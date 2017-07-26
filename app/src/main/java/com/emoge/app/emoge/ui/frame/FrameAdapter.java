@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.makeramen.dragsortadapter.DragSortAdapter;
@@ -66,7 +65,10 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
     @Override
     public void onBindViewHolder(FrameViewHolder holder, int position) {
         if( frames.get(position) != null ) {
-            Glide.with(holder.image.getContext()).load(frames.get(position).getImage()).into(holder.image);
+            holder.image.setImageBitmap(frames.get(position).getBitmap());
+//            Glide.with(holder.image.getContext())
+//                    .load(BitmapConverter.bitmapToByte(frames.get(position).getBitmap()))
+//                    .into(holder.image);
         }
     }
 
@@ -80,6 +82,9 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
         return Collections.unmodifiableList(frames);
     }
 
+
+
+    // 조작
     public void addItem(@NonNull Frame item) {
         frames.add(item);
         notifyItemInserted(frames.size()-1);
@@ -115,6 +120,8 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
     }
 
 
+
+    // 뷰 홀더
     static class FrameViewHolder extends DragSortAdapter.ViewHolder implements
             View.OnClickListener, View.OnLongClickListener {
 

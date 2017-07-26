@@ -2,6 +2,7 @@ package com.emoge.app.emoge.ui;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.ui.boombutton.FrameAddButton;
@@ -27,7 +27,9 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.nightonke.boommenu.BoomMenuButton;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.main_bt_add_frame) BoomMenuButton mFrameAddMenuButton;
     @BindView(R.id.main_bt_correction) BoomMenuButton mCorrectSelectButton;
 
+    private FrameAdder mFrameAdder;
     private FrameAdapter mFrameAdapter;
     private Timer mTimer;
     private int mPreviewIndex;
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         mFps = DEFAULT_FPS;
 
         // Set mFrameRecyclerView
+        mFrameAdder = new FrameAdder(this);
         mFrameAdapter = new FrameAdapter(mFrameRecyclerView, makeDummyDatas());
         mFrameRecyclerView.setHasFixedSize(true);
         mFrameRecyclerView.setAdapter(mFrameAdapter);
@@ -80,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
     @NonNull
     private ArrayList<Frame> makeDummyDatas() {
         ArrayList<Frame> dummyDatas = new ArrayList<>();
-        dummyDatas.add(new Frame(1,R.drawable.img_boost));
-        dummyDatas.add(new Frame(2,R.drawable.img_square_sun));
-        dummyDatas.add(new Frame(3,R.drawable.img_square_cloud));
-        dummyDatas.add(new Frame(4,R.drawable.img_noodle));
+        dummyDatas.add(new Frame(0, mFrameAdder.loadBitmapSampleSize(R.drawable.img_boost)));
+        dummyDatas.add(new Frame(1, mFrameAdder.loadBitmapSampleSize(R.drawable.img_square_sun)));
+        dummyDatas.add(new Frame(2, mFrameAdder.loadBitmapSampleSize(R.drawable.img_square_cloud)));
+        dummyDatas.add(new Frame(3, mFrameAdder.loadBitmapSampleSize(R.drawable.img_noodle)));
         return dummyDatas;
     }
 
@@ -96,14 +100,18 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Glide.with(MainActivity.this).load(mFrameAdapter.getItem(mPreviewIndex).getImage()).into(mPreview);
+
+                        mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
+//                        Glide.with(MainActivity.this)
+//                                .load(BitmapConverter.bitmapToByte(mFrameAdapter.getItem(mPreviewIndex).getBitmap()))
+//                                .into(mPreview);
                         mPreviewIndex = (mPreviewIndex+1) % mFrameAdapter.getItemCount();
                     }
                 });
             }
         };
         mTimer = new Timer();
-        mTimer.schedule(mTask, 0, mFps);
+        mTimer.schedule(mTask, mFps, mFps);
     }
 
     @Override
@@ -172,12 +180,26 @@ public class MainActivity extends AppCompatActivity {
 //                Glide.with(this).load(selectedUri).into(mImageView);
                 switch (requestCode) {
                     case FrameAdder.INTENT_GET_IMAGE:
-                        mFrameAdapter.addItem(new Frame(mFrameAdapter.getItemCount(), selectedUri));
+                        try {
+                            mFrameAdapter.addItem(new Frame(mFrameAdapter.getItemCount(),
+                                    mFrameAdder.loadBitmapSampleSize(selectedUri)));
+                        } catch (FileNotFoundException e) {
+                            Log.e(LOG_TAG, e.getClass().getName(), e);
+                        }
                         break;
                     case FrameAdder.INTENT_GET_VIDEO :
                         Intent videoActivityIntent = new Intent(this, VideoActivity.class);
                         videoActivityIntent.setData(selectedUri);
-                        startActivity(videoActivityIntent);
+                        startActivityForResult(videoActivityIntent, FrameAdder.INTENT_CAPTURE_VIDEO);
+                        break;
+                    case FrameAdder.INTENT_CAPTURE_VIDEO :
+                        List<Bitmap> bitmaps = mFrameAdder.captureVideo(selectedUri,
+                                data.getIntExtra("startSec", 0),
+                                data.getIntExtra("count", 0),
+                                data.getIntExtra("fps", 1));
+                        for(Bitmap bitmap : bitmaps) {
+                            mFrameAdapter.addItem(new Frame(mFrameAdapter.getItemCount(), bitmap));
+                        }
                         break;
                 }
             } else {

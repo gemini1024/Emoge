@@ -9,4 +9,5 @@
     <string name="inaccessible_frame_list">잘못된 frame list 접근</string>
     <string name="select_image">Select Image</string>
     <string name="select_video">Select Video</string>
+    <string name="saving_gif">저장되었습니다.</string>
 </resources>

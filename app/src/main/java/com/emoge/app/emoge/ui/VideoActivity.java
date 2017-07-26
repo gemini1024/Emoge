@@ -1,5 +1,8 @@
 package com.emoge.app.emoge.ui;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,6 +21,8 @@ public class VideoActivity extends AppCompatActivity {
     @BindView(R.id.video_video)
     VideoView mVideoView;
 
+    private Uri videoUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,10 +30,13 @@ public class VideoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         if( getIntent() != null && getIntent().getData() != null ) {
-            Log.i(LOG_TAG, getIntent().getData().toString());
-            mVideoView.setVideoURI(getIntent().getData());
+            videoUri = getIntent().getData();
+            Log.i(LOG_TAG, videoUri.toString());
+            mVideoView.setVideoURI(videoUri);
             mVideoView.setMediaController(new MediaController(this));
             mVideoView.start();
+
+            onCaptureVideo();
         } else {
             Log.e(LOG_TAG, getString(R.string.err_not_found_video_title));
             Alerter.create(this)
@@ -37,6 +45,17 @@ public class VideoActivity extends AppCompatActivity {
                     .show();
             finish();
         }
+    }
+
+    // TODO : 뷰에 연결
+    void onCaptureVideo() {
+        Intent returnIntent = new Intent();
+        returnIntent.setData(videoUri);
+        returnIntent.putExtra("startSec", 5000);
+        returnIntent.putExtra("count", 5);
+        returnIntent.putExtra("fps", 1000);
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
     }
 
 }

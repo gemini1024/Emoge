@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.emoge.app.emoge.R;
@@ -16,6 +18,7 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +30,15 @@ import java.util.List;
 public class FrameAdder implements OnBMClickListener, PermissionListener {
     private static final String LOG_TAG = FrameAdder.class.getSimpleName();
 
-    public static final int INTENT_GET_IMAGE    = 0;
-    public static final int INTENT_GET_GIF      = 1;
-    public static final int INTENT_GET_VIDEO    = 2;
+    // Menu Position
+    public static final int INTENT_GET_IMAGE        = 0;
+    public static final int INTENT_GET_GIF          = 1;
+    public static final int INTENT_GET_VIDEO        = 2;
+
+    public static final int INTENT_CAPTURE_VIDEO    = 100;
+
+    public static final int MAX_WIDTH   = 100;
+    public static final int MAX_HEIGHT  = 100;
 
     private Activity activity;
     private int selectedIndex;
@@ -100,13 +109,50 @@ public class FrameAdder implements OnBMClickListener, PermissionListener {
     }
 
 
-    private List<Bitmap> captureVideo(Context context, Uri videoUri, int startSec, int count, int fps) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        List<Bitmap> bitmapArrayList = new ArrayList<Bitmap>();
+    public Bitmap loadBitmapSampleSize(int resourceId) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(activity.getResources(), resourceId, options);
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = getSampleSize(options.outWidth, options.outHeight);
+        return BitmapFactory.decodeResource(activity.getResources(), resourceId, options);
+    }
 
-        retriever.setDataSource(context, videoUri);
+
+    public Bitmap loadBitmapSampleSize(Uri imageUri) throws FileNotFoundException {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri), null, options);
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = getSampleSize(options.outWidth, options.outHeight);
+        return BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri), null, options);
+    }
+
+    private int getSampleSize(int width, int height) {
+        int inSampleSize = 1;
+
+        if (height > MAX_HEIGHT || width > MAX_WIDTH) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            while ((halfHeight / inSampleSize) >= MAX_HEIGHT
+                    && (halfWidth / inSampleSize) >= MAX_WIDTH) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
+
+
+
+    @NonNull
+    public List<Bitmap> captureVideo(Uri videoUri, int startSec, int count, int fps) {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        List<Bitmap> bitmapArrayList = new ArrayList<>();
+
+        retriever.setDataSource(activity, videoUri);
         for(int i = 0; i < count; i++){
-            bitmapArrayList.add(retriever.getFrameAtTime(startSec + i*fps, MediaMetadataRetriever.OPTION_CLOSEST));
+            bitmapArrayList.add(retriever.getFrameAtTime((startSec + i*fps)*1000, MediaMetadataRetriever.OPTION_CLOSEST));
         }
         retriever.release();
 

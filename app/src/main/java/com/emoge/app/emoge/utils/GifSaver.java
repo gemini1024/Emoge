@@ -3,6 +3,7 @@ package com.emoge.app.emoge.utils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
@@ -35,14 +36,8 @@ public class GifSaver extends AsyncTask<List<Frame>, Integer, Boolean> {
 
     @Override
     protected Boolean doInBackground(List<Frame>... params) {
-        final List<Frame> frames = params[0];
-        int[] imgIds = new int[frames.size()];
-        int index = 0;
-        for (Frame frame : frames) {
-            imgIds[index++] = (int) frame.getImage();
-        }
         GifMaker gifMaker = new GifMaker();
-        ByteArrayOutputStream bos = gifMaker.makeGifByImages(activity.getResources(), imgIds, 500);
+        ByteArrayOutputStream bos = gifMaker.makeGifByImages(params[0], 500);
         gifMaker.saveAsGif(bos);
         return true;
     }
@@ -51,5 +46,6 @@ public class GifSaver extends AsyncTask<List<Frame>, Integer, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
         progressDialog.dismiss();
+        Toast.makeText(activity, R.string.saving_gif, Toast.LENGTH_SHORT).show();
     }
 }
