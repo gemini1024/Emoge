@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.ui.correction.Corrections;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 
@@ -23,7 +24,8 @@ public class ImageCorrectionButton {
             TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
                     .normalImageRes(imageIds.getResourceId(i,0))
                     .normalText(titles[i])
-                    .normalColor(Color.GRAY);
+                    .normalColor(Color.GRAY)
+                    .listener(new Corrections(activity));
             bmb.addBuilder(builder);
         }
         imageIds.recycle();

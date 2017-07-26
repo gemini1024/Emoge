@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -15,6 +17,7 @@ import com.gun0912.tedpermission.TedPermission;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jh on 17. 7. 26.
@@ -94,6 +97,20 @@ public class FrameAdder implements OnBMClickListener, PermissionListener {
         }
 
         return contentPath;
+    }
+
+
+    private List<Bitmap> captureVideo(Context context, Uri videoUri, int startSec, int count, int fps) {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        List<Bitmap> bitmapArrayList = new ArrayList<Bitmap>();
+
+        retriever.setDataSource(context, videoUri);
+        for(int i = 0; i < count; i++){
+            bitmapArrayList.add(retriever.getFrameAtTime(startSec + i*fps, MediaMetadataRetriever.OPTION_CLOSEST));
+        }
+        retriever.release();
+
+        return bitmapArrayList;
     }
 
 }

@@ -1,6 +1,5 @@
 package com.emoge.app.emoge.ui.frame;
 
-import android.content.Context;
 import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -30,14 +29,11 @@ import butterknife.ButterKnife;
 public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> {
     private static final String LOG_TAG = FrameAdapter.class.getSimpleName();
 
-    private final Context context;
     private final List<Frame> frames;
 
-    public FrameAdapter(@NonNull Context context,
-                        @NonNull RecyclerView recyclerView,
+    public FrameAdapter(@NonNull RecyclerView recyclerView,
                         @NonNull List<Frame> frames) {
         super(recyclerView);
-        this.context = context;
         this.frames = frames;
     }
 
@@ -70,7 +66,7 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
     @Override
     public void onBindViewHolder(FrameViewHolder holder, int position) {
         if( frames.get(position) != null ) {
-            Glide.with(context).load(frames.get(position).getImage()).into(holder.image);
+            Glide.with(holder.image.getContext()).load(frames.get(position).getImage()).into(holder.image);
         }
     }
 
@@ -79,6 +75,7 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
         return frames.size();
     }
 
+    @NonNull
     public List<Frame> getFrames() {
         return Collections.unmodifiableList(frames);
     }
@@ -97,7 +94,7 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
         if(inRange(position)) {
             return frames.get(position);
         } else {
-            Log.e(LOG_TAG, context.getString(R.string.inaccessible_frame_list));
+            Log.e(LOG_TAG, "잘못된 frame list 접근");
             return frames.get(0);
         }
     }
@@ -108,7 +105,7 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, frames.size());
         } else {
-            Log.e(LOG_TAG, context.getString(R.string.inaccessible_frame_list));
+            Log.e(LOG_TAG, "잘못된 frame list 접근");
         }
     }
 

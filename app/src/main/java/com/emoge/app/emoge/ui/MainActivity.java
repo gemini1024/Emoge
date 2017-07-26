@@ -28,7 +28,6 @@ import com.gun0912.tedpermission.TedPermission;
 import com.nightonke.boommenu.BoomMenuButton;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.main_bt_correction) BoomMenuButton mCorrectSelectButton;
 
     private FrameAdapter mFrameAdapter;
-    private List<Frame> mFrames;
     private Timer mTimer;
     private int mPreviewIndex;
     private int mFps;
@@ -66,12 +64,11 @@ public class MainActivity extends AppCompatActivity {
         mFps = DEFAULT_FPS;
 
         // Set mFrameRecyclerView
-        mFrameAdapter = new FrameAdapter(this, mFrameRecyclerView, makeDummyDatas());
+        mFrameAdapter = new FrameAdapter(mFrameRecyclerView, makeDummyDatas());
         mFrameRecyclerView.setHasFixedSize(true);
         mFrameRecyclerView.setAdapter(mFrameAdapter);
         mFrameRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mFrameRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mFrames = mFrameAdapter.getFrames();
 
         // Enable Buttons
         mShareButton.setVisibility(View.VISIBLE);
@@ -99,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Glide.with(MainActivity.this).load(mFrames.get(mPreviewIndex).getImage()).into(mPreview);
-                        mPreviewIndex = (mPreviewIndex+1) % mFrames.size();
+                        Glide.with(MainActivity.this).load(mFrameAdapter.getItem(mPreviewIndex).getImage()).into(mPreview);
+                        mPreviewIndex = (mPreviewIndex+1) % mFrameAdapter.getItemCount();
                     }
                 });
             }
@@ -124,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPermissionGranted() {
                 // make gif
-                new GifSaver(MainActivity.this).execute(mFrames);
+                new GifSaver(MainActivity.this).execute(mFrameAdapter.getFrames());
             }
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
@@ -174,10 +171,14 @@ public class MainActivity extends AppCompatActivity {
                 // image
 //                Glide.with(this).load(selectedUri).into(mImageView);
                 switch (requestCode) {
+                    case FrameAdder.INTENT_GET_IMAGE:
+                        mFrameAdapter.addItem(new Frame(mFrameAdapter.getItemCount(), selectedUri));
+                        break;
                     case FrameAdder.INTENT_GET_VIDEO :
                         Intent videoActivityIntent = new Intent(this, VideoActivity.class);
                         videoActivityIntent.setData(selectedUri);
                         startActivity(videoActivityIntent);
+                        break;
                 }
             } else {
                 // show error or do nothing
