@@ -17,9 +17,10 @@ import android.widget.ImageButton;
 import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
-import com.emoge.app.emoge.ui.boombutton.FrameAdder;
-import com.emoge.app.emoge.ui.boombutton.ImageCorrection;
+import com.emoge.app.emoge.ui.boombutton.FrameAddButton;
+import com.emoge.app.emoge.ui.boombutton.ImageCorrectionButton;
 import com.emoge.app.emoge.ui.frame.FrameAdapter;
+import com.emoge.app.emoge.ui.frame.FrameAdder;
 import com.emoge.app.emoge.utils.GifSaver;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.gun0912.tedpermission.PermissionListener;
@@ -27,6 +28,7 @@ import com.gun0912.tedpermission.TedPermission;
 import com.nightonke.boommenu.BoomMenuButton;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,10 +36,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.emoge.app.emoge.ui.boombutton.FrameAdder.INTENT_GET_VIDEO;
-
 public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
+
+    private final int DEFAULT_FPS = 500;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.toolbar_share) ImageButton mShareButton;
@@ -47,9 +49,11 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.main_bt_add_frame) BoomMenuButton mFrameAddMenuButton;
     @BindView(R.id.main_bt_correction) BoomMenuButton mCorrectSelectButton;
 
-    private ArrayList<Frame> mFrames;
+    private FrameAdapter mFrameAdapter;
+    private List<Frame> mFrames;
     private Timer mTimer;
     private int mPreviewIndex;
+    private int mFps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,19 +62,22 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
 
+        // Preview
+        mFps = DEFAULT_FPS;
+
         // Set mFrameRecyclerView
-        mFrames = makeDummyDatas();
+        mFrameAdapter = new FrameAdapter(this, mFrameRecyclerView, makeDummyDatas());
         mFrameRecyclerView.setHasFixedSize(true);
-        mFrameRecyclerView.setAdapter(new FrameAdapter(this, mFrameRecyclerView, mFrames));
+        mFrameRecyclerView.setAdapter(mFrameAdapter);
         mFrameRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mFrameRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        Glide.with(this).load(mFrames).into(mPreview);
+        mFrames = mFrameAdapter.getFrames();
 
         // Enable Buttons
         mShareButton.setVisibility(View.VISIBLE);
         mSaveButton.setVisibility(View.VISIBLE);
-        new FrameAdder().buildAddButton(this, mFrameAddMenuButton);
-        new ImageCorrection().buildSelectButton(this, mCorrectSelectButton);
+        new FrameAddButton().buildAddButton(this, mFrameAddMenuButton);
+        new ImageCorrectionButton().buildSelectButton(this, mCorrectSelectButton);
     }
 
     @NonNull
@@ -99,13 +106,14 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         mTimer = new Timer();
-        mTimer.schedule(mTask, 0, 500);
+        mTimer.schedule(mTask, 0, mFps);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mTimer.cancel();
+        mTimer = null;
     }
 
 
@@ -166,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                 // image
 //                Glide.with(this).load(selectedUri).into(mImageView);
                 switch (requestCode) {
-                    case INTENT_GET_VIDEO :
+                    case FrameAdder.INTENT_GET_VIDEO :
                         Intent videoActivityIntent = new Intent(this, VideoActivity.class);
                         videoActivityIntent.setData(selectedUri);
                         startActivity(videoActivityIntent);

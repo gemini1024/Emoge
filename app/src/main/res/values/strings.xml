@@ -6,4 +6,7 @@
     <string name="err_intent_return_null">data == null</string>
     <string name="saving_gif_title">움짤 생성 중</string>
     <string name="saving_gif_loading">움짤을 만들고있습니다. 기다려주세요.</string>
+    <string name="inaccessible_frame_list">잘못된 frame list 접근</string>
+    <string name="select_image">Select Image</string>
+    <string name="select_video">Select Video</string>
 </resources>

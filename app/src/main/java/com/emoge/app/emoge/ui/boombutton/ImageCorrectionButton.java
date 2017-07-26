@@ -1,7 +1,9 @@
 package com.emoge.app.emoge.ui.boombutton;
 
 import android.app.Activity;
+import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 
 import com.emoge.app.emoge.R;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
@@ -11,20 +13,20 @@ import com.nightonke.boommenu.BoomMenuButton;
  * Created by jh on 17. 7. 17.
  */
 
-public class ImageCorrection {
+public class ImageCorrectionButton {
 
-
-    public void buildSelectButton(final Activity activity, final BoomMenuButton bmb) {
-        String[] names = {"밝기 보정", "대비 보정", "감마 보정"};
-        int[] images = {R.drawable.ic_healing_24dp, R.drawable.ic_healing_24dp, R.drawable.ic_healing_24dp};
+    public void buildSelectButton(@NonNull final Activity activity, @NonNull final BoomMenuButton bmb) {
+        String[] titles = activity.getResources().getStringArray(R.array.correct_title);
+        TypedArray imageIds = activity.getResources().obtainTypedArray(R.array.correct_image);
 
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
-                    .normalImageRes(images[i])
-                    .normalText(names[i])
+                    .normalImageRes(imageIds.getResourceId(i,0))
+                    .normalText(titles[i])
                     .normalColor(Color.GRAY);
             bmb.addBuilder(builder);
         }
+        imageIds.recycle();
     }
 
 }

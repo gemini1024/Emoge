@@ -2,6 +2,7 @@ package com.emoge.app.emoge.ui.frame;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.emoge.app.emoge.model.Frame;
 import com.makeramen.dragsortadapter.DragSortAdapter;
 import com.makeramen.dragsortadapter.NoForegroundShadowBuilder;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,15 +24,18 @@ import butterknife.ButterKnife;
 
 /**
  * Created by jh on 17. 7. 25.
+ * Draggable RecyclerView Adapter
  */
 
 public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> {
-    public static final String LOG_TAG = FrameAdapter.class.getSimpleName();
+    private static final String LOG_TAG = FrameAdapter.class.getSimpleName();
 
     private final Context context;
     private final List<Frame> frames;
 
-    public FrameAdapter(Context context, RecyclerView recyclerView, List<Frame> frames) {
+    public FrameAdapter(@NonNull Context context,
+                        @NonNull RecyclerView recyclerView,
+                        @NonNull List<Frame> frames) {
         super(recyclerView);
         this.context = context;
         this.frames = frames;
@@ -74,6 +79,44 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
         return frames.size();
     }
 
+    public List<Frame> getFrames() {
+        return Collections.unmodifiableList(frames);
+    }
+
+    public void addItem(@NonNull Frame item) {
+        frames.add(item);
+        notifyItemInserted(frames.size()-1);
+    }
+
+    private boolean inRange(int position) {
+        return position >= 0 && position < frames.size();
+    }
+
+    @NonNull
+    public Frame getItem(int position) {
+        if(inRange(position)) {
+            return frames.get(position);
+        } else {
+            Log.e(LOG_TAG, context.getString(R.string.inaccessible_frame_list));
+            return frames.get(0);
+        }
+    }
+
+    public void deleteItem(int position) {
+        if(inRange(position)) {
+            frames.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, frames.size());
+        } else {
+            Log.e(LOG_TAG, context.getString(R.string.inaccessible_frame_list));
+        }
+    }
+
+    public void clear() {
+        frames.clear();
+        notifyDataSetChanged();
+    }
+
 
     static class FrameViewHolder extends DragSortAdapter.ViewHolder implements
             View.OnClickListener, View.OnLongClickListener {
@@ -81,14 +124,13 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
         @BindView(R.id.frame_item_image)
         ImageView image;
 
-        public FrameViewHolder(DragSortAdapter<?> dragSortAdapter, View itemView) {
+        FrameViewHolder(DragSortAdapter<?> dragSortAdapter, View itemView) {
             super(dragSortAdapter, itemView);
             ButterKnife.bind(this, itemView);
         }
 
         @Override
         public void onClick(View v) {
-            Log.d(LOG_TAG, "clicked");
         }
 
         @Override

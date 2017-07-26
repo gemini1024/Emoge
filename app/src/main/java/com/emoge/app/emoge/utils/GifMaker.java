@@ -1,15 +1,12 @@
 package com.emoge.app.emoge.utils;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.encoder.AnimatedGifEncoder;
 
 import java.io.ByteArrayOutputStream;
@@ -25,8 +22,9 @@ import java.util.Date;
  */
 
 public class GifMaker {
+    private static final String LOG_TAG = GifMaker.class.getSimpleName();
 
-    public boolean saveAsGif(ByteArrayOutputStream gifBos) {
+    public boolean saveAsGif(@NonNull ByteArrayOutputStream gifBos) {
         File filePath = new File(Environment.getExternalStorageDirectory().getPath(),
                 new Date().getTime()+".gif");
         FileOutputStream outputStream;
@@ -36,9 +34,9 @@ public class GifMaker {
             outputStream.write(gifBos.toByteArray());
             result = true;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Log.d(LOG_TAG, e.getClass().getName(), e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.d(LOG_TAG, e.getClass().getName(), e);
         }
         return result;
     }
@@ -54,14 +52,14 @@ public class GifMaker {
 
         for (int imgId : resourceIds) {
             Bitmap bitmap = loadBitmapSampleSize(res, imgId, 100, 100);
-            Log.d("bitmap", "loaded");
+            Log.i(LOG_TAG, "loaded");
             encoder.addFrame(bitmap);
-            Log.d("bitmap", "added");
+            Log.i(LOG_TAG, "added");
             bitmap.recycle();
         }
 
         encoder.finish();
-        Log.d("bitmap", "encoder finish");
+        Log.d(LOG_TAG, "encoder finish");
 
         return bos;
     }

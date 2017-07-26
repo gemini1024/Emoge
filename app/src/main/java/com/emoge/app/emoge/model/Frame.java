@@ -5,8 +5,8 @@ package com.emoge.app.emoge.model;
  */
 
 public class Frame {
-    long id;
-    Object image;
+    long id;            // 프레임별 고유 id
+    Object image;       // 실질 이미지
 
     public Frame(long id, Object image) {
         this.id = id;

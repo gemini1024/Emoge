@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--FrameAddButton-->
+    <string-array name="frame_add_title">
+        <item>이미지 추가</item>
+        <item>다른 움짤 추가</item>
+        <item>비디오 추가</item>
+    </string-array>
+    <string-array name="frame_add_sub">
+        <item>이미지를 추가합니다</item>
+        <item>움짤을 불러옵니다</item>
+        <item>비디오를 추가합니다</item>
+    </string-array>
+    <array name="frame_add_image">
+        <item>@drawable/ic_photo_library_24dp</item>
+        <item>@drawable/ic_gif_24dp</item>
+        <item>@drawable/ic_play_circle_filled_24dp</item>
+    </array>
+
+    <!--ImageCorrectionButton-->
+    <string-array name="correct_title">
+        <item>밝기 보정</item>
+        <item>대비 보정</item>
+        <item>감마 보정</item>
+    </string-array>
+    <array name="correct_image">
+        <item>@drawable/ic_healing_24dp</item>
+        <item>@drawable/ic_healing_24dp</item>
+        <item>@drawable/ic_healing_24dp</item>
+    </array>
+</resources>

@@ -15,6 +15,8 @@ import java.util.List;
  */
 
 public class GifSaver extends AsyncTask<List<Frame>, Integer, Boolean> {
+    private static final String LOG_TAG = GifSaver.class.getSimpleName();
+
     Activity activity;
     ProgressDialog progressDialog;
 
