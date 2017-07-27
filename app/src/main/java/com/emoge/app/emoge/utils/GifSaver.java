@@ -36,6 +36,9 @@ public class GifSaver extends AsyncTask<List<Frame>, Integer, Boolean> {
 
     @Override
     protected Boolean doInBackground(List<Frame>... params) {
+        if( params[0].isEmpty() ) {
+            return false;
+        }
         GifMaker gifMaker = new GifMaker();
         ByteArrayOutputStream bos = gifMaker.makeGifByImages(params[0], 500);
         gifMaker.saveAsGif(bos);
@@ -43,9 +46,13 @@ public class GifSaver extends AsyncTask<List<Frame>, Integer, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
-        super.onPostExecute(aBoolean);
+    protected void onPostExecute(Boolean isSaved) {
+        super.onPostExecute(isSaved);
         progressDialog.dismiss();
-        Toast.makeText(activity, R.string.saving_gif, Toast.LENGTH_SHORT).show();
+        if(isSaved) {
+            Toast.makeText(activity, R.string.saving_gif, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(activity, R.string.err_dont_saving_gif, Toast.LENGTH_SHORT).show();
+        }
     }
 }

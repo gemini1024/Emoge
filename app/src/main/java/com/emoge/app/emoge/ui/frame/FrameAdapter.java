@@ -1,6 +1,10 @@
 package com.emoge.app.emoge.ui.frame;
 
+import android.content.ClipData;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +18,7 @@ import com.emoge.app.emoge.model.Frame;
 import com.makeramen.dragsortadapter.DragSortAdapter;
 import com.makeramen.dragsortadapter.NoForegroundShadowBuilder;
 
+import java.io.FileNotFoundException;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,6 +32,8 @@ import butterknife.ButterKnife;
 
 public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> {
     private static final String LOG_TAG = FrameAdapter.class.getSimpleName();
+
+    private static final int MAX_ITEM_SIZE = 10;
 
     private final List<Frame> frames;
 
@@ -77,17 +84,28 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
         return frames.size();
     }
 
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        clear();
+    }
+
+    // 기본 조작
     @NonNull
     public List<Frame> getFrames() {
         return Collections.unmodifiableList(frames);
     }
 
-
-
-    // 조작
-    public void addItem(@NonNull Frame item) {
-        frames.add(item);
-        notifyItemInserted(frames.size()-1);
+    public boolean addItem(@NonNull Frame item) {
+        if( MAX_ITEM_SIZE > frames.size() ) {
+            frames.add(item);
+            notifyItemInserted(frames.size() - 1);
+            return true;
+        } else {
+            // TODO : Alert
+            Log.e(LOG_TAG, "item size 초과");
+            return false;
+        }
     }
 
     private boolean inRange(int position) {
@@ -100,7 +118,7 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
             return frames.get(position);
         } else {
             Log.e(LOG_TAG, "잘못된 frame list 접근");
-            return frames.get(0);
+            return new Frame(0, null);
         }
     }
 
@@ -115,8 +133,48 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
     }
 
     public void clear() {
-        frames.clear();
-        notifyDataSetChanged();
+        if(!frames.isEmpty()) {
+            for (Frame frame : frames) {
+                if(frame.getBitmap() != null) {
+                    frame.getBitmap().recycle();
+                }
+            }
+            frames.clear();
+            notifyDataSetChanged();
+        }
+    }
+
+    // Intent에서 프레임 추가
+    public void addFrameFromImages(@NonNull FrameAdder frameAdder,
+                                    @NonNull Intent imageData) {
+        try {
+            Uri singleImageUri = imageData.getData();
+            if( singleImageUri != null ) {
+                // single image
+                addItem(new Frame(getItemCount(), frameAdder.loadBitmapSampleSize(singleImageUri)));
+            } else if( imageData.getClipData() != null ) {
+                // multiple image
+                ClipData clipData = imageData.getClipData();
+                for (int i = 0; i < clipData.getItemCount(); i++) {
+                    addItem(new Frame(getItemCount(), frameAdder.loadBitmapSampleSize(clipData.getItemAt(i).getUri())));
+                }
+            }
+        } catch (FileNotFoundException e) {
+            Log.e(LOG_TAG, e.getClass().getName(), e);
+        }
+    }
+
+    public void addFrameFromVideo(@NonNull FrameAdder frameAdder,
+                                   @NonNull Intent videoData) {
+        if(videoData.getData() != null) {
+            List<Bitmap> bitmaps = frameAdder.captureVideo(videoData.getData(),
+                    videoData.getIntExtra("startSec", 0),
+                    videoData.getIntExtra("count", 0),
+                    videoData.getIntExtra("fps", 1));
+            for (Bitmap bitmap : bitmaps) {
+                addItem(new Frame(getItemCount(), bitmap));
+            }
+        }
     }
 
 

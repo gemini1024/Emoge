@@ -37,8 +37,8 @@ public class FrameAdder implements OnBMClickListener, PermissionListener {
 
     public static final int INTENT_CAPTURE_VIDEO    = 100;
 
-    public static final int MAX_WIDTH   = 100;
-    public static final int MAX_HEIGHT  = 100;
+    public static final int MAX_WIDTH   = 400;
+    public static final int MAX_HEIGHT  = 400;
 
     private Activity activity;
     private int selectedIndex;
@@ -62,14 +62,22 @@ public class FrameAdder implements OnBMClickListener, PermissionListener {
         Intent intent;
         switch (selectedIndex) {
             case INTENT_GET_IMAGE :
-                intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/jpeg, image/png");
+//                intent = new Intent(Action.ACTION_MULTIPLE_PICK);
+//                activity.startActivityForResult(intent, INTENT_GET_IMAGE);
+//                intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                intent.setType("image/jpeg, image/png");
+                intent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
                 activity.startActivityForResult(Intent.createChooser(intent,activity.getString(R.string.select_image)), INTENT_GET_IMAGE);
                 break;
             case INTENT_GET_GIF :
+//                intent = new Intent(Action.ACTION_PICK);
+//                activity.startActivityForResult(intent, INTENT_GET_GIF);
                 intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/gif");
-                activity.startActivityForResult(Intent.createChooser(intent,"Select Video"), INTENT_GET_GIF);
+                activity.startActivityForResult(Intent.createChooser(intent,activity.getString(R.string.select_image)), INTENT_GET_GIF);
                 break;
             case INTENT_GET_VIDEO :
                 intent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
@@ -128,17 +136,11 @@ public class FrameAdder implements OnBMClickListener, PermissionListener {
         return BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri), null, options);
     }
 
+
     private int getSampleSize(int width, int height) {
         int inSampleSize = 1;
-
-        if (height > MAX_HEIGHT || width > MAX_WIDTH) {
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            while ((halfHeight / inSampleSize) >= MAX_HEIGHT
-                    && (halfWidth / inSampleSize) >= MAX_WIDTH) {
-                inSampleSize *= 2;
-            }
+        if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+            inSampleSize = width > height ? width / MAX_WIDTH : height / MAX_HEIGHT;
         }
         return inSampleSize;
     }

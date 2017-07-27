@@ -38,7 +38,8 @@
             android:background="@android:color/transparent"
             android:padding="@dimen/unit_dimen"
             android:scaleType="centerInside"
-            android:src="@drawable/app_name" />
+            android:src="@drawable/app_name"
+            android:transitionName="@string/splash_image" />
 
         <ImageButton
             android:id="@+id/toolbar_save"

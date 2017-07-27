@@ -23,6 +23,7 @@ public class Frame {
         return bitmap;
     }
 
+    // For Draggable Recycler View
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof Frame) {

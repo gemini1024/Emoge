@@ -36,6 +36,7 @@ public class VideoActivity extends AppCompatActivity {
             mVideoView.setMediaController(new MediaController(this));
             mVideoView.start();
 
+            // TODO : 뷰에 연결 후 제거
             onCaptureVideo();
         } else {
             Log.e(LOG_TAG, getString(R.string.err_not_found_video_title));

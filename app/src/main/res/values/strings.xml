@@ -10,4 +10,6 @@
     <string name="select_image">Select Image</string>
     <string name="select_video">Select Video</string>
     <string name="saving_gif">저장되었습니다.</string>
+    <string name="splash_image">logo_image</string>
+    <string name="err_dont_saving_gif">움짤 만들기에 실패 했습니다</string>
 </resources>
