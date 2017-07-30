@@ -1,6 +1,5 @@
 package com.emoge.app.emoge.ui.frame;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +10,8 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.emoge.app.emoge.R;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 
 import java.io.FileNotFoundException;
@@ -27,7 +23,7 @@ import java.util.List;
  */
 
 
-public class FrameAdder implements OnBMClickListener, PermissionListener {
+public class FrameAdder implements OnBMClickListener {
     private static final String LOG_TAG = FrameAdder.class.getSimpleName();
 
     // Menu Position
@@ -49,34 +45,18 @@ public class FrameAdder implements OnBMClickListener, PermissionListener {
 
     @Override
     public void onBoomButtonClick(int index) {
-        selectedIndex = index;
-
-        new TedPermission(activity).setPermissionListener(this)
-                .setDeniedMessage(R.string.err_permission_denied)
-                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .check();
-    }
-
-    @Override
-    public void onPermissionGranted() {
         Intent intent;
-        switch (selectedIndex) {
+
+        switch (index) {
             case INTENT_GET_IMAGE :
-//                intent = new Intent(Action.ACTION_MULTIPLE_PICK);
-//                activity.startActivityForResult(intent, INTENT_GET_IMAGE);
-//                intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                intent.setType("image/jpeg, image/png");
                 intent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {"image/jpeg", "image/png"});
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
                 activity.startActivityForResult(Intent.createChooser(intent,activity.getString(R.string.select_image)), INTENT_GET_IMAGE);
                 break;
             case INTENT_GET_GIF :
-//                intent = new Intent(Action.ACTION_PICK);
-//                activity.startActivityForResult(intent, INTENT_GET_GIF);
-                intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/gif");
+                intent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {"image/gif"});
                 activity.startActivityForResult(Intent.createChooser(intent,activity.getString(R.string.select_image)), INTENT_GET_GIF);
                 break;
             case INTENT_GET_VIDEO :
@@ -84,13 +64,8 @@ public class FrameAdder implements OnBMClickListener, PermissionListener {
                 activity.startActivityForResult(Intent.createChooser(intent,activity.getString(R.string.select_video)), INTENT_GET_VIDEO);
                 break;
         }
-    }
 
-    @Override
-    public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-        Log.d(LOG_TAG, activity.getString(R.string.err_permission_denied));
     }
-
 
     private String getRealPathFromUri(Context context, Uri selectedUri) {
         String[] columns = { MediaStore.Images.Media.DATA,

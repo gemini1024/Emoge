@@ -5,6 +5,7 @@
     <dimen name="half_unit_dimen">8dp</dimen>
     <dimen name="unit_dimen">16dp</dimen>
     <dimen name="line_width">1dp</dimen>
-    <dimen name="boombutton_size">40dp</dimen>
-    <dimen name="toolbar_height">@android:dimen/app_icon_size</dimen>
+    <dimen name="boombutton_size">28dp</dimen>
+    <dimen name="boombutton_image_size">24dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
 </resources>

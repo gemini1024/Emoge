@@ -1,6 +1,5 @@
 package com.emoge.app.emoge.ui;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,8 +20,6 @@ import com.emoge.app.emoge.ui.frame.FrameAdapter;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
 import com.emoge.app.emoge.utils.GifSaver;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
 import com.nightonke.boommenu.BoomMenuButton;
 
 import java.util.ArrayList;
@@ -111,21 +108,8 @@ public class MainActivity extends AppCompatActivity {
     // 저장 기능
     @OnClick(R.id.toolbar_save)
     void makeToGifByImages(View view) {
-        PermissionListener storagePermissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                // make gif
-                new GifSaver(MainActivity.this).execute(mFrameAdapter.getFrames());
-            }
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Log.e(LOG_TAG, getString(R.string.err_permission_denied));
-            }
-        };
-        new TedPermission(this).setPermissionListener(storagePermissionListener)
-                .setDeniedMessage(R.string.err_permission_denied)
-                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .check();
+        // make gif
+        new GifSaver(MainActivity.this).execute(mFrameAdapter.getFrames());
     }
 
 
@@ -138,22 +122,8 @@ public class MainActivity extends AppCompatActivity {
     // TODO : 보정 연습 용. 보정 완성 후 제거
     @OnClick(R.id.main_bt_camera)
     void callCameraActivity() {
-        PermissionListener cameraPermissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Intent intent = new Intent(getBaseContext(), CameraActivity.class);
-                startActivity(intent);
-            }
-
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Log.e(LOG_TAG, getString(R.string.err_permission_denied));
-            }
-        };
-        new TedPermission(this).setPermissionListener(cameraPermissionListener)
-                .setDeniedMessage(R.string.err_permission_denied)
-                .setPermissions(android.Manifest.permission.CAMERA)
-                .check();
+        Intent intent = new Intent(getBaseContext(), CameraActivity.class);
+        startActivity(intent);
     }
 
     private void startVideoActivity(@NonNull Intent videoData) {
