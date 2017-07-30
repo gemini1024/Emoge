@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.encoder.GifDecoder;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 
 import java.io.FileNotFoundException;
@@ -92,6 +93,7 @@ public class FrameAdder implements OnBMClickListener {
     }
 
 
+    @NonNull
     public Bitmap loadBitmapSampleSize(int resourceId) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -102,13 +104,25 @@ public class FrameAdder implements OnBMClickListener {
     }
 
 
-    public Bitmap loadBitmapSampleSize(Uri imageUri) throws FileNotFoundException {
+    @NonNull
+    public Bitmap loadBitmapSampleSize(@NonNull Uri imageUri) throws FileNotFoundException {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri), null, options);
         options.inJustDecodeBounds = false;
         options.inSampleSize = getSampleSize(options.outWidth, options.outHeight);
         return BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri), null, options);
+    }
+
+    @NonNull
+    public List<Bitmap> loadBitmapsFromGif(@NonNull Uri imageUri) throws FileNotFoundException {
+        ArrayList<Bitmap> bitmaps = new ArrayList<>();
+        GifDecoder decoder = new GifDecoder();
+        decoder.read(activity.getContentResolver().openInputStream(imageUri));
+        for(int i=0; i<decoder.getFrameCount(); i++) {
+            bitmaps.add(decoder.getFrame(i));
+        }
+        return bitmaps;
     }
 
 

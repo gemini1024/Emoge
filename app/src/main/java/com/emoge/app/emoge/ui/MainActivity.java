@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.ui.boombutton.FrameAddButton;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         mFrameAdapter = new FrameAdapter(mFrameRecyclerView, new ArrayList<Frame>());
         mFrameRecyclerView.setHasFixedSize(true);
         mFrameRecyclerView.setAdapter(mFrameAdapter);
-        mFrameRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        mFrameRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mFrameRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Enable Buttons
@@ -88,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
                         if(mFrameAdapter.getItemCount() > 0) {
                             mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
                             mPreviewIndex = (mPreviewIndex + 1) % mFrameAdapter.getItemCount();
+                        } else {
+                            Glide.with(getBaseContext()).load(R.drawable.img_no_image).into(mPreview);
                         }
                     }
                 });
@@ -108,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
     // 저장 기능
     @OnClick(R.id.toolbar_save)
     void makeToGifByImages(View view) {
-        // make gif
         new GifSaver(MainActivity.this).execute(mFrameAdapter.getFrames());
     }
 
@@ -116,15 +118,11 @@ public class MainActivity extends AppCompatActivity {
     // 공유 기능
     @OnClick(R.id.toolbar_share)
     void onShareButton() {
-    }
-
-
-    // TODO : 보정 연습 용. 보정 완성 후 제거
-    @OnClick(R.id.main_bt_camera)
-    void callCameraActivity() {
+        // TODO : 보정 연습 용. 보정 완성 후 제거
         Intent intent = new Intent(getBaseContext(), CameraActivity.class);
         startActivity(intent);
     }
+
 
     private void startVideoActivity(@NonNull Intent videoData) {
         if(videoData.getData() != null) {
@@ -143,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
                 switch (requestCode) {
                     case FrameAdder.INTENT_GET_IMAGE:
                         mFrameAdapter.addFrameFromImages(mFrameAdder, data);
+                        break;
+                    case FrameAdder.INTENT_GET_GIF:
+                        mFrameAdapter.addFrameFromGif(mFrameAdder, data);
                         break;
                     case FrameAdder.INTENT_GET_VIDEO :
                         startVideoActivity(data);

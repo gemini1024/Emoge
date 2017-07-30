@@ -71,11 +71,12 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
 
     @Override
     public void onBindViewHolder(FrameViewHolder holder, int position) {
-        if( frames.get(position) != null ) {
-            holder.image.setImageBitmap(frames.get(position).getBitmap());
-//            Glide.with(holder.image.getContext())
-//                    .load(BitmapConverter.bitmapToByte(frames.get(position).getBitmap()))
-//                    .into(holder.image);
+        final Frame frame = frames.get(position);
+
+        if( frame != null ) {
+            holder.image.setImageBitmap(frame.getBitmap());
+            holder.image.setVisibility(getDraggingId() == frame.getId() ? View.INVISIBLE : View.VISIBLE);
+            holder.image.postInvalidate();
         }
     }
 
@@ -122,7 +123,7 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
         }
     }
 
-    public void deleteItem(int position) {
+    public void removeItem(int position) {
         if(inRange(position)) {
             frames.remove(position);
             notifyItemRemoved(position);
@@ -164,6 +165,21 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
         }
     }
 
+    public void addFrameFromGif(@NonNull FrameAdder frameAdder,
+                                @NonNull Intent imageData) {
+        try {
+            Uri imageUri = imageData.getData();
+            if( imageUri != null ) {
+                List<Bitmap> bitmaps = frameAdder.loadBitmapsFromGif(imageUri);
+                for(Bitmap bitmap : bitmaps) {
+                    addItem(new Frame(getItemCount(), bitmap));
+                }
+            }
+        } catch (FileNotFoundException e) {
+            Log.e(LOG_TAG, e.getClass().getName(), e);
+        }
+    }
+
     public void addFrameFromVideo(@NonNull FrameAdder frameAdder,
                                    @NonNull Intent videoData) {
         if(videoData.getData() != null) {
@@ -193,6 +209,8 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
 
         @Override
         public void onClick(View v) {
+            // TODO : Zoom or Remove
+            Log.d(LOG_TAG, "clicked");
         }
 
         @Override
