@@ -7,5 +7,5 @@
     <dimen name="line_width">1dp</dimen>
     <dimen name="boombutton_size">28dp</dimen>
     <dimen name="boombutton_image_size">24dp</dimen>
-    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="toolbar_height">48dp</dimen>
 </resources>

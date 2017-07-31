@@ -1,16 +1,25 @@
 <resources>
-    <string name="app_name">Emoge</string>
+    <string name="app_name" translatable="false">Emoge</string>
     <string name="err_permission_denied">기능 사용을 위해 권한이 필요합니다</string>
     <string name="err_not_found_video_title">비디오 로딩 실패</string>
     <string name="err_not_found_video_text">비디오를 찾을 수 없습니다. 다시 확인 해 주세요.</string>
     <string name="err_intent_return_null">data == null</string>
-    <string name="saving_gif_title">움짤 생성 중</string>
-    <string name="saving_gif_loading">움짤을 만들고있습니다. 기다려주세요.</string>
+    <string name="saving_gif">움짤 생성 중</string>
     <string name="inaccessible_frame_list">잘못된 frame list 접근</string>
     <string name="select_image">Select Image</string>
     <string name="select_video">Select Video</string>
-    <string name="saving_gif">저장되었습니다.</string>
+    <string name="saved_gif">저장되었습니다.</string>
     <string name="splash_image">logo_image</string>
-    <string name="err_dont_saving_gif">움짤 만들기에 실패 했습니다</string>
+    <string name="err_dont_saving_gif_title">생성 실패</string>
+    <string name="err_dont_saving_gif_content">움짤 생성에 실패 했습니다\n다시 시도해주세요</string>
     <string name="share_gif">Share Gif</string>
+
+    <string name="fps" translatable="false">Fps</string>
+    <string name="brightness">밝기</string>
+    <string name="contrast">대비</string>
+    <string name="gamma">감마</string>
+    <string name="exit">종료</string>
+    <string name="exit_content">모든 작업 상황을 버리고 종료합니다. 계속 하시겠습니까?</string>
+    <string name="cancel">취소</string>
+    <string name="complete">완료</string>
 </resources>

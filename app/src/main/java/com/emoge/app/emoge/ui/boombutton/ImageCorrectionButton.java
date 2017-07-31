@@ -1,6 +1,6 @@
 package com.emoge.app.emoge.ui.boombutton;
 
-import android.app.Activity;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -16,16 +16,18 @@ import com.nightonke.boommenu.BoomMenuButton;
 
 public class ImageCorrectionButton {
 
-    public void buildSelectButton(@NonNull final Activity activity, @NonNull final BoomMenuButton bmb) {
-        String[] titles = activity.getResources().getStringArray(R.array.correct_title);
-        TypedArray imageIds = activity.getResources().obtainTypedArray(R.array.correct_image);
+    public void buildSelectButton(@NonNull final Resources res,
+                                  @NonNull final BoomMenuButton bmb,
+                                  @NonNull final Corrections corrections) {
+        String[] titles = res.getStringArray(R.array.correct_title);
+        TypedArray imageIds = res.obtainTypedArray(R.array.correct_image);
 
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
                     .normalImageRes(imageIds.getResourceId(i,0))
                     .normalText(titles[i])
                     .normalColor(Color.GRAY)
-                    .listener(new Corrections(activity));
+                    .listener(corrections);
             bmb.addBuilder(builder);
         }
         imageIds.recycle();

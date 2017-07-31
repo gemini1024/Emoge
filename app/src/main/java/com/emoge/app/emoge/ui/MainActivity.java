@@ -3,6 +3,8 @@ package com.emoge.app.emoge.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,13 +17,21 @@ import android.widget.ImageButton;
 import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
+import com.emoge.app.emoge.model.PaletteMessage;
 import com.emoge.app.emoge.ui.boombutton.FrameAddButton;
 import com.emoge.app.emoge.ui.boombutton.ImageCorrectionButton;
+import com.emoge.app.emoge.ui.correction.Corrections;
 import com.emoge.app.emoge.ui.frame.FrameAdapter;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
+import com.emoge.app.emoge.ui.palette.PaletteFragment;
+import com.emoge.app.emoge.utils.Dialogs;
 import com.emoge.app.emoge.utils.GifSaver;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.nightonke.boommenu.BoomMenuButton;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -44,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.main_bt_add_frame) BoomMenuButton mFrameAddMenuButton;
     @BindView(R.id.main_bt_correction) BoomMenuButton mCorrectSelectButton;
 
+    private Corrections mCorrections;
     private FrameAdder mFrameAdder;
     private FrameAdapter mFrameAdapter;
 
@@ -69,13 +80,25 @@ public class MainActivity extends AppCompatActivity {
         mFrameRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mFrameRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        // Add Palette
+        mCorrections = new Corrections(this);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.add(R.id.main_palette_container, PaletteFragment.newInstance(Corrections.MAIN_PALETTE));
+        fragmentTransaction.commit();
+
         // Enable Buttons
         mShareButton.setVisibility(View.VISIBLE);
         mSaveButton.setVisibility(View.VISIBLE);
-        new FrameAddButton().buildAddButton(this, mFrameAddMenuButton);
-        new ImageCorrectionButton().buildSelectButton(this, mCorrectSelectButton);
+        new FrameAddButton().buildAddButton(getResources(), mFrameAddMenuButton, mFrameAdder);
+        new ImageCorrectionButton().buildSelectButton(getResources(), mCorrectSelectButton, mCorrections);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
     @Override
     protected void onResume() {
@@ -107,11 +130,10 @@ public class MainActivity extends AppCompatActivity {
         mPreviewTimer = null;
     }
 
-
-    // 저장 기능
-    @OnClick(R.id.toolbar_save)
-    void makeToGifByImages(View view) {
-        new GifSaver(MainActivity.this).execute(mFrameAdapter.getFrames());
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -121,6 +143,20 @@ public class MainActivity extends AppCompatActivity {
         // TODO : 보정 연습 용. 보정 완성 후 제거
         Intent intent = new Intent(getBaseContext(), CameraActivity.class);
         startActivity(intent);
+    }
+
+
+    // 저장 기능
+    @OnClick(R.id.toolbar_save)
+    void makeToGifByImages(View view) {
+        new GifSaver(MainActivity.this).execute(mFrameAdapter.getFrames());
+    }
+
+
+    // 보정 기능
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPaletteEvent(PaletteMessage message) {
+
     }
 
 
@@ -159,4 +195,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            Dialogs.showExitDialog(this);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

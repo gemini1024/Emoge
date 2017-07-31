@@ -1,6 +1,6 @@
 package com.emoge.app.emoge.ui.boombutton;
 
-import android.app.Activity;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -16,10 +16,12 @@ import com.nightonke.boommenu.BoomMenuButton;
 
 public class FrameAddButton {
 
-    public void buildAddButton(@NonNull final Activity activity, @NonNull final BoomMenuButton bmb) {
-        String[] titles = activity.getResources().getStringArray(R.array.frame_add_title);
-        String[] subTitles = activity.getResources().getStringArray(R.array.frame_add_sub);
-        TypedArray imageIds = activity.getResources().obtainTypedArray(R.array.frame_add_image);
+    public void buildAddButton(@NonNull final Resources res,
+                               @NonNull final BoomMenuButton bmb,
+                               @NonNull final FrameAdder frameAdder) {
+        String[] titles = res.getStringArray(R.array.frame_add_title);
+        String[] subTitles = res.getStringArray(R.array.frame_add_sub);
+        TypedArray imageIds = res.obtainTypedArray(R.array.frame_add_image);
 
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             final HamButton.Builder builder = new HamButton.Builder()
@@ -27,7 +29,7 @@ public class FrameAddButton {
                     .normalText(titles[i])
                     .subNormalText(subTitles[i])
                     .normalColor(Color.GRAY)
-                    .listener(new FrameAdder(activity));
+                    .listener(frameAdder);
             bmb.addBuilder(builder);
         }
         imageIds.recycle();

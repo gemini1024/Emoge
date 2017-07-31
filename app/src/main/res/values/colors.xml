@@ -6,4 +6,5 @@
     <color name="colorBackground">#333333</color>
     <color name="colorPalette">#545657</color>
     <color name="colorBoomDim">#AA000000</color>
+    <color name="colorProgress">#A5DC86</color>
 </resources>

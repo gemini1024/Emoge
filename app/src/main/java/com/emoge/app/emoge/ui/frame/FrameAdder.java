@@ -38,7 +38,6 @@ public class FrameAdder implements OnBMClickListener {
     public static final int MAX_HEIGHT  = 400;
 
     private Activity activity;
-    private int selectedIndex;
 
     public FrameAdder(Activity activity) {
         this.activity = activity;
