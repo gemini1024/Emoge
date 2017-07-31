@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPalette"
     tools:context="com.emoge.app.emoge.ui.palette.PaletteFragment">
 
     <android.support.constraint.Guideline

@@ -59,7 +59,7 @@ public class Dialogs {
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        sweetAlertDialog.dismiss();
+                        sweetAlertDialog.dismissWithAnimation();
                         activity.finish();
                     }
                 })

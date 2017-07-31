@@ -10,7 +10,7 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.emoge.app.emoge.R;
-import com.tapadoo.alerter.Alerter;
+import com.emoge.app.emoge.utils.Dialogs;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,10 +40,8 @@ public class VideoActivity extends AppCompatActivity {
             onCaptureVideo();
         } else {
             Log.e(LOG_TAG, getString(R.string.err_not_found_video_title));
-            Alerter.create(this)
-                    .setTitle(R.string.err_not_found_video_title)
-                    .setText(R.string.err_not_found_video_text)
-                    .show();
+            Dialogs.showErrorDialog(this,
+                    R.string.err_not_found_video_title, R.string.err_not_found_video_text);
             finish();
         }
     }

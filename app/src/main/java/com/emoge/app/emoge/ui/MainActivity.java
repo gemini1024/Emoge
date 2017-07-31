@@ -2,6 +2,7 @@ package com.emoge.app.emoge.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -34,12 +35,11 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -58,9 +58,28 @@ public class MainActivity extends AppCompatActivity {
     private FrameAdder mFrameAdder;
     private FrameAdapter mFrameAdapter;
 
-    private Timer mPreviewTimer;
+    // Preview
     private int mPreviewIndex;
     private int mFps;
+    private Handler mHandler;
+    private final Runnable mTask = new Runnable() {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(mFrameAdapter.getItemCount() > 0) {
+                        mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
+                        mPreviewIndex = (mPreviewIndex + 1) % mFrameAdapter.getItemCount();
+                    } else {
+                        Glide.with(getBaseContext()).load(R.drawable.img_no_image).into(mPreview);
+                    }
+                }
+            });
+            mHandler.postDelayed(mTask, mFps);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         // Preview
+        mHandler = new Handler();
         mFps = DEFAULT_FPS;
 
         // Set mFrameRecyclerView
@@ -103,31 +123,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        TimerTask previewTask = new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(mFrameAdapter.getItemCount() > 0) {
-                            mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
-                            mPreviewIndex = (mPreviewIndex + 1) % mFrameAdapter.getItemCount();
-                        } else {
-                            Glide.with(getBaseContext()).load(R.drawable.img_no_image).into(mPreview);
-                        }
-                    }
-                });
-            }
-        };
-        mPreviewTimer = new Timer();
-        mPreviewTimer.schedule(previewTask, mFps, mFps);
+        mHandler.postDelayed(mTask, mFps);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mPreviewTimer.cancel();
-        mPreviewTimer = null;
+        mHandler.removeCallbacks(mTask);
     }
 
     @Override
@@ -148,15 +150,25 @@ public class MainActivity extends AppCompatActivity {
 
     // 저장 기능
     @OnClick(R.id.toolbar_save)
-    void makeToGifByImages(View view) {
-        new GifSaver(MainActivity.this).execute(mFrameAdapter.getFrames());
+    void makeToGifByImages() {
+        new GifSaver(this, mFrameAdapter.getFrames()).execute(mFps);
     }
 
 
     // 보정 기능
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPaletteEvent(PaletteMessage message) {
-
+        switch (message.getType()) {
+            case Corrections.MAIN_PALETTE :
+                mFps = message.getValue();
+                break;
+            case Corrections.CORRECT_BRIGHTNESS :
+                break;
+            case Corrections.CORRECT_CONTRAST :
+                break;
+            case Corrections.CORRECT_GAMMA :
+                break;
+        }
     }
 
 
@@ -174,18 +186,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if( data != null) {
+                SweetAlertDialog loadingDialog;
+
                 switch (requestCode) {
                     case FrameAdder.INTENT_GET_IMAGE:
                         mFrameAdapter.addFrameFromImages(mFrameAdder, data);
                         break;
                     case FrameAdder.INTENT_GET_GIF:
+                        loadingDialog = Dialogs.showLoadingProgressDialog(this, R.string.adding_frames);
                         mFrameAdapter.addFrameFromGif(mFrameAdder, data);
+                        loadingDialog.dismissWithAnimation();
                         break;
                     case FrameAdder.INTENT_GET_VIDEO :
                         startVideoActivity(data);
                         break;
                     case FrameAdder.INTENT_CAPTURE_VIDEO :
+                        loadingDialog = Dialogs.showLoadingProgressDialog(this, R.string.adding_frames);
                         mFrameAdapter.addFrameFromVideo(mFrameAdder, data);
+                        loadingDialog.dismissWithAnimation();
                         break;
                 }
             } else {

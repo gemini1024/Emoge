@@ -2,6 +2,7 @@ package com.emoge.app.emoge.ui.correction;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.emoge.app.emoge.R;
@@ -35,9 +36,12 @@ public class Corrections implements OnBMClickListener {
     @Override
     public void onBoomButtonClick(int index) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.main_palette_container, PaletteFragment.newInstance(index))
-                .addToBackStack(null)
-                .commit();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_palette_container, PaletteFragment.newInstance(index));
+        if(fragmentManager.getBackStackEntryCount() == 0) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragmentTransaction.commit();
     }
+
 }

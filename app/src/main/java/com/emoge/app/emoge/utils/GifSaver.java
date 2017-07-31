@@ -15,14 +15,16 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  * Created by jh on 17. 7. 25.
  */
 
-public class GifSaver extends AsyncTask<List<Frame>, Integer, Boolean> {
+public class GifSaver extends AsyncTask<Integer, Integer, Boolean> {
     private static final String LOG_TAG = GifSaver.class.getSimpleName();
 
     Activity activity;
     SweetAlertDialog progressDialog;
+    List<Frame> frames;
 
-    public GifSaver(Activity activity) {
+    public GifSaver(Activity activity, List<Frame> frames) {
         this.activity = activity;
+        this.frames = frames;
     }
 
 
@@ -33,12 +35,12 @@ public class GifSaver extends AsyncTask<List<Frame>, Integer, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(List<Frame>... params) {
-        if( params[0].isEmpty() ) {
+    protected Boolean doInBackground(Integer... params) {
+        if( frames.isEmpty() ) {
             return false;
         }
         GifMaker gifMaker = new GifMaker();
-        ByteArrayOutputStream bos = gifMaker.makeGifByImages(params[0], 500);
+        ByteArrayOutputStream bos = gifMaker.makeGifByImages(frames, params[0]);
         gifMaker.saveAsGif(bos);
         return true;
     }
@@ -46,7 +48,7 @@ public class GifSaver extends AsyncTask<List<Frame>, Integer, Boolean> {
     @Override
     protected void onPostExecute(Boolean isSaved) {
         super.onPostExecute(isSaved);
-        progressDialog.dismiss();
+        progressDialog.dismissWithAnimation();
         if(isSaved) {
             Dialogs.showSuccessDialog(activity, R.string.complete, R.string.saved_gif);
         } else {
