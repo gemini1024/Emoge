@@ -32,7 +32,7 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
     public static final String ARG_PALETTE_TYPE     = "TYPE";
     public static final String ARG_PALETTE_VALUE    = "VALUE";
     private int mPaletteType;
-    private int mPreValue;
+    private int mDefaultValue;
 
 
     @BindView(R.id.palette_label)   TextView mLabel;
@@ -58,7 +58,7 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mPaletteType    = getArguments().getInt(ARG_PALETTE_TYPE);
-            mPreValue       = getArguments().getInt(ARG_PALETTE_VALUE);
+            mDefaultValue   = getArguments().getInt(ARG_PALETTE_VALUE);
         }
     }
 
@@ -92,27 +92,27 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
     private void setSeekBarByType(int type) {
         switch (type) {
             case Correcter.CORRECT_BRIGHTNESS :
-                mSeekBar.setMin(0);
+                mSeekBar.setMin(-100);
                 mSeekBar.setMax(100);
-                mSeekBar.setProgress(mPreValue);
+                mSeekBar.setProgress(mDefaultValue);
                 mApplyButton.setText(getString(R.string.apply));
                 break;
             case Correcter.CORRECT_CONTRAST :
                 mSeekBar.setMin(0);
                 mSeekBar.setMax(200);
-                mSeekBar.setProgress(mPreValue);
+                mSeekBar.setProgress(mDefaultValue);
                 mApplyButton.setText(getString(R.string.apply));
                 break;
             case Correcter.CORRECT_GAMMA :
                 mSeekBar.setMin(0);
-                mSeekBar.setMax(255);
-                mSeekBar.setProgress(mPreValue);
+                mSeekBar.setMax(200);
+                mSeekBar.setProgress(mDefaultValue);
                 mApplyButton.setText(getString(R.string.apply));
                 break;
             default :
                 mSeekBar.setMin(100);
                 mSeekBar.setMax(3000);
-                mSeekBar.setProgress(mPreValue);
+                mSeekBar.setProgress(mDefaultValue);
                 mApplyButton.setText(getString(R.string.reverse));
                 break;
         }

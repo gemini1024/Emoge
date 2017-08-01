@@ -126,12 +126,12 @@ public class Correcter implements OnBMClickListener {
     // 감마 변경
     List<Frame> setGamma(List<Frame> frames, int value) {
         ArrayList<Frame> stageFrames = new ArrayList<>();
-        Filter gammaFilter = new Filter();
         Point[] rgbKnots;
         rgbKnots = new Point[3];
         rgbKnots[0] = new Point(0, 0);
-        rgbKnots[1] = new Point(value, value);
+        rgbKnots[1] = new Point(255-value, value);
         rgbKnots[2] = new Point(255, 255);
+        Filter gammaFilter = new Filter();
         gammaFilter.addSubFilter(new ToneCurveSubfilter(rgbKnots, null, null, null));
         for(Frame frame : frames) {
             stageFrames.add(new Frame(frame.getId(),

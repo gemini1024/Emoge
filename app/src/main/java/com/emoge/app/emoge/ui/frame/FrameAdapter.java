@@ -101,9 +101,14 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
 
     public boolean addItem(@NonNull Frame item) {
         if( MAX_ITEM_SIZE > frames.size() ) {
-            frames.add(item);
-            notifyItemInserted(frames.size() - 1);
-            return true;
+            try {
+                frames.add(item);
+                notifyItemInserted(frames.size() - 1);
+                return true;
+            } catch (IllegalStateException e) {
+                Log.e(LOG_TAG, e.getClass().getSimpleName(), e);
+                return false;
+            }
         } else {
             // TODO : Alert
             Log.e(LOG_TAG, "item size 초과");

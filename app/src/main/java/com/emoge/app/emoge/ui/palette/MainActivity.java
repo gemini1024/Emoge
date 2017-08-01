@@ -13,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 
 import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
@@ -50,18 +49,11 @@ public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.toolbar)             Toolbar mToolbar;
-    @BindView(R.id.toolbar_share)       ImageButton mShareButton;
-    @BindView(R.id.toolbar_save)        ImageButton mSaveButton;
     @BindView(R.id.main_preview)        PhotoView mPreview;
     @BindView(R.id.main_frame_list)     RecyclerView mFrameRecyclerView;
-    @BindView(R.id.main_bt_add_frame)   BoomMenuButton mFrameAddMenuButton;
-    @BindView(R.id.main_bt_correction)  BoomMenuButton mCorrectSelectButton;
-
 
     // Frame 저장 및 수정용 Adapter
     private CorrectImplAdapter mFrameAdapter;
-
-
 
     // Preview
     private int mPreviewIndex;
@@ -97,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,10 +122,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void enableMenuButtons(FrameAdder frameAdder, Correcter correcter) {
-        mShareButton.setVisibility(View.VISIBLE);
-        mSaveButton.setVisibility(View.VISIBLE);
-        MenuButtons.buildAddButton(getResources(), mFrameAddMenuButton, frameAdder);
-        MenuButtons.buildSelectButton(getResources(), mCorrectSelectButton, correcter);
+        findViewById(R.id.toolbar_share).setVisibility(View.VISIBLE);
+        findViewById(R.id.toolbar_save).setVisibility(View.VISIBLE);
+        MenuButtons.buildAddButton(getResources(),
+                (BoomMenuButton)findViewById(R.id.main_bt_add_frame), frameAdder);
+        MenuButtons.buildSelectButton(getResources(),
+                (BoomMenuButton)findViewById(R.id.main_bt_correction), correcter);
     }
 
 
