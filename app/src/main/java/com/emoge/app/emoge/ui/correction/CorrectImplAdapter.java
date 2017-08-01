@@ -20,6 +20,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
 
     private Correcter correcter;
     private List<Frame> stageFrames;
+    private List<Frame> tmpFrames;
 
     public CorrectImplAdapter(@NonNull RecyclerView recyclerView,
                               @NonNull List<Frame> frames,
@@ -32,7 +33,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
 
     @Override
     public boolean move(int fromPosition, int toPosition) {
-        if(! stageFrames.isEmpty()) {
+        if(!stageFrames.isEmpty()) {
             stageFrames.add(toPosition, stageFrames.remove(fromPosition));
         }
         return super.move(fromPosition, toPosition);
@@ -57,30 +58,30 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
 
     @Override
     public void setBrightness(int value) {
-        clearStage();
+        tmpFrames = stageFrames;
         stageFrames = correcter.setBrightness(getFrames(), value);
         notifyDataSetChanged();
-        if(stageFrames.isEmpty()) {
-            Log.d(LOG_TAG, "setBrightness empty");
-        }
     }
 
     @Override
     public void setContrast(int value) {
-        clearStage();
+        tmpFrames = stageFrames;
         stageFrames = correcter.setContrast(getFrames(), value);
         notifyDataSetChanged();
     }
 
     @Override
     public void setGamma(int value) {
-        clearStage();
+        tmpFrames = stageFrames;
         stageFrames = correcter.setGamma(getFrames(), value);
         notifyDataSetChanged();
     }
 
     @Override
     public void apply() {
+        if(!tmpFrames.isEmpty()) {
+            Log.e(LOG_TAG, "don't clearPreviousFrames");
+        }
         super.clear();
         super.setFrames(stageFrames);
         stageFrames = new ArrayList<>();
@@ -88,6 +89,9 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
 
     @Override
     public void reset() {
+        if(!tmpFrames.isEmpty()) {
+            Log.e(LOG_TAG, "don't clearPreviousFrames");
+        }
         clearStage();
         stageFrames = new ArrayList<>();
     }
@@ -99,6 +103,16 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
             }
         }
         stageFrames.clear();
-        Log.d(LOG_TAG, "cleared");
+        Log.d(LOG_TAG, "cleared stage");
+    }
+
+    public void clearPreviousFrames() {
+        for(Frame frame : tmpFrames) {
+            if(frame.getBitmap() != null) {
+                frame.getBitmap().recycle();
+            }
+        }
+        tmpFrames.clear();
+        Log.d(LOG_TAG, "cleared temp");
     }
 }

@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     // 보정 기능
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPaletteEvent(PaletteMessage message) {
-//        mHandler.removeCallbacks(mTask);
+        mHandler.removeCallbacks(mTask);
         switch (message.getType()) {
             case Correcter.MAIN_PALETTE :
                 mCorrecter.setCurrentFps(message.getValue());
@@ -171,7 +171,9 @@ public class MainActivity extends AppCompatActivity {
                 mFrameAdapter.setGamma(message.getValue());
                 break;
         }
-//        mHandler.postDelayed(mTask, mCorrecter.getCurrentFps());
+        mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
+        mHandler.postDelayed(mTask, mCorrecter.getCurrentFps());
+        mFrameAdapter.clearPreviousFrames();
     }
 
 
