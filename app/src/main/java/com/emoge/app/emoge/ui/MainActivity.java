@@ -21,8 +21,8 @@ import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.PaletteMessage;
 import com.emoge.app.emoge.ui.boombutton.FrameAddButton;
 import com.emoge.app.emoge.ui.boombutton.ImageCorrectionButton;
-import com.emoge.app.emoge.ui.correction.Corrections;
-import com.emoge.app.emoge.ui.frame.FrameAdapter;
+import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
+import com.emoge.app.emoge.ui.correction.Correcter;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
 import com.emoge.app.emoge.ui.palette.PaletteFragment;
 import com.emoge.app.emoge.utils.Dialogs;
@@ -44,8 +44,6 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private final int DEFAULT_FPS = 500;
-
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.toolbar_share) ImageButton mShareButton;
     @BindView(R.id.toolbar_save) ImageButton mSaveButton;
@@ -54,13 +52,12 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.main_bt_add_frame) BoomMenuButton mFrameAddMenuButton;
     @BindView(R.id.main_bt_correction) BoomMenuButton mCorrectSelectButton;
 
-    private Corrections mCorrections;
+    private Correcter mCorrecter;
     private FrameAdder mFrameAdder;
-    private FrameAdapter mFrameAdapter;
+    private CorrectImplAdapter mFrameAdapter;
 
     // Preview
     private int mPreviewIndex;
-    private int mFps;
     private Handler mHandler;
     private final Runnable mTask = new Runnable() {
         @Override
@@ -76,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-            mHandler.postDelayed(mTask, mFps);
+            mHandler.postDelayed(mTask, mCorrecter.getCurrentFps());
         }
     };
 
@@ -90,28 +87,29 @@ public class MainActivity extends AppCompatActivity {
 
         // Preview
         mHandler = new Handler();
-        mFps = DEFAULT_FPS;
+
+        // Add Palette
+        mCorrecter = new Correcter(this);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.add(R.id.main_palette_container,
+                PaletteFragment.newInstance(Correcter.MAIN_PALETTE, mCorrecter.getCurrentFps()));
+        fragmentTransaction.commit();
 
         // Set mFrameRecyclerView
         mFrameAdder = new FrameAdder(this);
-        mFrameAdapter = new FrameAdapter(mFrameRecyclerView, new ArrayList<Frame>());
+        mFrameAdapter = new CorrectImplAdapter(mFrameRecyclerView,new ArrayList<Frame>(), mFrameAdder, mCorrecter);
         mFrameRecyclerView.setHasFixedSize(true);
         mFrameRecyclerView.setAdapter(mFrameAdapter);
         mFrameRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mFrameRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        // Add Palette
-        mCorrections = new Corrections(this);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.add(R.id.main_palette_container, PaletteFragment.newInstance(Corrections.MAIN_PALETTE));
-        fragmentTransaction.commit();
 
         // Enable Buttons
         mShareButton.setVisibility(View.VISIBLE);
         mSaveButton.setVisibility(View.VISIBLE);
         new FrameAddButton().buildAddButton(getResources(), mFrameAddMenuButton, mFrameAdder);
-        new ImageCorrectionButton().buildSelectButton(getResources(), mCorrectSelectButton, mCorrections);
+        new ImageCorrectionButton().buildSelectButton(getResources(), mCorrectSelectButton, mCorrecter);
     }
 
     @Override
@@ -123,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mHandler.postDelayed(mTask, mFps);
+        mHandler.postDelayed(mTask, mCorrecter.getCurrentFps());
     }
 
     @Override
@@ -151,24 +149,29 @@ public class MainActivity extends AppCompatActivity {
     // 저장 기능
     @OnClick(R.id.toolbar_save)
     void makeToGifByImages() {
-        new GifSaver(this, mFrameAdapter.getFrames()).execute(mFps);
+        new GifSaver(this, mFrameAdapter.getFrames()).execute(mCorrecter.getCurrentFps());
     }
 
 
     // 보정 기능
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPaletteEvent(PaletteMessage message) {
+//        mHandler.removeCallbacks(mTask);
         switch (message.getType()) {
-            case Corrections.MAIN_PALETTE :
-                mFps = message.getValue();
+            case Correcter.MAIN_PALETTE :
+                mCorrecter.setCurrentFps(message.getValue());
                 break;
-            case Corrections.CORRECT_BRIGHTNESS :
+            case Correcter.CORRECT_BRIGHTNESS :
+                mFrameAdapter.setBrightness(message.getValue());
                 break;
-            case Corrections.CORRECT_CONTRAST :
+            case Correcter.CORRECT_CONTRAST :
+                mFrameAdapter.setContrast(message.getValue());
                 break;
-            case Corrections.CORRECT_GAMMA :
+            case Correcter.CORRECT_GAMMA :
+                mFrameAdapter.setGamma(message.getValue());
                 break;
         }
+//        mHandler.postDelayed(mTask, mCorrecter.getCurrentFps());
     }
 
 
@@ -190,11 +193,11 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (requestCode) {
                     case FrameAdder.INTENT_GET_IMAGE:
-                        mFrameAdapter.addFrameFromImages(mFrameAdder, data);
+                        mFrameAdapter.addFrameFromImages(data);
                         break;
                     case FrameAdder.INTENT_GET_GIF:
                         loadingDialog = Dialogs.showLoadingProgressDialog(this, R.string.adding_frames);
-                        mFrameAdapter.addFrameFromGif(mFrameAdder, data);
+                        mFrameAdapter.addFrameFromGif(data);
                         loadingDialog.dismissWithAnimation();
                         break;
                     case FrameAdder.INTENT_GET_VIDEO :
@@ -202,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case FrameAdder.INTENT_CAPTURE_VIDEO :
                         loadingDialog = Dialogs.showLoadingProgressDialog(this, R.string.adding_frames);
-                        mFrameAdapter.addFrameFromVideo(mFrameAdder, data);
+                        mFrameAdapter.addFrameFromVideo(data);
                         loadingDialog.dismissWithAnimation();
                         break;
                 }

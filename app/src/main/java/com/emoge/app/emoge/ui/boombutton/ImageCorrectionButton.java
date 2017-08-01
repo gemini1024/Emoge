@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 
 import com.emoge.app.emoge.R;
-import com.emoge.app.emoge.ui.correction.Corrections;
+import com.emoge.app.emoge.ui.correction.Correcter;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 
@@ -18,7 +18,7 @@ public class ImageCorrectionButton {
 
     public void buildSelectButton(@NonNull final Resources res,
                                   @NonNull final BoomMenuButton bmb,
-                                  @NonNull final Corrections corrections) {
+                                  @NonNull final Correcter correcter) {
         String[] titles = res.getStringArray(R.array.correct_title);
         TypedArray imageIds = res.obtainTypedArray(R.array.correct_image);
 
@@ -27,7 +27,7 @@ public class ImageCorrectionButton {
                     .normalImageRes(imageIds.getResourceId(i,0))
                     .normalText(titles[i])
                     .normalColor(Color.GRAY)
-                    .listener(corrections);
+                    .listener(correcter);
             bmb.addBuilder(builder);
         }
         imageIds.recycle();

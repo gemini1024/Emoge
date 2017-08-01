@@ -15,6 +15,10 @@ public class Frame {
         this.bitmap = bitmap;
     }
 
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
     public long getId() {
         return id;
     }

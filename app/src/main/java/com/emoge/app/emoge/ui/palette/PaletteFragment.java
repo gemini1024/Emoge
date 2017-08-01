@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.PaletteMessage;
-import com.emoge.app.emoge.ui.correction.Corrections;
+import com.emoge.app.emoge.ui.correction.Correcter;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.greenrobot.eventbus.EventBus;
@@ -24,8 +24,10 @@ import butterknife.ButterKnife;
 public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgressChangeListener {
     private static final String LOG_TAG = PaletteFragment.class.getSimpleName();
 
-    public static final String ARG_PALETTE_TYPE = "TYPE";
+    public static final String ARG_PALETTE_TYPE     = "TYPE";
+    public static final String ARG_PALETTE_VALUE    = "VALUE";
     private int mPaletteType;
+    private int mPreValue;
 
 
     @BindView(R.id.palette_label)
@@ -37,10 +39,11 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
     public PaletteFragment() {
     }
 
-    public static PaletteFragment newInstance(int paletteType) {
+    public static PaletteFragment newInstance(int paletteType, int preValue) {
         PaletteFragment fragment = new PaletteFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PALETTE_TYPE, paletteType);
+        args.putInt(ARG_PALETTE_VALUE, preValue);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,7 +52,8 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mPaletteType = getArguments().getInt(ARG_PALETTE_TYPE);
+            mPaletteType    = getArguments().getInt(ARG_PALETTE_TYPE);
+            mPreValue       = getArguments().getInt(ARG_PALETTE_VALUE);
         }
     }
 
@@ -59,6 +63,7 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
         View view = inflater.inflate(R.layout.fragment_palette, container, false);
         ButterKnife.bind(this, view);
         mLabel.setText(getLabelByType(mPaletteType));
+        setSeekBarByType(mPaletteType);
         mSeekBar.setOnProgressChangeListener(this);
         return view;
     }
@@ -66,14 +71,40 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
     @NonNull
     private String getLabelByType(int type) {
         switch (type) {
-            case Corrections.CORRECT_BRIGHTNESS :
+            case Correcter.CORRECT_BRIGHTNESS :
                 return getString(R.string.brightness);
-            case Corrections.CORRECT_CONTRAST :
+            case Correcter.CORRECT_CONTRAST :
                 return getString(R.string.contrast);
-            case Corrections.CORRECT_GAMMA :
+            case Correcter.CORRECT_GAMMA :
                 return getString(R.string.gamma);
             default :
                 return getString(R.string.fps);
+        }
+    }
+
+
+    private void setSeekBarByType(int type) {
+        switch (type) {
+            case Correcter.CORRECT_BRIGHTNESS :
+                mSeekBar.setMin(0);
+                mSeekBar.setMax(100);
+                mSeekBar.setProgress(mPreValue);
+                break;
+            case Correcter.CORRECT_CONTRAST :
+                mSeekBar.setMin(0);
+                mSeekBar.setMax(200);
+                mSeekBar.setProgress(mPreValue);
+                break;
+            case Correcter.CORRECT_GAMMA :
+                mSeekBar.setMin(0);
+                mSeekBar.setMax(255);
+                mSeekBar.setProgress(mPreValue);
+                break;
+            default :
+                mSeekBar.setMin(100);
+                mSeekBar.setMax(3000);
+                mSeekBar.setProgress(mPreValue);
+                break;
         }
     }
 
