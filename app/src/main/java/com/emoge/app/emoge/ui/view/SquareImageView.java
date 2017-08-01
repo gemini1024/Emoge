@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 
 /**
  * Created by jh on 17. 7. 26.
+ * 정사각형 ImageView
  */
 
 public class SquareImageView extends android.support.v7.widget.AppCompatImageView {
@@ -29,8 +30,6 @@ public class SquareImageView extends android.support.v7.widget.AppCompatImageVie
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
-        // If one of the measures is match_parent, use that one to determine the size.
-        // If not, use the default implementation of onMeasure.
         if(widthMode == MeasureSpec.EXACTLY && heightMode != MeasureSpec.EXACTLY) {
             setMeasuredDimension(widthSize, widthSize);
         } else if(heightMode == MeasureSpec.EXACTLY && widthMode != MeasureSpec.EXACTLY) {

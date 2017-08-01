@@ -21,6 +21,8 @@ import java.util.List;
 
 /**
  * Created by jh on 17. 7. 26.
+ * Frame 추가.
+ * 이 클래스로만 파일 접근
  */
 
 
@@ -34,8 +36,8 @@ public class FrameAdder implements OnBMClickListener {
 
     public static final int INTENT_CAPTURE_VIDEO    = 100;
 
-    public static final int MAX_WIDTH   = 400;
-    public static final int MAX_HEIGHT  = 400;
+    private static final int MAX_WIDTH   = 400;
+    private static final int MAX_HEIGHT  = 400;
 
     private Activity activity;
 
@@ -104,7 +106,7 @@ public class FrameAdder implements OnBMClickListener {
 
 
     @NonNull
-    public Bitmap loadBitmapSampleSize(@NonNull Uri imageUri) throws FileNotFoundException {
+    Bitmap loadBitmapSampleSize(@NonNull Uri imageUri) throws FileNotFoundException {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri), null, options);
@@ -114,7 +116,7 @@ public class FrameAdder implements OnBMClickListener {
     }
 
     @NonNull
-    public List<Bitmap> loadBitmapsFromGif(@NonNull Uri imageUri) throws FileNotFoundException {
+    List<Bitmap> loadBitmapsFromGif(@NonNull Uri imageUri) throws FileNotFoundException {
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         GifDecoder decoder = new GifDecoder();
         decoder.read(activity.getContentResolver().openInputStream(imageUri));
@@ -136,7 +138,7 @@ public class FrameAdder implements OnBMClickListener {
 
 
     @NonNull
-    public List<Bitmap> captureVideo(Uri videoUri, int startSec, int count, int fps) {
+    List<Bitmap> captureVideo(@NonNull Uri videoUri, int startSec, int count, int fps) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         List<Bitmap> bitmapArrayList = new ArrayList<>();
 

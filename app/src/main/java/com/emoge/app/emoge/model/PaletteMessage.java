@@ -2,6 +2,8 @@ package com.emoge.app.emoge.model;
 
 /**
  * Created by jh on 17. 7. 31.
+ * EventBus Message.
+ * Palette Fragment -> Activity
  */
 
 public class PaletteMessage {

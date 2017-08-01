@@ -90,8 +90,13 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
         return Collections.unmodifiableList(frames);
     }
 
-    public void setFrames(List<Frame> frames) {
+    protected void setFrames(List<Frame> frames) {
         this.frames = frames;
+    }
+
+    public void reverse() {
+        Collections.reverse(frames);
+        notifyDataSetChanged();
     }
 
     public boolean addItem(@NonNull Frame item) {

@@ -5,18 +5,123 @@
     android:id="@+id/video_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPalette"
     tools:context="com.emoge.app.emoge.ui.VideoActivity">
 
     <include layout="@layout/toolbar_main" />
 
-    <VideoView
-        android:id="@+id/video_video"
+    <!--MediaController 위치-->
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/toolbar_height"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <VideoView
+            android:id="@+id/video_video"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
+    <!--Guidelines-->
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.62" />
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+
+    <!--capture count seek bar-->
+    <TextView
+        android:id="@+id/video_count_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/small_dimen"
+        android:text="@string/count"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
+        android:textColor="@android:color/primary_text_light"
+        app:layout_constraintBottom_toTopOf="@+id/video_count"
+        app:layout_constraintLeft_toLeftOf="@+id/video_count" />
+
+    <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+        android:id="@+id/video_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/unit_dimen"
+        app:dsb_indicatorElevation="0dp"
+        app:dsb_max="10"
+        app:dsb_min="1"
+        app:dsb_progressColor="@color/colorProgress"
+        app:dsb_value="5"
+        app:layout_constraintBottom_toBottomOf="@+id/video_fps_label"
+        app:layout_constraintLeft_toRightOf="@id/guideline_left"
+        app:layout_constraintRight_toLeftOf="@id/guideline_right" />
+
+
+    <!--fps seek bar-->
+    <TextView
+        android:id="@+id/video_fps_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/small_dimen"
+        android:text="@string/fps"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
+        android:textColor="@android:color/primary_text_light"
+        app:layout_constraintBottom_toTopOf="@+id/video_fps"
+        app:layout_constraintLeft_toLeftOf="@+id/video_fps" />
+
+    <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+        android:id="@+id/video_fps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/unit_dimen"
+        app:dsb_indicatorElevation="0dp"
+        app:dsb_max="3000"
+        app:dsb_min="100"
+        app:dsb_progressColor="@color/colorProgress"
+        app:dsb_value="650"
+        app:layout_constraintBottom_toTopOf="@+id/video_button"
+        app:layout_constraintLeft_toRightOf="@id/guideline_left"
+        app:layout_constraintRight_toLeftOf="@id/guideline_right" />
+
+
+    <!--confirm button-->
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/video_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="@dimen/half_unit_dimen"
+        android:background="@android:color/transparent"
+        android:text="@string/capture"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
+        android:textColor="@android:color/primary_text_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_left"
+        app:layout_constraintRight_toRightOf="@id/guideline_right" />
+
 
 </android.support.constraint.ConstraintLayout>

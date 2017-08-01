@@ -27,6 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/app_name"
         android:padding="@dimen/unit_dimen"
         android:scaleType="centerInside"
         android:src="@drawable/app_name"

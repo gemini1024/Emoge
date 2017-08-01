@@ -13,16 +13,17 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by jh on 17. 7. 25.
+ * 이미지(Frame)들을 이용해 GIF 로 저장 작업 ( Background )
  */
 
-public class GifSaver extends AsyncTask<Integer, Integer, Boolean> {
-    private static final String LOG_TAG = GifSaver.class.getSimpleName();
+public class GifSaveTask extends AsyncTask<Integer, Integer, Boolean> {
+    private static final String LOG_TAG = GifSaveTask.class.getSimpleName();
 
     Activity activity;
     SweetAlertDialog progressDialog;
     List<Frame> frames;
 
-    public GifSaver(Activity activity, List<Frame> frames) {
+    public GifSaveTask(Activity activity, List<Frame> frames) {
         this.activity = activity;
         this.frames = frames;
     }

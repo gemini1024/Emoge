@@ -10,6 +10,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by jh on 17. 7. 31.
+ * SweetAlertDialog 여러 군데서 쓰기 위함.
  */
 
 public class Dialogs {

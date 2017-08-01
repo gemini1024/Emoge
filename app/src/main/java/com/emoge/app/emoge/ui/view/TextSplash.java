@@ -26,6 +26,7 @@ import su.levenetc.android.textsurface.contants.Side;
 /**
  * Created by jh on 17. 7. 27.
  * 서버 준비 용.
+ * TODO : 서버준비화면. 사용 or 제거
  */
 
 public class TextSplash {

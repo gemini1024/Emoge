@@ -12,14 +12,27 @@ import android.widget.VideoView;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.utils.Dialogs;
 
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+
+/**
+ * Video 에서 Frame 추출하기위한
+ * 정보(캡처 시작 위치, 캡처 수, fps) 획득
+ */
 
 public class VideoActivity extends AppCompatActivity {
     private static final String LOG_TAG = VideoView.class.getSimpleName();
 
     @BindView(R.id.video_video)
     VideoView mVideoView;
+    @BindView(R.id.video_count)
+    DiscreteSeekBar mCountBar;
+    @BindView(R.id.video_fps)
+    DiscreteSeekBar mFpsBar;
 
     private Uri videoUri;
 
@@ -33,11 +46,9 @@ public class VideoActivity extends AppCompatActivity {
             videoUri = getIntent().getData();
             Log.i(LOG_TAG, videoUri.toString());
             mVideoView.setVideoURI(videoUri);
-            mVideoView.setMediaController(new MediaController(this));
+            mVideoView.setMediaController(new MediaController(mVideoView.getContext()));
             mVideoView.start();
 
-            // TODO : 뷰에 연결 후 제거
-            onCaptureVideo();
         } else {
             Log.e(LOG_TAG, getString(R.string.err_not_found_video_title));
             Dialogs.showErrorDialog(this,
@@ -46,13 +57,13 @@ public class VideoActivity extends AppCompatActivity {
         }
     }
 
-    // TODO : 뷰에 연결
+    @OnClick(R.id.video_button)
     void onCaptureVideo() {
         Intent returnIntent = new Intent();
         returnIntent.setData(videoUri);
-        returnIntent.putExtra("startSec", 5000);
-        returnIntent.putExtra("count", 5);
-        returnIntent.putExtra("fps", 1000);
+        returnIntent.putExtra("startSec", mVideoView.getCurrentPosition());
+        returnIntent.putExtra("count", mCountBar.getProgress());
+        returnIntent.putExtra("fps", mFpsBar.getProgress());
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }

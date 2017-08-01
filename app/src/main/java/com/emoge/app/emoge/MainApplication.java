@@ -6,6 +6,7 @@ import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Created by jh on 17. 7. 25.
+ * leakCanary 사용.
  */
 
 public class MainApplication extends Application {

@@ -9,7 +9,6 @@ import com.emoge.app.emoge.model.Frame;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -17,13 +16,13 @@ import java.util.List;
 
 /**
  * Created by jh on 17. 7. 14.
- * 이미지들을 이용해 GIF 파일 생성
+ * 이미지(Frame)들을 이용해 GIF 파일 생성
  */
 
-public class GifMaker {
+class GifMaker {
     private static final String LOG_TAG = GifMaker.class.getSimpleName();
 
-    public boolean saveAsGif(@NonNull ByteArrayOutputStream gifBos) {
+    boolean saveAsGif(@NonNull ByteArrayOutputStream gifBos) {
         File filePath = new File(Environment.getExternalStorageDirectory().getPath(),
                 new Date().getTime()+".gif");
         FileOutputStream outputStream;
@@ -32,8 +31,6 @@ public class GifMaker {
             outputStream = new FileOutputStream(filePath);
             outputStream.write(gifBos.toByteArray());
             result = true;
-        } catch (FileNotFoundException e) {
-            Log.d(LOG_TAG, e.getClass().getName(), e);
         } catch (IOException e) {
             Log.d(LOG_TAG, e.getClass().getName(), e);
         }
@@ -41,7 +38,7 @@ public class GifMaker {
     }
 
 
-    public ByteArrayOutputStream makeGifByImages(List<Frame> images, int frameDelay) {
+    ByteArrayOutputStream makeGifByImages(List<Frame> images, int frameDelay) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         AnimatedGifEncoder encoder = new AnimatedGifEncoder();
         encoder.setDelay(frameDelay);

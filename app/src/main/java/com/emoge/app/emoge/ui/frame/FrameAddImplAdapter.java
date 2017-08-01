@@ -15,12 +15,13 @@ import java.util.List;
 
 /**
  * Created by jh on 17. 8. 1.
+ * 파일에서 이미지를 추가할 수 있는 어댑터
  */
 
 public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
     private static final String LOG_TAG = FrameAddImplAdapter.class.getSimpleName();
 
-    private FrameAdder frameAdder;
+    private FrameAdder frameAdder;      // 파일 접근 처리
 
     public FrameAddImplAdapter(@NonNull RecyclerView recyclerView,
                                @NonNull List<Frame> frames,
@@ -28,6 +29,7 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
         super(recyclerView, frames);
         this.frameAdder = frameAdder;
     }
+
 
     @Override
     public void addFrameFromImages(@NonNull Intent imageData) {

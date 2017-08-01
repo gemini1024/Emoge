@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 /**
  * Created by jh on 17. 7. 25.
+ * 프레임(Gif 구성 이미지) 데이터
  */
 
 public class Frame {

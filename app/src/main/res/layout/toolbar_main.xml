@@ -21,10 +21,10 @@
             android:id="@+id/toolbar_share"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/unit_dimen"
             android:layout_marginStart="@dimen/unit_dimen"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/share_gif"
             android:padding="@dimen/half_unit_dimen"
             android:src="@android:drawable/ic_menu_share"
             android:visibility="gone" />
@@ -39,19 +39,20 @@
             android:padding="@dimen/unit_dimen"
             android:scaleType="centerInside"
             android:src="@drawable/app_name"
-            android:transitionName="@string/splash_image" />
+            android:transitionName="@string/splash_image"
+            android:contentDescription="@string/app_name" />
 
         <ImageButton
             android:id="@+id/toolbar_save"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/unit_dimen"
-            android:layout_marginRight="@dimen/unit_dimen"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:padding="@dimen/half_unit_dimen"
             android:src="@android:drawable/ic_menu_save"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:contentDescription="@string/save" />
 
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

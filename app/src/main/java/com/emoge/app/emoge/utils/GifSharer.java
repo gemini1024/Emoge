@@ -8,6 +8,7 @@ import com.emoge.app.emoge.R;
 
 /**
  * Created by jh on 17. 7. 30.
+ * GIF 이미지 공유
  */
 
 public class GifSharer {

@@ -9,11 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.emoge.app.emoge.R;
-import com.emoge.app.emoge.ui.MainActivity;
+import com.emoge.app.emoge.ui.palette.MainActivity;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
+
+/**
+ * 첫 시작화면.
+ * 퍼미션체크
+ */
 
 public class SplashActivity extends AppCompatActivity implements PermissionListener {
     private final String LOG_TAG = SplashActivity.class.getSimpleName();

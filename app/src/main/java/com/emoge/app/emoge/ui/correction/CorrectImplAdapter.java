@@ -13,22 +13,25 @@ import java.util.List;
 
 /**
  * Created by jh on 17. 8. 1.
+ * 보정기능을 추가한 어댑터.
  */
 
 public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctable {
     private static final String LOG_TAG = CorrectImplAdapter.class.getSimpleName();
 
-    private Correcter correcter;
-    private List<Frame> stageFrames;
-    private List<Frame> tmpFrames;
+    private Correcter correcter;        // 보정 작업 처리
+    private List<Frame> stageFrames;    // 현 상태 Preview 용. Palette 제거 시 같이 제거
+    private List<Frame> tmpFrames;      // View Looper 용. 변경된 이미지가 View 에서 내려온 후 제거
+
 
     public CorrectImplAdapter(@NonNull RecyclerView recyclerView,
                               @NonNull List<Frame> frames,
                               @NonNull FrameAdder frameAdder,
-                              Correcter correcter) {
+                              @NonNull Correcter correcter) {
         super(recyclerView, frames, frameAdder);
         this.correcter = correcter;
         this.stageFrames = new ArrayList<>();
+        this.tmpFrames = new ArrayList<>();
     }
 
     @Override
@@ -39,15 +42,15 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         return super.move(fromPosition, toPosition);
     }
 
+
+    // stage 존재 시 stage 를 보여줌. 존재X -> 원본 Frame
     @NonNull
     @Override
     public Frame getItem(int position) {
         if(inRange(position)) {
             if(stageFrames.isEmpty()) {
-                Log.d(LOG_TAG, "stage empty");
                 return getFrames().get(position);
             } else {
-                Log.d(LOG_TAG, String.valueOf(stageFrames.get(position).getId()));
                 return stageFrames.get(position);
             }
         } else {
@@ -56,6 +59,19 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         }
     }
 
+
+    // FPS(재생 속도) 변경
+    @Override
+    public void setFps(int value) {
+        correcter.setCurrentFps(value);
+    }
+
+    public int getFps() {
+        return correcter.getCurrentFps();
+    }
+
+
+    // Frame 전체 밝기 변경
     @Override
     public void setBrightness(int value) {
         tmpFrames = stageFrames;
@@ -63,6 +79,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         notifyDataSetChanged();
     }
 
+    // Frame 전체 대비 변경
     @Override
     public void setContrast(int value) {
         tmpFrames = stageFrames;
@@ -70,6 +87,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         notifyDataSetChanged();
     }
 
+    // Frame 전체 감마 변경
     @Override
     public void setGamma(int value) {
         tmpFrames = stageFrames;
@@ -77,42 +95,40 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         notifyDataSetChanged();
     }
 
+    // 변경 사항 적용. stage frame -> original frame
     @Override
     public void apply() {
-        if(!tmpFrames.isEmpty()) {
-            Log.e(LOG_TAG, "don't clearPreviousFrames");
-        }
         super.clear();
         super.setFrames(stageFrames);
         stageFrames = new ArrayList<>();
+        notifyDataSetChanged();
     }
 
+    // 변경 사항 제거
     @Override
     public void reset() {
-        if(!tmpFrames.isEmpty()) {
-            Log.e(LOG_TAG, "don't clearPreviousFrames");
-        }
         clearStage();
         stageFrames = new ArrayList<>();
+        notifyDataSetChanged();
     }
 
+    // stageFrames recycle
     private void clearStage() {
-        for(Frame frame : stageFrames) {
-            if(frame.getBitmap() != null) {
+        for (Frame frame : stageFrames) {
+            if (frame.getBitmap() != null) {
                 frame.getBitmap().recycle();
             }
         }
         stageFrames.clear();
-        Log.d(LOG_TAG, "cleared stage");
     }
 
+    // tmpFrames recycle
     public void clearPreviousFrames() {
-        for(Frame frame : tmpFrames) {
-            if(frame.getBitmap() != null) {
+        for (Frame frame : tmpFrames) {
+            if (frame.getBitmap() != null) {
                 frame.getBitmap().recycle();
             }
         }
         tmpFrames.clear();
-        Log.d(LOG_TAG, "cleared temp");
     }
 }

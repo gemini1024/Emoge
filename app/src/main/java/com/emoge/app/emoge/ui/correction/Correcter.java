@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
@@ -22,94 +21,98 @@ import java.util.List;
 
 /**
  * Created by jh on 17. 7. 26.
+ * 보정.
+ * Bitmap -> Bitmap or Bitmap list -> Bitmap list
+ * Frame -> Frame or Frame list -> Frame list
  */
 
 public class Correcter implements OnBMClickListener {
     private static final String LOG_TAG = Correcter.class.getSimpleName();
 
-    public static final int MAIN_PALETTE        = 10;
+    // 보정 타입 (Fragment 존재)
     public static final int CORRECT_BRIGHTNESS  = 0;
     public static final int CORRECT_CONTRAST    = 1;
     public static final int CORRECT_GAMMA       = 2;
+    public static final int MAIN_PALETTE        = 10;
+
+    // 보정 타입 (명령형. Fragment 존재 X)
+    public static final int CORRECT_REVERSE     = 100;
+    public static final int CORRECT_APPLY       = 101;
+    public static final int CORRECT_RESET       = 102;
+
+    // 기본값 (For Fragment's SeekBar)
+    private static final int DEFAULT_FPS         = 650;
+    private static final int DEFAULT_BRIGHTNESS  = 0;
+    private static final int DEFAULT_CONTRAST    = 100;
+    private static final int DEFAULT_GAMMA       = 128;
 
 
-    public static final int DEFAULT_FPS         = 650;
-    public static final int DEFAULT_BRIGHTNESS  = 0;
-    public static final int DEFAULT_CONTRAST    = 100;
-    public static final int DEFAULT_GAMMA       = 128;
-
-    private int currentFps;
-    private int currentBrightness;
-    private int currentContrast;
-    private int currentGamma;
-
-
+    // NDK Libraries
     static {
         System.loadLibrary("opencv_java3");
         System.loadLibrary("native-lib");
         System.loadLibrary("NativeImageProcessor");
     }
 
-    private AppCompatActivity activity;
-
+    private AppCompatActivity activity;     // 호출한 Activity (SupportFragment 생성)
+    private int currentFps;                 // 현재 FPS (재생 속도)
 
     public Correcter(@NonNull AppCompatActivity activity) {
-        this.activity           = activity;
-        this.currentFps         = DEFAULT_FPS;
-        this.currentBrightness  = DEFAULT_BRIGHTNESS;
-        this.currentContrast    = DEFAULT_CONTRAST;
-        this.currentGamma       = DEFAULT_GAMMA;
+        this.activity   = activity;
+        this.currentFps = DEFAULT_FPS;
     }
 
+    // 해당 Palette(보정을 위한 Fragment) 생성
     @Override
     public void onBoomButtonClick(int index) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.main_palette_container,
-                PaletteFragment.newInstance(index, getCurrentValueByType(index)));
+                PaletteFragment.newInstance(index, getDefaultValueByType(index)));
         if(fragmentManager.getBackStackEntryCount() == 0) {
             fragmentTransaction.addToBackStack(null);
         }
         fragmentTransaction.commit();
     }
 
-    public int getCurrentFps() {
-        return currentFps;
-    }
-
-    public void setCurrentFps(int currentFps) {
-        this.currentFps = currentFps;
-    }
-
-    public int getCurrentValueByType(int type) {
+    // 각 보정 타입 별 기본값
+    private int getDefaultValueByType(int type) {
         switch (type) {
             case CORRECT_BRIGHTNESS :
-                return currentBrightness;
+                return DEFAULT_BRIGHTNESS;
             case CORRECT_CONTRAST :
-                return currentContrast;
+                return DEFAULT_CONTRAST;
             case CORRECT_GAMMA :
-                return currentGamma;
-            default:
+                return DEFAULT_GAMMA;
+            default :
                 return currentFps;
         }
     }
 
-    public List<Frame> setBrightness(List<Frame> frames, int value) {
+    // FPS 변경
+    public int getCurrentFps() {
+        return currentFps;
+    }
+
+    void setCurrentFps(int currentFps) {
+        this.currentFps = currentFps;
+    }
+
+
+    // 밝기 변경
+    List<Frame> setBrightness(List<Frame> frames, int value) {
         ArrayList<Frame> stageFrames = new ArrayList<>();
         Filter brightFilter = new Filter();
         brightFilter.addSubFilter(new BrightnessSubfilter(value));
         for(Frame frame : frames) {
             stageFrames.add(new Frame(frame.getId(),
                     brightFilter.processFilter(frame.getBitmap().copy(Bitmap.Config.ARGB_8888, true))));
-            Log.d(LOG_TAG, "apply");
         }
-        currentBrightness = value;
-        Log.d(LOG_TAG, String.valueOf(value));
         return stageFrames;
     }
 
-
-    public List<Frame> setContrast(List<Frame> frames, int value) {
+    // 대비 변경
+    List<Frame> setContrast(List<Frame> frames, int value) {
         ArrayList<Frame> stageFrames = new ArrayList<>();
         Filter contrastFilter = new Filter();
         contrastFilter.addSubFilter(new ContrastSubfilter((float)(value)/100.0f));
@@ -117,12 +120,11 @@ public class Correcter implements OnBMClickListener {
             stageFrames.add(new Frame(frame.getId(),
                     contrastFilter.processFilter(frame.getBitmap().copy(Bitmap.Config.ARGB_8888, true))));
         }
-        currentContrast = value;
         return stageFrames;
     }
 
-
-    public List<Frame> setGamma(List<Frame> frames, int value) {
+    // 감마 변경
+    List<Frame> setGamma(List<Frame> frames, int value) {
         ArrayList<Frame> stageFrames = new ArrayList<>();
         Filter gammaFilter = new Filter();
         Point[] rgbKnots;
@@ -135,9 +137,7 @@ public class Correcter implements OnBMClickListener {
             stageFrames.add(new Frame(frame.getId(),
                     gammaFilter.processFilter(frame.getBitmap().copy(Bitmap.Config.ARGB_8888, true))));
         }
-        currentBrightness = value;
         return stageFrames;
     }
-
 
 }
