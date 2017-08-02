@@ -8,4 +8,5 @@
     <color name="colorPalette">#F1F5F8</color>
     <color name="colorBoomDim">#AA000000</color>
     <color name="colorProgress">#A5DC86</color>
+    <color name="colorWarning">#F27025</color>
 </resources>

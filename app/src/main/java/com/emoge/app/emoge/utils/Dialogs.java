@@ -1,8 +1,11 @@
 package com.emoge.app.emoge.utils;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
 
 import com.emoge.app.emoge.R;
 
@@ -10,7 +13,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by jh on 17. 7. 31.
- * SweetAlertDialog 여러 군데서 쓰기 위함.
+ * Dialog 여러 군데서 쓰기 위함.
  */
 
 public class Dialogs {
@@ -73,4 +76,28 @@ public class Dialogs {
         exitDialog.show();
         return exitDialog;
     }
+
+
+    @NonNull
+    public static CustomDialogController showImageDialog(@NonNull Activity activity,
+                                                         @NonNull Bitmap bitmap) {
+        AlertDialog.Builder ab = new AlertDialog.Builder(activity, R.style.CustomAlertDialog);
+        CustomDialogController controller = new CustomDialogController(activity);
+        controller.setImage(bitmap);
+        controller.build(ab);
+        controller.show();
+        return controller;
+    }
+
+    @NonNull
+    public static CustomDialogController showImageDialog(@NonNull Activity activity,
+                                                            @NonNull Uri uri) {
+        AlertDialog.Builder ab = new AlertDialog.Builder(activity, R.style.CustomAlertDialog);
+        CustomDialogController controller = new CustomDialogController(activity);
+        controller.setImage(activity, uri);
+        controller.build(ab);
+        controller.show();
+        return controller;
+    }
+
 }

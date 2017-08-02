@@ -37,8 +37,9 @@ public class Correcter implements OnBMClickListener {
 
     // 보정 타입 (명령형. Fragment 존재 X)
     public static final int CORRECT_REVERSE     = 100;
-    public static final int CORRECT_APPLY       = 101;
-    public static final int CORRECT_RESET       = 102;
+    public static final int CORRECT_ADD         = 101;
+    public static final int CORRECT_APPLY       = 102;
+    public static final int CORRECT_RESET       = 103;
 
     // 기본값 (For Fragment's SeekBar)
     private static final int DEFAULT_FPS         = 650;
@@ -69,10 +70,14 @@ public class Correcter implements OnBMClickListener {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.main_palette_container,
                 PaletteFragment.newInstance(index, getDefaultValueByType(index)));
-        if(fragmentManager.getBackStackEntryCount() == 0) {
+        if(isMainPalette(fragmentManager)) {
             fragmentTransaction.addToBackStack(null);
         }
         fragmentTransaction.commit();
+    }
+
+    public static boolean isMainPalette(FragmentManager fragmentManager) {
+        return fragmentManager.getBackStackEntryCount() == 0;
     }
 
     // 각 보정 타입 별 기본값

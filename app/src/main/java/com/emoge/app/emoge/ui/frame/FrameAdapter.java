@@ -1,39 +1,37 @@
 package com.emoge.app.emoge.ui.frame;
 
-import android.graphics.Point;
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
+import com.emoge.app.emoge.utils.CustomDialogController;
+import com.emoge.app.emoge.utils.Dialogs;
 import com.makeramen.dragsortadapter.DragSortAdapter;
-import com.makeramen.dragsortadapter.NoForegroundShadowBuilder;
 
 import java.util.Collections;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by jh on 17. 7. 25.
  * Draggable RecyclerView Adapter
  */
 
-public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> {
+public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
     private static final String LOG_TAG = FrameAdapter.class.getSimpleName();
 
     private static final int MAX_ITEM_SIZE = 10;
 
     private List<Frame> frames;
+    private Activity activity;
 
-    public FrameAdapter(@NonNull RecyclerView recyclerView,
-                        @NonNull List<Frame> frames) {
+    FrameAdapter(@NonNull RecyclerView recyclerView,
+                 @NonNull List<Frame> frames) {
         super(recyclerView);
         this.frames = frames;
     }
@@ -58,19 +56,18 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
     public FrameViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.item_frame, parent, false);
-        FrameViewHolder holder = new FrameViewHolder(this, view);
-        view.setOnClickListener(holder);
-        view.setOnLongClickListener(holder);
-        return holder;
+        return new FrameViewHolder(this, view);
     }
 
     @Override
-    public void onBindViewHolder(FrameViewHolder holder, int position) {
+    public void onBindViewHolder(final FrameViewHolder holder, int position) {
         final Frame frame = getItem(position);
 
         holder.image.setImageBitmap(frame.getBitmap());
         holder.image.setVisibility(getDraggingId() == frame.getId() ? View.INVISIBLE : View.VISIBLE);
         holder.image.postInvalidate();
+        setDialog(holder.image, frame.getId());
+        holder.image.setOnLongClickListener(holder);
     }
 
     @Override
@@ -83,6 +80,30 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
         super.onDetachedFromRecyclerView(recyclerView);
         clear();
     }
+
+    public void setDialogTargetWhenOnItemClick(Activity activity) {
+        this.activity = activity;
+    }
+
+    private void setDialog(View view, final long id) {
+        if(activity != null) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final CustomDialogController controller = Dialogs.showImageDialog(activity,
+                            frames.get(getPositionForId(id)).getBitmap());
+                    controller.setRemoveButtonListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    removeItem(id);
+                                    controller.dismiss();
+                                }
+                            });
+                }
+            });
+        }
+    }
+
 
     // 기본 조작
     @NonNull
@@ -140,6 +161,10 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
         }
     }
 
+    public void removeItem(long id) {
+        removeItem(getPositionForId(id));
+    }
+
     public void clear() {
         if(!frames.isEmpty()) {
             for (Frame frame : frames) {
@@ -149,37 +174,6 @@ public class FrameAdapter extends DragSortAdapter<FrameAdapter.FrameViewHolder> 
             }
             frames.clear();
             notifyDataSetChanged();
-        }
-    }
-
-
-    // 뷰 홀더
-    static class FrameViewHolder extends DragSortAdapter.ViewHolder implements
-            View.OnClickListener, View.OnLongClickListener {
-
-        @BindView(R.id.frame_item_image)
-        ImageView image;
-
-        FrameViewHolder(DragSortAdapter<?> dragSortAdapter, View itemView) {
-            super(dragSortAdapter, itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        @Override
-        public void onClick(View v) {
-            // TODO : Zoom or Remove
-            Log.d(LOG_TAG, "clicked");
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            startDrag();
-            return true;
-        }
-
-        @Override
-        public View.DragShadowBuilder getShadowBuilder(View itemView, Point touchPoint) {
-            return new NoForegroundShadowBuilder(itemView, touchPoint);
         }
     }
 }

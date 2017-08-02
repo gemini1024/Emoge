@@ -59,6 +59,36 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         }
     }
 
+    // 보정 작업
+    public void correct(int type, int value) {
+        switch (type) {
+            case Correcter.MAIN_PALETTE :
+                setFps(value);
+                break;
+            case Correcter.CORRECT_BRIGHTNESS :
+                setBrightness(value);
+                break;
+            case Correcter.CORRECT_CONTRAST :
+                setContrast(value);
+                break;
+            case Correcter.CORRECT_GAMMA :
+                setGamma(value);
+                break;
+            case Correcter.CORRECT_REVERSE :
+                reverse();
+                break;
+            case Correcter.CORRECT_ADD :
+                setBrightness(0);
+                break;
+            case Correcter.CORRECT_APPLY :
+                apply();
+                break;
+            case Correcter.CORRECT_RESET :
+                reset();
+                break;
+        }
+    }
+
 
     // FPS(재생 속도) 변경
     @Override

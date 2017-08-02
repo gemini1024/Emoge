@@ -1,5 +1,6 @@
 package com.emoge.app.emoge.ui.palette;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -135,6 +136,12 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
 
     }
 
+    // 보정 시작
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_ADD, value));
+    }
 
     // apply 없이 종료시 reset. 이미 apply 한 경우도 호출. 상관X.
     @Override

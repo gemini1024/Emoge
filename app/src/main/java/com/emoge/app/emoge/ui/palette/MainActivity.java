@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFrameList(FrameAdder frameAdder, Correcter correcter) {
         mFrameAdapter = new CorrectImplAdapter(mFrameRecyclerView,new ArrayList<Frame>(), frameAdder, correcter);
+        mFrameAdapter.setDialogTargetWhenOnItemClick(this);
         mFrameRecyclerView.setHasFixedSize(true);
         mFrameRecyclerView.setAdapter(mFrameAdapter);
         mFrameRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -135,29 +136,7 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPaletteEvent(PaletteMessage message) {
         mHandler.removeCallbacks(mTask);
-        switch (message.getType()) {
-            case Correcter.MAIN_PALETTE :
-                mFrameAdapter.setFps(message.getValue());
-                break;
-            case Correcter.CORRECT_BRIGHTNESS :
-                mFrameAdapter.setBrightness(message.getValue());
-                break;
-            case Correcter.CORRECT_CONTRAST :
-                mFrameAdapter.setContrast(message.getValue());
-                break;
-            case Correcter.CORRECT_GAMMA :
-                mFrameAdapter.setGamma(message.getValue());
-                break;
-            case Correcter.CORRECT_REVERSE :
-                mFrameAdapter.reverse();
-                break;
-            case Correcter.CORRECT_APPLY :
-                mFrameAdapter.apply();
-                break;
-            case Correcter.CORRECT_RESET :
-                mFrameAdapter.reset();
-                break;
-        }
+        mFrameAdapter.correct(message.getType(), message.getValue());
         mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
         mHandler.postDelayed(mTask, mFrameAdapter.getFps());
         mFrameAdapter.clearPreviousFrames();    // View 에서 띄우는 이미지를 변경했으므로 -> 제거
@@ -214,7 +193,11 @@ public class MainActivity extends AppCompatActivity {
     // 저장 기능
     @OnClick(R.id.toolbar_save)
     void makeToGifByImages() {
-        new GifSaveTask(this, mFrameAdapter.getFrames()).execute(mFrameAdapter.getFps());
+        if(Correcter.isMainPalette(getSupportFragmentManager())) {
+            new GifSaveTask(this, mFrameAdapter.getFrames()).execute(mFrameAdapter.getFps());
+        } else {
+            Dialogs.showErrorDialog(this, R.string.modifying, R.string.err_modifying);
+        }
     }
 
 

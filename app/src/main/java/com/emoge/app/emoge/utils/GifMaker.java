@@ -2,6 +2,7 @@ package com.emoge.app.emoge.utils;
 
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.emoge.app.emoge.encoder.AnimatedGifEncoder;
@@ -22,23 +23,23 @@ import java.util.List;
 class GifMaker {
     private static final String LOG_TAG = GifMaker.class.getSimpleName();
 
-    boolean saveAsGif(@NonNull ByteArrayOutputStream gifBos) {
-        File filePath = new File(Environment.getExternalStorageDirectory().getPath(),
+    @Nullable
+    File saveAsGif(@NonNull ByteArrayOutputStream gifBos) {
+        File file = new File(Environment.getExternalStorageDirectory().getPath(),
                 new Date().getTime()+".gif");
         FileOutputStream outputStream;
-        boolean result = false;
         try {
-            outputStream = new FileOutputStream(filePath);
+            outputStream = new FileOutputStream(file);
             outputStream.write(gifBos.toByteArray());
-            result = true;
+            return file;
         } catch (IOException e) {
             Log.d(LOG_TAG, e.getClass().getName(), e);
+            return null;
         }
-        return result;
     }
 
-
-    ByteArrayOutputStream makeGifByImages(List<Frame> images, int frameDelay) {
+    @NonNull
+    ByteArrayOutputStream makeGifByImages(@NonNull List<Frame> images, int frameDelay) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         AnimatedGifEncoder encoder = new AnimatedGifEncoder();
         encoder.setDelay(frameDelay);
@@ -47,7 +48,7 @@ class GifMaker {
 
         for (Frame frame : images) {
             encoder.addFrame(frame.getBitmap());
-            Log.i(LOG_TAG, "added");
+            Log.i(LOG_TAG, "added frame");
         }
 
         encoder.finish();
