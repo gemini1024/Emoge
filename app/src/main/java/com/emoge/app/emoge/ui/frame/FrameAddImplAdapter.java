@@ -37,13 +37,16 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
             Uri singleImageUri = imageData.getData();
             if( singleImageUri != null ) {
                 // single image
-                addItem(new Frame(getItemCount(), frameAdder.loadBitmapSampleSize(singleImageUri)));
+                addItem(new Frame(nextId(), frameAdder.loadBitmapSampleSize(singleImageUri)));
             } else if( imageData.getClipData() != null ) {
                 // multiple image
                 ClipData clipData = imageData.getClipData();
+                int firstAddPosition = getItemCount();
                 for (int i = 0; i < clipData.getItemCount(); i++) {
-                    addItem(new Frame(getItemCount(), frameAdder.loadBitmapSampleSize(clipData.getItemAt(i).getUri())));
+                    addItemWithoutNotify(new Frame(nextId(),
+                            frameAdder.loadBitmapSampleSize(clipData.getItemAt(i).getUri())));
                 }
+                notifyItemRangeInserted(firstAddPosition, getItemCount()-1);
             }
         } catch (FileNotFoundException e) {
             Log.e(LOG_TAG, e.getClass().getName(), e);
@@ -56,9 +59,11 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
             Uri imageUri = imageData.getData();
             if( imageUri != null ) {
                 List<Bitmap> bitmaps = frameAdder.loadBitmapsFromGif(imageUri);
+                int firstAddPosition = getItemCount();
                 for(Bitmap bitmap : bitmaps) {
-                    addItem(new Frame(getItemCount(), bitmap));
+                    addItemWithoutNotify(new Frame(nextId(), bitmap));
                 }
+                notifyItemRangeInserted(firstAddPosition, getItemCount()-1);
             }
         } catch (FileNotFoundException e) {
             Log.e(LOG_TAG, e.getClass().getName(), e);
@@ -72,9 +77,11 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
                     videoData.getIntExtra("startSec", 0),
                     videoData.getIntExtra("count", 0),
                     videoData.getIntExtra("fps", 1));
+            int firstAddPosition = getItemCount();
             for (Bitmap bitmap : bitmaps) {
-                addItem(new Frame(getItemCount(), bitmap));
+                addItemWithoutNotify(new Frame(nextId(), bitmap));
             }
+            notifyItemRangeInserted(firstAddPosition, getItemCount()-1);
         }
     }
 }

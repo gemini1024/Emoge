@@ -42,6 +42,19 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         return super.move(fromPosition, toPosition);
     }
 
+    @Override
+    public void removeItem(int position) {
+        super.removeItem(position);
+        if(!stageFrames.isEmpty()) {
+            if (inRange(position)) {
+                stageFrames.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, stageFrames.size());
+            } else {
+                Log.e(LOG_TAG, "잘못된 frame list 접근");
+            }
+        }
+    }
 
     // stage 존재 시 stage 를 보여줌. 존재X -> 원본 Frame
     @NonNull
@@ -79,12 +92,15 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
                 break;
             case Correcter.CORRECT_ADD :
                 setBrightness(0);
+                Log.i(LOG_TAG, "correct start");
                 break;
             case Correcter.CORRECT_APPLY :
                 apply();
+                Log.i(LOG_TAG, "clear");
                 break;
             case Correcter.CORRECT_RESET :
                 reset();
+                Log.i(LOG_TAG, "reset");
                 break;
         }
     }

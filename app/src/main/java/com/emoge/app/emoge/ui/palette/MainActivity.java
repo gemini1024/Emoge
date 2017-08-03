@@ -17,6 +17,7 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
+import com.emoge.app.emoge.model.FrameStatusMessage;
 import com.emoge.app.emoge.model.PaletteMessage;
 import com.emoge.app.emoge.ui.CameraActivity;
 import com.emoge.app.emoge.ui.VideoActivity;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)             Toolbar mToolbar;
     @BindView(R.id.main_preview)        PhotoView mPreview;
     @BindView(R.id.main_frame_list)     RecyclerView mFrameRecyclerView;
+    @BindView(R.id.main_bt_add_frame)   BoomMenuButton mAddMenu;
+    @BindView(R.id.main_bt_correction)  BoomMenuButton mCorrectMenu;
 
     // Frame 저장 및 수정용 Adapter
     private CorrectImplAdapter mFrameAdapter;
@@ -125,22 +128,56 @@ public class MainActivity extends AppCompatActivity {
     private void enableMenuButtons(FrameAdder frameAdder, Correcter correcter) {
         findViewById(R.id.toolbar_share).setVisibility(View.VISIBLE);
         findViewById(R.id.toolbar_save).setVisibility(View.VISIBLE);
-        MenuButtons.buildAddButton(getResources(),
-                (BoomMenuButton)findViewById(R.id.main_bt_add_frame), frameAdder);
-        MenuButtons.buildSelectButton(getResources(),
-                (BoomMenuButton)findViewById(R.id.main_bt_correction), correcter);
+        MenuButtons.buildAddButton(getResources(),mAddMenu, frameAdder);
+        MenuButtons.buildSelectButton(getResources(),mCorrectMenu, correcter);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MenuButtons.showWithAnimation(mAddMenu);
+            }
+        }, 500);
     }
 
 
-    // 보정 기능
+    // 보정 기능 ( Message from PaletteFragment )
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPaletteEvent(PaletteMessage message) {
+    void onPaletteEvent(PaletteMessage message) {
         mHandler.removeCallbacks(mTask);
+        if(isTransPalette(message.getType())) {
+            showAddMenuOnlyMainPalette();
+        }
         mFrameAdapter.correct(message.getType(), message.getValue());
         mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
         mHandler.postDelayed(mTask, mFrameAdapter.getFps());
         mFrameAdapter.clearPreviousFrames();    // View 에서 띄우는 이미지를 변경했으므로 -> 제거
     }
+
+    private boolean isTransPalette(int type) {
+        return type == Correcter.CORRECT_ADD
+                || type == Correcter.CORRECT_APPLY
+                || type == Correcter.CORRECT_RESET;
+    }
+
+    private void showAddMenuOnlyMainPalette() {
+        if (Correcter.isMainPalette(getSupportFragmentManager())
+                && !mFrameAdapter.isFull()) {
+            MenuButtons.showWithAnimation(mAddMenu);
+        } else {
+            MenuButtons.hideWithAnimation(mAddMenu);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    void receiveFrameStatusMessage(FrameStatusMessage message) {
+        if(message.equals(FrameStatusMessage.FULL)) {
+            MenuButtons.hideWithAnimation(mAddMenu);
+        } else {
+            showAddMenuOnlyMainPalette();
+        }
+    }
+
+
+
 
     @Override
     protected void onStart() {
@@ -173,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 new FrameAddTask(this, mFrameAdapter, requestCode).execute(data);
+                MenuButtons.showWithAnimation(mCorrectMenu);
             } else {
                 // show error or do nothing
                 Log.e(LOG_TAG, getString(R.string.err_intent_return_null));
@@ -181,10 +219,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // 공유 기능
+    // 움짤 평가소
     @OnClick(R.id.toolbar_share)
     void onShareButton() {
-        // TODO : 보정 연습 용. 보정 완성 후 제거
+        // TODO : 움짤 평가소로 교체
         Intent intent = new Intent(getBaseContext(), CameraActivity.class);
         startActivity(intent);
     }

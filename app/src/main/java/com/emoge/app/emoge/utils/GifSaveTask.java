@@ -3,8 +3,8 @@ package com.emoge.app.emoge.utils;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.Toast;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
@@ -58,7 +58,7 @@ public class GifSaveTask extends AsyncTask<Integer, Integer, File> {
             dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                 @Override
                 public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    showResultDialog(savedFile);
+                    showResultImageDialog(savedFile);
                     sweetAlertDialog.dismissWithAnimation();
                 }
             });
@@ -68,13 +68,13 @@ public class GifSaveTask extends AsyncTask<Integer, Integer, File> {
         }
     }
 
-    private void showResultDialog(File file) {
-        final CustomDialogController controller = Dialogs.showImageDialog(activity, Uri.fromFile(file));
+    private void showResultImageDialog(@NonNull File file) {
+        final Uri fileUri = Uri.fromFile(file);
+        final CustomDialogController controller = Dialogs.showImageDialog(activity, fileUri);
         controller.setShareKakaoButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : 공유
-                Toast.makeText(activity, "share", Toast.LENGTH_SHORT).show();
+                GifSharer.shareOtherApps(activity, fileUri);
                 controller.dismiss();
             }
         });

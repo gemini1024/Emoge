@@ -10,11 +10,15 @@ import android.view.ViewGroup;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
+import com.emoge.app.emoge.model.FrameStatusMessage;
 import com.emoge.app.emoge.utils.CustomDialogController;
 import com.emoge.app.emoge.utils.Dialogs;
 import com.makeramen.dragsortadapter.DragSortAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -105,36 +109,53 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
     }
 
 
-    // 기본 조작
-    @NonNull
-    public List<Frame> getFrames() {
-        return Collections.unmodifiableList(frames);
-    }
 
-    protected void setFrames(List<Frame> frames) {
-        this.frames = frames;
-    }
 
-    public void reverse() {
-        Collections.reverse(frames);
-        notifyDataSetChanged();
-    }
-
+    /**
+     * 기본조작들.
+     * CRUD 순
+     */
+    // C
     public boolean addItem(@NonNull Frame item) {
-        if( MAX_ITEM_SIZE > frames.size() ) {
-            try {
-                frames.add(item);
-                notifyItemInserted(frames.size() - 1);
-                return true;
-            } catch (IllegalStateException e) {
-                Log.e(LOG_TAG, e.getClass().getSimpleName(), e);
-                return false;
-            }
+        if (addItemWithoutNotify(item)) {
+            notifyItemInserted(frames.size() - 1);
+            return true;
         } else {
-            // TODO : Alert
-            Log.e(LOG_TAG, "item size 초과");
             return false;
         }
+    }
+
+    boolean addItemWithoutNotify(@NonNull Frame item) {
+        if( MAX_ITEM_SIZE > frames.size() ) {
+            frames.add(item);
+            return true;
+        } else {
+            EventBus.getDefault().post(FrameStatusMessage.FULL);
+            return false;
+        }
+    }
+
+    long nextId() {
+        if(frames.isEmpty()) {
+            return 1;
+        } else {
+            return Collections.max(frames, new Comparator<Frame>() {
+                @Override
+                public int compare(Frame o1, Frame o2) {
+                    return Long.compare(o1.getId(), o2.getId());
+                }
+            }).getId() + 1;
+        }
+    }
+
+
+    // R
+    public boolean isEmpty() {
+        return frames.isEmpty();
+    }
+
+    public boolean isFull() {
+        return MAX_ITEM_SIZE <= frames.size();
     }
 
     protected boolean inRange(int position) {
@@ -151,11 +172,31 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
         }
     }
 
+    @NonNull
+    public List<Frame> getFrames() {
+        return Collections.unmodifiableList(frames);
+    }
+
+
+    // U
+    protected void setFrames(List<Frame> frames) {
+        this.frames = frames;
+    }
+
+    protected void reverse() {
+        Collections.reverse(frames);
+        notifyDataSetChanged();
+    }
+
+
+
+    // D
     public void removeItem(int position) {
         if(inRange(position)) {
             frames.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, frames.size());
+            EventBus.getDefault().post(FrameStatusMessage.NOT_FULL);
         } else {
             Log.e(LOG_TAG, "잘못된 frame list 접근");
         }
@@ -165,7 +206,7 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
         removeItem(getPositionForId(id));
     }
 
-    public void clear() {
+    protected void clear() {
         if(!frames.isEmpty()) {
             for (Frame frame : frames) {
                 if(frame.getBitmap() != null) {

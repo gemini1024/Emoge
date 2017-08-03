@@ -1,6 +1,5 @@
 package com.emoge.app.emoge.ui.palette;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -72,8 +71,34 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
         mLabel.setText(getLabelByType(mPaletteType));
         setSeekBarByType(mPaletteType);
         mSeekBar.setOnProgressChangeListener(this);
+
+        // 보정 시작
+        if(! Correcter.isMainPalette(getActivity().getSupportFragmentManager())) {
+            EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_ADD, value));
+        }
         return view;
     }
+
+    // apply 없이 종료시 reset. 이미 apply 한 경우도 호출. 상관X.
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_RESET, value));
+    }
+
+    // apply
+    @OnClick(R.id.palette_button)
+    void onApplyButton() {
+        if(mPaletteType == Correcter.MAIN_PALETTE) {
+            EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_REVERSE, value));
+        } else {
+            EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_APPLY, value));
+        }
+        getActivity().getSupportFragmentManager().popBackStack();
+    }
+
+
+
 
     @NonNull
     private String getLabelByType(int type) {
@@ -135,31 +160,5 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
     public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
 
     }
-
-    // 보정 시작
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_ADD, value));
-    }
-
-    // apply 없이 종료시 reset. 이미 apply 한 경우도 호출. 상관X.
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_RESET, value));
-    }
-
-    // apply
-    @OnClick(R.id.palette_button)
-    void onApplyButton() {
-        if(mPaletteType == Correcter.MAIN_PALETTE) {
-            EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_REVERSE, value));
-        } else {
-            EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_APPLY, value));
-        }
-        getActivity().getSupportFragmentManager().popBackStack();
-    }
-
 
 }

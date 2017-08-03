@@ -12,13 +12,8 @@ import com.emoge.app.emoge.R;
  */
 
 public class GifSharer {
-    private Activity activity;
 
-    public GifSharer(Activity activity) {
-        this.activity = activity;
-    }
-
-    private void shareOtherApps(Uri sharingGifFile) {
+    public static void shareOtherApps(Activity activity, Uri sharingGifFile) {
         Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
         shareIntent.setType("image/gif");
         shareIntent.putExtra(Intent.EXTRA_STREAM, sharingGifFile);

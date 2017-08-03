@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "75729174023",
+    "firebase_url": "https://emoge-50942.firebaseio.com",
+    "project_id": "emoge-50942",
+    "storage_bucket": "emoge-50942.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75729174023:android:c1ceab83b4a3a3dd",
+        "android_client_info": {
+          "package_name": "com.emoge.app.emoge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "75729174023-dl52fkp9rn0lgsmp659j741pfp81efem.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOPsX8Zp1LROFJKd5nA7lzJh2KIatDEiY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
