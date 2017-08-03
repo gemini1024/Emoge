@@ -78,5 +78,12 @@ public class GifSaveTask extends AsyncTask<Integer, Integer, File> {
                 controller.dismiss();
             }
         });
+        controller.setShareServerButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GifSharer.shareServer("유머", "시바견", fileUri);
+                controller.dismiss();
+            }
+        });
     }
 }

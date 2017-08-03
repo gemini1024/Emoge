@@ -19,12 +19,12 @@ import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.FrameStatusMessage;
 import com.emoge.app.emoge.model.PaletteMessage;
-import com.emoge.app.emoge.ui.CameraActivity;
 import com.emoge.app.emoge.ui.VideoActivity;
 import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
 import com.emoge.app.emoge.ui.correction.Correcter;
 import com.emoge.app.emoge.ui.frame.FrameAddTask;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
+import com.emoge.app.emoge.ui.server.ServerActivity;
 import com.emoge.app.emoge.ui.view.MenuButtons;
 import com.emoge.app.emoge.utils.Dialogs;
 import com.emoge.app.emoge.utils.GifSaveTask;
@@ -222,8 +222,7 @@ public class MainActivity extends AppCompatActivity {
     // 움짤 평가소
     @OnClick(R.id.toolbar_share)
     void onShareButton() {
-        // TODO : 움짤 평가소로 교체
-        Intent intent = new Intent(getBaseContext(), CameraActivity.class);
+        Intent intent = new Intent(getBaseContext(), ServerActivity.class);
         startActivity(intent);
     }
 

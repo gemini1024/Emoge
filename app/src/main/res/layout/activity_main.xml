@@ -108,7 +108,7 @@
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
             android:src="@drawable/ic_contrast"
-            android:contentDescription="@string/menu_add_image" />
+            android:contentDescription="@string/menu_correct_image" />
     </com.nightonke.boommenu.BoomMenuButton>
 
 

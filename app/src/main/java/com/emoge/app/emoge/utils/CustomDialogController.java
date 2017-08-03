@@ -60,6 +60,13 @@ public class CustomDialogController {
         shareKakaoButton.setVisibility(View.VISIBLE);
     }
 
+    public void setShareServerButton(View.OnClickListener listener) {
+        shareLayout.setVisibility(View.VISIBLE);
+        ImageButton shareServerButton = (ImageButton) innerLayout.findViewById(R.id.dialog_share_server);
+        shareServerButton.setOnClickListener(listener);
+        shareServerButton.setVisibility(View.VISIBLE);
+    }
+
     Dialog build(AlertDialog.Builder builder) {
         builder.setView(innerLayout);
         resultDialog = builder.create();

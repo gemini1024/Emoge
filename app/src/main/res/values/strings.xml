@@ -43,4 +43,8 @@
     <!--other-->
     <string name="save">움짤 저장</string>
     <string name="menu_add_image">이미지 추가 메뉴</string>
+    <string name="title_activity_server">움짱 저장소</string>
+    <string name="section_format">카테고리 : %1$d</string>
+    <string name="menu_correct_image">보정 메뉴</string>
+    <string name="server_image">서버 이미지</string>
 </resources>
