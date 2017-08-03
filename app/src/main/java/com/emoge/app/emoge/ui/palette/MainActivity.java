@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
     private void enableMenuButtons(FrameAdder frameAdder, Correcter correcter) {
         findViewById(R.id.toolbar_share).setVisibility(View.VISIBLE);
         findViewById(R.id.toolbar_save).setVisibility(View.VISIBLE);
-        MenuButtons.buildAddButton(getResources(),mAddMenu, frameAdder);
-        MenuButtons.buildSelectButton(getResources(),mCorrectMenu, correcter);
+        MenuButtons.buildAddButton(this,mAddMenu, frameAdder);
+        MenuButtons.buildSelectButton(this,mCorrectMenu, correcter);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

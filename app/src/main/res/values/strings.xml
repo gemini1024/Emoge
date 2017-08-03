@@ -42,4 +42,5 @@
 
     <!--other-->
     <string name="save">움짤 저장</string>
+    <string name="menu_add_image">이미지 추가 메뉴</string>
 </resources>

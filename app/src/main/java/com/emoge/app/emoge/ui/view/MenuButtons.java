@@ -1,9 +1,10 @@
 package com.emoge.app.emoge.ui.view;
 
-import android.content.res.Resources;
+import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
+import android.graphics.Rect;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.OvershootInterpolator;
@@ -23,38 +24,43 @@ import com.nightonke.boommenu.BoomMenuButton;
 
 public class MenuButtons {
 
-    private static final int ANIMATION_DELAY = 400;
+    private static final int ANIMATION_DELAY    = 400;
+    private static final Rect IMAGE_PADDING     = new Rect(24,24,24,24);
 
-    public static void buildAddButton(@NonNull final Resources res,
+    public static void buildAddButton(@NonNull final Context context,
                                @NonNull final BoomMenuButton bmb,
                                @NonNull final FrameAdder frameAdder) {
-        String[] titles = res.getStringArray(R.array.frame_add_title);
-        String[] subTitles = res.getStringArray(R.array.frame_add_sub);
-        TypedArray imageIds = res.obtainTypedArray(R.array.frame_add_image);
+        String[] titles = context.getResources().getStringArray(R.array.frame_add_title);
+        String[] subTitles = context.getResources().getStringArray(R.array.frame_add_sub);
+        TypedArray imageIds = context.getResources().obtainTypedArray(R.array.frame_add_image);
 
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             final HamButton.Builder builder = new HamButton.Builder()
                     .normalImageRes(imageIds.getResourceId(i,0))
+                    .imagePadding(IMAGE_PADDING)
                     .normalText(titles[i])
                     .subNormalText(subTitles[i])
-                    .normalColor(Color.GRAY)
+                    .normalColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                    .highlightedColor(ContextCompat.getColor(context, R.color.colorAccent))
                     .listener(frameAdder);
             bmb.addBuilder(builder);
         }
         imageIds.recycle();
     }
 
-    public static void buildSelectButton(@NonNull final Resources res,
+    public static void buildSelectButton(@NonNull final Context context,
                                   @NonNull final BoomMenuButton bmb,
                                   @NonNull final Correcter correcter) {
-        String[] titles = res.getStringArray(R.array.correct_title);
-        TypedArray imageIds = res.obtainTypedArray(R.array.correct_image);
+        String[] titles = context.getResources().getStringArray(R.array.correct_title);
+        TypedArray imageIds = context.getResources().obtainTypedArray(R.array.correct_image);
 
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
                     .normalImageRes(imageIds.getResourceId(i,0))
+                    .imagePadding(IMAGE_PADDING)
                     .normalText(titles[i])
-                    .normalColor(Color.GRAY)
+                    .normalColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                    .highlightedColor(ContextCompat.getColor(context, R.color.colorAccent))
                     .listener(correcter);
             bmb.addBuilder(builder);
         }

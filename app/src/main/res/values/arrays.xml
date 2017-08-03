@@ -12,9 +12,9 @@
         <item>비디오를 추가합니다</item>
     </string-array>
     <array name="frame_add_image">
-        <item>@drawable/ic_photo_library_24dp</item>
-        <item>@drawable/ic_gif_24dp</item>
-        <item>@drawable/ic_play_circle_filled_24dp</item>
+        <item>@drawable/ic_photo_library</item>
+        <item>@drawable/ic_gif</item>
+        <item>@drawable/ic_play</item>
     </array>
 
     <!--ImageCorrectionButton-->
@@ -24,8 +24,8 @@
         <item>감마 보정</item>
     </string-array>
     <array name="correct_image">
-        <item>@drawable/ic_healing_24dp</item>
-        <item>@drawable/ic_healing_24dp</item>
-        <item>@drawable/ic_healing_24dp</item>
+        <item>@drawable/ic_brightness</item>
+        <item>@drawable/ic_contrast</item>
+        <item>@drawable/ic_gamma</item>
     </array>
 </resources>

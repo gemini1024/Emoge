@@ -73,7 +73,6 @@
         app:bmb_dotRadius="0dp"
         app:bmb_normalColor="@color/colorPrimary"
         app:bmb_piecePlaceEnum="piecePlace_ham_3"
-        app:bmb_use3DTransformAnimation="true"
         app:layout_constraintBottom_toBottomOf="@id/guideline2"
         app:layout_constraintRight_toLeftOf="@+id/main_bt_correction"
         app:layout_constraintTop_toTopOf="@id/guideline2">
@@ -83,7 +82,8 @@
             android:layout_height="@dimen/boombutton_image_size"
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
-            android:src="@drawable/ic_add_24dp" />
+            android:src="@drawable/ic_add"
+            android:contentDescription="@string/menu_add_image" />
     </com.nightonke.boommenu.BoomMenuButton>
 
     <com.nightonke.boommenu.BoomMenuButton
@@ -98,10 +98,18 @@
         app:bmb_dimColor="@color/colorBoomDim"
         app:bmb_normalColor="@color/colorPrimary"
         app:bmb_piecePlaceEnum="piecePlace_dot_3_1"
-        app:bmb_use3DTransformAnimation="true"
         app:layout_constraintBottom_toBottomOf="@id/guideline2"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline2" />
+        app:layout_constraintTop_toTopOf="@id/guideline2">
+
+        <ImageView
+            android:layout_width="@dimen/boombutton_image_size"
+            android:layout_height="@dimen/boombutton_image_size"
+            android:layout_gravity="center"
+            android:background="@color/colorPrimary"
+            android:src="@drawable/ic_contrast"
+            android:contentDescription="@string/menu_add_image" />
+    </com.nightonke.boommenu.BoomMenuButton>
 
 
 </android.support.constraint.ConstraintLayout>
