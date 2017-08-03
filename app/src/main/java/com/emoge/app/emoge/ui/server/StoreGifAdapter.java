@@ -49,6 +49,11 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
         notifyItemInserted(gifs.size()-1);
     }
 
+    void clear() {
+        gifs.clear();
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getItemCount() {

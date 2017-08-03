@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
     // 실수로 나가기 방지
     @Override
     public void onBackPressed() {
-        if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
+        if(Correcter.isMainPalette(getSupportFragmentManager())) {
             Dialogs.showExitDialog(this);
         } else {
             super.onBackPressed();

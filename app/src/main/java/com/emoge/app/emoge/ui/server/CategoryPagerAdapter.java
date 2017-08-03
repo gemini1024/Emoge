@@ -16,11 +16,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 class CategoryPagerAdapter extends FragmentPagerAdapter {
     private final String LOG_TAG = CategoryPagerAdapter.class.getSimpleName();
 
-    static final int CATEGORY_HUMOR = 0;
-    static final int CATEGORY_HEALING = 1;
-    static final int CATEGORY_HUMAN = 2;
-    static final int CATEGORY_STORE = 3;
-    static final int CATEGORY_NUM = 4;
+    static final int CATEGORY_HUMOR     = 0;
+    static final int CATEGORY_HEALING   = 1;
+    static final int CATEGORY_HUMAN     = 2;
+    static final int CATEGORY_STORE     = 3;
+    static final int CATEGORY_NUM       = 4;
 
 
     CategoryPagerAdapter(FragmentManager fm) {

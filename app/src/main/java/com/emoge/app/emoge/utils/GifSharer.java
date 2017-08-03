@@ -7,8 +7,10 @@ import android.support.annotation.NonNull;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.StoreGif;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -54,6 +56,11 @@ public class GifSharer {
     private static void sendServer(String category, String title, Uri downloadUri) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference(category);
         StoreGif user = new StoreGif(title, downloadUri.toString(), 0);
-        database.push().setValue(user);
+        database.push().setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+            }
+        });
     }
 }

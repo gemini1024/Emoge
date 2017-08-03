@@ -43,8 +43,11 @@
     <!--other-->
     <string name="save">움짤 저장</string>
     <string name="menu_add_image">이미지 추가 메뉴</string>
-    <string name="title_activity_server">움짱 저장소</string>
     <string name="section_format">카테고리 : %1$d</string>
     <string name="menu_correct_image">보정 메뉴</string>
     <string name="server_image">서버 이미지</string>
+    <string name="loading_image">이미지를 불러오는 중입니다</string>
+    <string name="err_loading_image_content">서버에서 이미지를 가져오는데 실패했습니다. 다시 시도해 주세요.</string>
+    <string name="err_loading_image_title">서버 연결 실패</string>
+    <string name="back_button">뒤로가기</string>
 </resources>

@@ -47,7 +47,7 @@
         tools:replace="android:icon">
         <activity
             android:name=".ui.palette.MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.CameraActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -63,9 +63,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.server.ServerActivity"
-            android:label="@string/title_activity_server"
-            android:theme="@style/AppTheme"></activity>
+            android:name=".ui.server.ServerActivity"/>
     </application>
 
 </manifest>

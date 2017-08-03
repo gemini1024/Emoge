@@ -73,6 +73,7 @@ public class Dialogs {
                         sweetAlertDialog.cancel();
                     }
                 });
+        exitDialog.setCancelable(false);
         exitDialog.show();
         return exitDialog;
     }
