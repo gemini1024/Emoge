@@ -9,12 +9,12 @@ import android.widget.ImageButton;
 
 import com.emoge.app.emoge.R;
 
+/**
+ * Created by jh on 17. 8. 3.
+ * 서버 메인 페이지
+ */
 public class ServerActivity extends AppCompatActivity {
     private final String LOG_TAG = ServerActivity.class.getSimpleName();
-
-    private CategoryPagerAdapter mCategoryPagerAdapter;
-
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +30,12 @@ public class ServerActivity extends AppCompatActivity {
             }
         });
 
-        mCategoryPagerAdapter = new CategoryPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.server_container);
+        CategoryPagerAdapter mCategoryPagerAdapter = new CategoryPagerAdapter(getSupportFragmentManager(), new Category(getResources()));
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.server_container);
         mViewPager.setAdapter(mCategoryPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.server_tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
     }
 
 

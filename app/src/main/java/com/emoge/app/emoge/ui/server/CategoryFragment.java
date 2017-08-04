@@ -1,9 +1,5 @@
 package com.emoge.app.emoge.ui.server;
 
-/**
- * Created by jh on 17. 8. 3.
- */
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.StoreGif;
-import com.emoge.app.emoge.utils.Dialogs;
+import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +25,8 @@ import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Created by jh on 17. 8. 3.
+ * 서버의 카테고리별 View
  */
 public class CategoryFragment extends Fragment {
     private final String LOG_TAG = CategoryFragment.class.getSimpleName();
@@ -44,10 +41,10 @@ public class CategoryFragment extends Fragment {
     public CategoryFragment() {
     }
 
-    public static CategoryFragment newInstance(int sectionNumber) {
+    public static CategoryFragment newInstance(String category) {
         CategoryFragment fragment = new CategoryFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_CATEGORY, sectionNumber);
+        args.putString(ARG_CATEGORY, category);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,9 +67,9 @@ public class CategoryFragment extends Fragment {
     }
 
     void loadGifImages() {
-        final SweetAlertDialog dialog = Dialogs.showLoadingProgressDialog(getActivity(), R.string.loading_image);
+        final SweetAlertDialog dialog = SweetDialogs.showLoadingProgressDialog(getActivity(), R.string.loading_image);
         DatabaseReference database = FirebaseDatabase.getInstance().getReference(
-                CategoryPagerAdapter.getCategoryName(getArguments().getInt(ARG_CATEGORY)).toString());
+                getArguments().getString(ARG_CATEGORY, getString(R.string.category_store)));
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -90,7 +87,7 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 dialog.dismissWithAnimation();
-                Dialogs.showErrorDialog(getActivity(),
+                SweetDialogs.showErrorDialog(getActivity(),
                         R.string.err_loading_image_title, R.string.err_loading_image_content);
             }
         });

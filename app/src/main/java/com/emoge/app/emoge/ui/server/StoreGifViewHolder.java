@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by jh on 17. 8. 3.
+ * 서버에 저장된 이미지들을 위한 ViewHolder
  */
 
 class StoreGifViewHolder extends RecyclerView.ViewHolder {

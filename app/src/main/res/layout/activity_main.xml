@@ -107,7 +107,7 @@
             android:layout_height="@dimen/boombutton_image_size"
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
-            android:src="@drawable/ic_contrast"
+            android:src="@drawable/ic_correct"
             android:contentDescription="@string/menu_correct_image" />
     </com.nightonke.boommenu.BoomMenuButton>
 

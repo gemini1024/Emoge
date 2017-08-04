@@ -28,4 +28,11 @@
         <item>@drawable/ic_contrast</item>
         <item>@drawable/ic_gamma</item>
     </array>
+
+    <!--category-->
+    <string-array name="server_category">
+        <item>유머</item>
+        <item>힐링</item>
+        <item>인물</item>
+    </string-array>
 </resources>

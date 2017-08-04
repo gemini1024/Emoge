@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:gravity="center"
-        android:visibility="gone" />
+        android:gravity="center" />
 
     <Button
         android:id="@+id/dialog_bt_remove"

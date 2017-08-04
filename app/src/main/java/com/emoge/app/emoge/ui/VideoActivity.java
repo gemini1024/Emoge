@@ -12,7 +12,7 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.emoge.app.emoge.R;
-import com.emoge.app.emoge.utils.Dialogs;
+import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
@@ -62,7 +62,7 @@ public class VideoActivity extends AppCompatActivity {
 
         } else {
             Log.e(LOG_TAG, getString(R.string.err_not_found_video_title));
-            Dialogs.showErrorDialog(this,
+            SweetDialogs.showErrorDialog(this,
                     R.string.err_not_found_video_title, R.string.err_not_found_video_text);
             finish();
         }

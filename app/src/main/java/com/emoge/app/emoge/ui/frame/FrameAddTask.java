@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.emoge.app.emoge.R;
-import com.emoge.app.emoge.utils.Dialogs;
+import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -32,7 +32,7 @@ public class FrameAddTask extends AsyncTask<Intent, Void, Boolean> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        dialog = Dialogs.showLoadingProgressDialog(activity, R.string.adding_frames);
+        dialog = SweetDialogs.showLoadingProgressDialog(activity, R.string.adding_frames);
     }
 
     @Override

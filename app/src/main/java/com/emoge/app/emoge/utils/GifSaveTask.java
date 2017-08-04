@@ -8,6 +8,8 @@ import android.view.View;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
+import com.emoge.app.emoge.utils.dialog.ImageDialog;
+import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -23,20 +25,24 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class GifSaveTask extends AsyncTask<Integer, Integer, File> {
     private static final String LOG_TAG = GifSaveTask.class.getSimpleName();
 
-    private Activity activity;
     private SweetAlertDialog progressDialog;
+
+    private Activity activity;
+    private String category;
+    private String title;
     private List<Frame> frames;
 
-    public GifSaveTask(Activity activity, List<Frame> frames) {
+    public GifSaveTask(Activity activity, String category, String title, List<Frame> frames) {
         this.activity = activity;
+        this.category = category;
+        this.title = title;
         this.frames = frames;
     }
-
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = Dialogs.showLoadingProgressDialog(activity, R.string.saving_gif);
+        progressDialog = SweetDialogs.showLoadingProgressDialog(activity, R.string.saving_gif);
     }
 
     @Override
@@ -46,7 +52,7 @@ public class GifSaveTask extends AsyncTask<Integer, Integer, File> {
         }
         GifMaker gifMaker = new GifMaker();
         ByteArrayOutputStream bos = gifMaker.makeGifByImages(frames, params[0]);
-        return gifMaker.saveAsGif(bos);
+        return gifMaker.saveAsGif(title, bos);
     }
 
     @Override
@@ -54,7 +60,7 @@ public class GifSaveTask extends AsyncTask<Integer, Integer, File> {
         super.onPostExecute(savedFile);
         progressDialog.dismissWithAnimation();
         if(savedFile != null) {
-            SweetAlertDialog dialog = Dialogs.showSuccessDialog(activity, R.string.complete, R.string.saved_gif);
+            SweetAlertDialog dialog = SweetDialogs.showSuccessDialog(activity, R.string.complete, R.string.saved_gif);
             dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                 @Override
                 public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -63,27 +69,26 @@ public class GifSaveTask extends AsyncTask<Integer, Integer, File> {
                 }
             });
         } else {
-            Dialogs.showErrorDialog(activity,
+            SweetDialogs.showErrorDialog(activity,
                     R.string.err_dont_saving_gif_title, R.string.err_dont_saving_gif_content);
         }
     }
 
     private void showResultImageDialog(@NonNull File file) {
         final Uri fileUri = Uri.fromFile(file);
-        final CustomDialogController controller = Dialogs.showImageDialog(activity, fileUri);
-        controller.setShareKakaoButton(new View.OnClickListener() {
+        final ImageDialog imageDialog = new ImageDialog(activity, fileUri);
+        imageDialog.setShareOtherAppButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GifSharer.shareOtherApps(activity, fileUri);
-                controller.dismiss();
+                imageDialog.dismiss();
             }
-        });
-        controller.setShareServerButton(new View.OnClickListener() {
+        }).setShareServerButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GifSharer.shareServer("유머", "시바견", fileUri);
-                controller.dismiss();
+                GifSharer.shareServer(category,title, fileUri);
+                imageDialog.dismiss();
             }
-        });
+        }).show();
     }
 }

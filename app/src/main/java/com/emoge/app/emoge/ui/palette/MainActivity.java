@@ -11,6 +11,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -26,8 +27,9 @@ import com.emoge.app.emoge.ui.frame.FrameAddTask;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
 import com.emoge.app.emoge.ui.server.ServerActivity;
 import com.emoge.app.emoge.ui.view.MenuButtons;
-import com.emoge.app.emoge.utils.Dialogs;
 import com.emoge.app.emoge.utils.GifSaveTask;
+import com.emoge.app.emoge.utils.dialog.SweetDialogs;
+import com.emoge.app.emoge.utils.dialog.EditorDialog;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.nightonke.boommenu.BoomMenuButton;
 
@@ -229,12 +231,32 @@ public class MainActivity extends AppCompatActivity {
 
     // 저장 기능
     @OnClick(R.id.toolbar_save)
-    void makeToGifByImages() {
-        if(Correcter.isMainPalette(getSupportFragmentManager())) {
-            new GifSaveTask(this, mFrameAdapter.getFrames()).execute(mFrameAdapter.getFps());
+    void showEditorDialog() {
+        if(!Correcter.isMainPalette(getSupportFragmentManager())) {
+            SweetDialogs.showErrorDialog(this, R.string.modifying, R.string.err_modifying);
+        } else if(mFrameAdapter.isEmpty()) {
+            SweetDialogs.showErrorDialog(this, R.string.err_no_image_title, R.string.err_no_image_content);
         } else {
-            Dialogs.showErrorDialog(this, R.string.modifying, R.string.err_modifying);
+            final EditorDialog editorDialog = new EditorDialog(this);
+            editorDialog.setSaveButtonListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    makeToGif(editorDialog);
+                }
+            }).show();
         }
+    }
+
+    private void makeToGif(EditorDialog editorDialog) {
+        String gifTitle = editorDialog.getContent();
+        if(TextUtils.isEmpty(gifTitle)) {
+            editorDialog.setError(getString(R.string.naming_gif_hint));
+        } else {
+            new GifSaveTask(MainActivity.this, editorDialog.getCategory(), editorDialog.getContent(),
+                    mFrameAdapter.getFrames()).execute(mFrameAdapter.getFps());
+            editorDialog.dismiss();
+        }
+
     }
 
 
@@ -242,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(Correcter.isMainPalette(getSupportFragmentManager())) {
-            Dialogs.showExitDialog(this);
+            SweetDialogs.showExitDialog(this);
         } else {
             super.onBackPressed();
         }

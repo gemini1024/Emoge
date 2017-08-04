@@ -11,6 +11,10 @@
     <string name="inaccessible_frame_list">잘못된 frame list 접근</string>
     <string name="err_dont_load_frame">프레임을 불러올 수 없습니다.</string>
     <string name="err_modifying">수정 사항을 적용한 후 다시 시도해 주세요</string>
+    <string name="err_loading_image_content">서버에서 이미지를 가져오는데 실패했습니다. 다시 시도해 주세요.</string>
+    <string name="err_loading_image_title">서버 연결 실패</string>
+    <string name="err_no_image_title">이미지 없음</string>
+    <string name="err_no_image_content">만들고있는 이미지가 없습니다</string>
 
 
     <!--dialog-->
@@ -43,11 +47,10 @@
     <!--other-->
     <string name="save">움짤 저장</string>
     <string name="menu_add_image">이미지 추가 메뉴</string>
-    <string name="section_format">카테고리 : %1$d</string>
     <string name="menu_correct_image">보정 메뉴</string>
     <string name="server_image">서버 이미지</string>
     <string name="loading_image">이미지를 불러오는 중입니다</string>
-    <string name="err_loading_image_content">서버에서 이미지를 가져오는데 실패했습니다. 다시 시도해 주세요.</string>
-    <string name="err_loading_image_title">서버 연결 실패</string>
     <string name="back_button">뒤로가기</string>
+    <string name="naming_gif_hint">움짤의 이름을 입력하세요</string>
+    <string name="category_store">저장소</string>
 </resources>

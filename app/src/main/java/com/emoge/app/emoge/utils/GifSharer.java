@@ -24,16 +24,16 @@ import java.util.UUID;
  * GIF 이미지 공유
  */
 
-public class GifSharer {
+class GifSharer {
 
-    public static void shareOtherApps(Activity activity, Uri sharingGifFile) {
+    static void shareOtherApps(Activity activity, Uri sharingGifFile) {
         Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
         shareIntent.setType("image/gif");
         shareIntent.putExtra(Intent.EXTRA_STREAM, sharingGifFile);
         activity.startActivity(Intent.createChooser(shareIntent, activity.getString(R.string.share_gif)));
     }
 
-    public static void shareServer(final String category, final String title, Uri sharingGifFile) {
+    static void shareServer(final String category, final String title, Uri sharingGifFile) {
         StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://emoge-50942.appspot.com");
         StorageReference mountainsRef = storageRef.child(UUID.randomUUID().toString());
 
