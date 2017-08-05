@@ -7,9 +7,12 @@ import android.util.Log;
 import com.emoge.app.emoge.MainApplication;
 import com.emoge.app.emoge.encoder.AnimatedGifEncoder;
 import com.emoge.app.emoge.model.Frame;
+import com.emoge.app.emoge.model.GifMakingInfo;
+import com.waynejo.androidndkgif.GifEncoder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -22,8 +25,61 @@ import java.util.List;
 class GifMaker {
     private static final String LOG_TAG = GifMaker.class.getSimpleName();
 
+    private static final int QUALITY_LOW = 0;
+    private static final int QUALITY_MEDIUM = 1;
+    private static final int QUALITY_HIGH = 2;
+    private static final int QUALITY_SUPER_HIGH = 3;
+
+
     @Nullable
-    File saveAsGif(@NonNull String title, @NonNull ByteArrayOutputStream gifBos) {
+    File saveAsGif(@NonNull List<Frame> images, @NonNull GifMakingInfo info) {
+        if(QUALITY_SUPER_HIGH == info.getQuality()) {
+            return saveAsGif(info.getTitle(), images, info.getFrameDelay());
+        } else {
+            return saveAsGif(info.getTitle(), images, info.getFrameDelay(),
+                    getEncodingTypeByQuality(info.getQuality()));
+        }
+    }
+
+    @NonNull
+    private GifEncoder.EncodingType getEncodingTypeByQuality(int quality) {
+        switch (quality) {
+            case QUALITY_HIGH :
+                return GifEncoder.EncodingType.ENCODING_TYPE_STABLE_HIGH_MEMORY;
+            case QUALITY_LOW :
+                return GifEncoder.EncodingType.ENCODING_TYPE_SIMPLE_FAST;
+            default:
+                return GifEncoder.EncodingType.ENCODING_TYPE_NORMAL_LOW_MEMORY;
+        }
+    }
+
+    @Nullable
+    private File saveAsGif(@NonNull String title, @NonNull List<Frame> images,
+                           int frameDelay, @NonNull GifEncoder.EncodingType encodingType) {
+        File file = makeFile(title);
+        GifEncoder encoder = new GifEncoder();
+
+        try {
+            encoder.init(images.get(0).getBitmap().getWidth(), images.get(0).getBitmap().getHeight(),
+                    file.getPath(), encodingType);
+
+            for(Frame frame : images) {
+                encoder.encodeFrame(frame.getBitmap(), frameDelay);
+                Log.i(LOG_TAG, "added frame");
+            }
+            return file;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            encoder.close();
+            Log.d(LOG_TAG, "encoder finish");
+        }
+    }
+
+    @Nullable
+    private File saveAsGif(@NonNull String title, @NonNull List<Frame> images, int frameDelay) {
+        ByteArrayOutputStream gifBos = makeGifByImages(images, frameDelay);
         File file = makeFile(title);
 
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
@@ -34,6 +90,26 @@ class GifMaker {
             return null;
         }
     }
+
+    @NonNull
+    private ByteArrayOutputStream makeGifByImages(@NonNull List<Frame> images, int frameDelay) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        AnimatedGifEncoder encoder = new AnimatedGifEncoder();
+        encoder.setDelay(frameDelay);
+        encoder.setRepeat(0);   // 0 : roof, 1 : non-roof
+        encoder.start(bos);
+
+        for (Frame frame : images) {
+            encoder.addFrame(frame.getBitmap());
+            Log.i(LOG_TAG, "added frame");
+        }
+
+        encoder.finish();
+        Log.d(LOG_TAG, "encoder finish");
+
+        return bos;
+    }
+
 
     private File makeFile(String wantedFileName) {
         String fileName = wantedFileName+".gif";
@@ -52,23 +128,5 @@ class GifMaker {
         return new File(MainApplication.defaultDir, fileName);
     }
 
-    @NonNull
-    ByteArrayOutputStream makeGifByImages(@NonNull List<Frame> images, int frameDelay) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        AnimatedGifEncoder encoder = new AnimatedGifEncoder();
-        encoder.setDelay(frameDelay);
-        encoder.setRepeat(0);   // 0 : roof, 1 : non-roof
-        encoder.start(bos);
-
-        for (Frame frame : images) {
-            encoder.addFrame(frame.getBitmap());
-            Log.i(LOG_TAG, "added frame");
-        }
-
-        encoder.finish();
-        Log.d(LOG_TAG, "encoder finish");
-
-        return bos;
-    }
 
 }

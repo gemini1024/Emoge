@@ -23,16 +23,19 @@ public class EditorDialog extends CustomDialog {
     private static final String LOG_TAG = EditorDialog.class.getSimpleName();
 
     private String selectedCategory;
+    private int selectedQuality;
     private AppCompatEditText editText;
 
     public EditorDialog(Activity activity) {
         super(activity, R.layout.dialog_with_editor);
-        initSpinner();
+        initCategorySpinner();
+        initQualitySpinner();
         initEditor(activity);
     }
 
-    private void initSpinner() {
-        AppCompatSpinner spinner = (AppCompatSpinner)findViewById(R.id.dialog_spinner);
+    private void initCategorySpinner() {
+        AppCompatSpinner spinner = (AppCompatSpinner)findViewById(R.id.dialog_category);
+        spinner.setSelection(0);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -42,6 +45,22 @@ public class EditorDialog extends CustomDialog {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 selectedCategory = parent.getItemAtPosition(0).toString();
+            }
+        });
+    }
+
+    private void initQualitySpinner() {
+        AppCompatSpinner spinner = (AppCompatSpinner)findViewById(R.id.dialog_quality);
+        spinner.setSelection(1); // 중화질
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedQuality = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectedQuality = 1;
             }
         });
     }
@@ -64,6 +83,10 @@ public class EditorDialog extends CustomDialog {
 
     public String getCategory() {
         return selectedCategory;
+    }
+
+    public int getQuality() {
+        return selectedQuality;
     }
 
     public String getContent() {

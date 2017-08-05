@@ -6,17 +6,26 @@
     android:padding="@dimen/half_unit_dimen">
 
     <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/dialog_spinner"
+        android:id="@+id/dialog_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
         android:entries="@array/server_category" />
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/dialog_quality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:entries="@array/image_quality" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/dialog_editor_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dialog_spinner">
+        android:layout_below="@id/dialog_category">
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/dialog_editor"

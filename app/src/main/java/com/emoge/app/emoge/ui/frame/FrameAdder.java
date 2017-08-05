@@ -144,11 +144,37 @@ public class FrameAdder implements OnBMClickListener {
 
         retriever.setDataSource(activity, videoUri);
         for(int i = 0; i < count; i++){
-            bitmapArrayList.add(retriever.getFrameAtTime((startSec + i*fps)*1000, MediaMetadataRetriever.OPTION_CLOSEST));
+            Bitmap originFrame = retriever.getFrameAtTime((startSec + i*fps)*1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+            bitmapArrayList.add(resizeVideoFrame(originFrame));
         }
         retriever.release();
 
         return bitmapArrayList;
+    }
+
+    @NonNull
+    private Bitmap resizeVideoFrame(@NonNull Bitmap source) {
+        int width = source.getWidth();
+        int height = source.getHeight();
+        int newWidth = width;
+        int newHeight = height;
+        Bitmap scaledBitmap = source;
+
+        if(width > MAX_WIDTH || height > MAX_HEIGHT) {
+            if(width > height) {
+                float rate = MAX_WIDTH / (float) width;
+                newHeight = (int) (height * rate);
+                newWidth = MAX_WIDTH;
+            } else {
+                float rate = MAX_HEIGHT / (float) height;
+                newWidth = (int) (width * rate);
+                newHeight = MAX_HEIGHT;
+
+            }
+            scaledBitmap = Bitmap.createScaledBitmap(source, newWidth, newHeight, true);
+            source.recycle();
+        }
+        return scaledBitmap;
     }
 
 }

@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.FrameStatusMessage;
+import com.emoge.app.emoge.model.GifMakingInfo;
 import com.emoge.app.emoge.model.PaletteMessage;
 import com.emoge.app.emoge.ui.VideoActivity;
 import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
@@ -252,8 +253,10 @@ public class MainActivity extends AppCompatActivity {
         if(TextUtils.isEmpty(gifTitle)) {
             editorDialog.setError(getString(R.string.naming_gif_hint));
         } else {
-            new GifSaveTask(MainActivity.this, editorDialog.getCategory(), editorDialog.getContent(),
-                    mFrameAdapter.getFrames()).execute(mFrameAdapter.getFps());
+            GifMakingInfo makingInfo = new GifMakingInfo(editorDialog.getCategory(),
+                    editorDialog.getContent(), editorDialog.getQuality(), mFrameAdapter.getFps());
+            new GifSaveTask(MainActivity.this, mFrameAdapter.getFrames())
+                    .execute(makingInfo);
             editorDialog.dismiss();
         }
 

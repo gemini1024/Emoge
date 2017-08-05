@@ -1,6 +1,7 @@
 package com.emoge.app.emoge.ui.frame;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,6 +33,9 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
 
     private List<Frame> frames;
     private Activity activity;
+
+    private int frameWidth;
+    private int frameHeight;
 
     FrameAdapter(@NonNull RecyclerView recyclerView,
                  @NonNull List<Frame> frames) {
@@ -124,6 +128,7 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
 
     boolean addItemWithoutNotify(@NonNull Frame item) {
         if( MAX_ITEM_SIZE > frames.size() ) {
+            item.setBitmap(applyPreFrameAttr(item.getBitmap()));
             frames.add(item);
             return true;
         } else {
@@ -143,6 +148,23 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
                 }
             }).getId() + 1;
         }
+    }
+
+    @NonNull
+    private Bitmap applyPreFrameAttr(@NonNull Bitmap source) {
+        Bitmap argbBitmap;
+        if(frames.isEmpty()) {
+            frameWidth = source.getWidth();
+            frameHeight = source.getHeight();
+            argbBitmap = source.copy(Bitmap.Config.ARGB_8888, true);
+            source.recycle();
+        } else {
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(source, frameWidth, frameHeight, true);
+            argbBitmap = scaledBitmap.copy(Bitmap.Config.ARGB_8888, true);
+            scaledBitmap.recycle();
+            source.recycle();
+        }
+        return argbBitmap;
     }
 
 

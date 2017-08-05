@@ -8,10 +8,10 @@ import android.view.View;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
+import com.emoge.app.emoge.model.GifMakingInfo;
 import com.emoge.app.emoge.utils.dialog.ImageDialog;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 
@@ -22,20 +22,17 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  * 이미지(Frame)들을 이용해 GIF 로 저장 작업 ( Background )
  */
 
-public class GifSaveTask extends AsyncTask<Integer, Integer, File> {
+public class GifSaveTask extends AsyncTask<GifMakingInfo, Integer, File> {
     private static final String LOG_TAG = GifSaveTask.class.getSimpleName();
 
     private SweetAlertDialog progressDialog;
 
     private Activity activity;
-    private String category;
-    private String title;
     private List<Frame> frames;
+    private GifMakingInfo info;
 
-    public GifSaveTask(Activity activity, String category, String title, List<Frame> frames) {
+    public GifSaveTask(Activity activity, List<Frame> frames) {
         this.activity = activity;
-        this.category = category;
-        this.title = title;
         this.frames = frames;
     }
 
@@ -46,13 +43,12 @@ public class GifSaveTask extends AsyncTask<Integer, Integer, File> {
     }
 
     @Override
-    protected File doInBackground(Integer... params) {
-        if( frames.isEmpty() ) {
+    protected File doInBackground(GifMakingInfo... params) {
+        info = params[0];
+        if( frames.isEmpty() || info == null ) {
             return null;
         }
-        GifMaker gifMaker = new GifMaker();
-        ByteArrayOutputStream bos = gifMaker.makeGifByImages(frames, params[0]);
-        return gifMaker.saveAsGif(title, bos);
+        return new GifMaker().saveAsGif(frames, info);
     }
 
     @Override
@@ -86,7 +82,7 @@ public class GifSaveTask extends AsyncTask<Integer, Integer, File> {
         }).setShareServerButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GifSharer.shareServer(category,title, fileUri);
+                GifSharer.shareServer(info.getCategory(),info.getTitle(), fileUri);
                 imageDialog.dismiss();
             }
         }).show();
