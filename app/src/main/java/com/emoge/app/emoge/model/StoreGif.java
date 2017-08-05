@@ -8,9 +8,9 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class StoreGif {
-    public String title;
-    public String downloadUrl;
-    public int favorite;
+    public String title;        // 움짤 이름 (파일 이름 및 서버 업로드시 짤 제목)
+    public String downloadUrl;  // 움짤 download 할 수 있는 URL
+    public int favorite;        // 사람들이 좋아하는(담아간) 수
 
     public StoreGif() {
     }

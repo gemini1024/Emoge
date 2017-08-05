@@ -2,13 +2,14 @@ package com.emoge.app.emoge.model;
 
 /**
  * Created by jh on 17. 8. 5.
+ * 움짤 저장시 옵션
  */
 
 public class GifMakingInfo {
-    private String category;
-    private String title;
-    private int quality;
-    private int frameDelay;
+    private String category;    // 서버 업로드시 저장될 category
+    private String title;       // 움짤 이름 (파일 이름 및 서버 업로드시 짤 제목)
+    private int quality;        // 저장 품질 (EditorDialog 에서 선택)
+    private int frameDelay;     // 한 프레임이 보여질 시간 (ms)
 
     public GifMakingInfo(String category, String title, int quality, int frameDelay) {
         this.category = category;

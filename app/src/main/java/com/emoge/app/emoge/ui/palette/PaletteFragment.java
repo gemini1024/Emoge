@@ -118,34 +118,36 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
     private void setSeekBarByType(int type) {
         switch (type) {
             case Correcter.CORRECT_BRIGHTNESS :
-                mSeekBar.setMin(-50);
-                mSeekBar.setMax(50);
-                mSeekBar.setProgress(mDefaultValue);
+                // -50 ~ 50
+                setSeekBarValues(null /* DefaultNumericTransformer */, -50, 50, mDefaultValue);
                 mApplyButton.setText(getString(R.string.apply));
                 break;
             case Correcter.CORRECT_CONTRAST :
-                mSeekBar.setMin(50);
-                mSeekBar.setMax(150);
-                mSeekBar.setNumericTransformer(SeekBarNumberTransformers.Subtract(100));
-                mSeekBar.setProgress(mDefaultValue);
+                // -50 ~ 50
+                setSeekBarValues(SeekBarNumberTransformers.Subtract(100), 50, 150, mDefaultValue);
                 mApplyButton.setText(getString(R.string.apply));
                 break;
             case Correcter.CORRECT_GAMMA :
-                mSeekBar.setMin(78);
-                mSeekBar.setMax(178);
-                mSeekBar.setNumericTransformer(SeekBarNumberTransformers.Subtract(128));
-                mSeekBar.setProgress(mDefaultValue);
+                // -50 ~ 50
+                setSeekBarValues(SeekBarNumberTransformers.Subtract(128), 78, 178, mDefaultValue);
                 mApplyButton.setText(getString(R.string.apply));
                 break;
-            default :
-                mSeekBar.setMin(1);
-                mSeekBar.setMax(200);
-                mSeekBar.setNumericTransformer(SeekBarNumberTransformers.Multiply(10));
-                mSeekBar.setProgress(mDefaultValue/10);
+            default : // MAIN_PALETTE (fps 변경)
+                // 10 ~ 2000
+                setSeekBarValues(SeekBarNumberTransformers.Multiply(10), 1, 200, mDefaultValue/10);
                 mApplyButton.setText(getString(R.string.reverse));
                 break;
         }
     }
+
+    private void setSeekBarValues(DiscreteSeekBar.NumericTransformer transformers,
+                                  int min, int max, int current) {
+        mSeekBar.setNumericTransformer(transformers);
+        mSeekBar.setMin(min);
+        mSeekBar.setMax(max);
+        mSeekBar.setProgress(current);
+    }
+
 
 
     // (보정) SeekBar 변경

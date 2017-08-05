@@ -7,6 +7,7 @@ import com.emoge.app.emoge.R;
 
 /**
  * Created by jh on 17. 8. 4.
+ * 서버 category. get category's name by index
  */
 
 class Category {

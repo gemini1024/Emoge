@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by jh on 17. 7. 26.
  * Frame 추가.
- * 이 클래스로만 파일 접근
+ * 이 클래스로만 단말 내부 파일 접근
  */
 
 
@@ -33,11 +33,12 @@ public class FrameAdder implements OnBMClickListener {
     public static final int INTENT_GET_IMAGE        = 0;
     public static final int INTENT_GET_GIF          = 1;
     public static final int INTENT_GET_VIDEO        = 2;
-
     public static final int INTENT_CAPTURE_VIDEO    = 100;
 
-    private static final int MAX_WIDTH   = 400;
-    private static final int MAX_HEIGHT  = 400;
+
+    // 이미지 크기 제한
+    private static final int MAX_WIDTH   = 600;
+    private static final int MAX_HEIGHT  = 600;
 
     private Activity activity;
 
@@ -144,8 +145,8 @@ public class FrameAdder implements OnBMClickListener {
 
         retriever.setDataSource(activity, videoUri);
         for(int i = 0; i < count; i++){
-            Bitmap originFrame = retriever.getFrameAtTime((startSec + i*fps)*1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-            bitmapArrayList.add(resizeVideoFrame(originFrame));
+            Bitmap videoFrame = retriever.getFrameAtTime((startSec + i*fps)*1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+            bitmapArrayList.add(resizeVideoFrame(videoFrame));
         }
         retriever.release();
 
@@ -156,25 +157,23 @@ public class FrameAdder implements OnBMClickListener {
     private Bitmap resizeVideoFrame(@NonNull Bitmap source) {
         int width = source.getWidth();
         int height = source.getHeight();
-        int newWidth = width;
-        int newHeight = height;
-        Bitmap scaledBitmap = source;
 
         if(width > MAX_WIDTH || height > MAX_HEIGHT) {
             if(width > height) {
                 float rate = MAX_WIDTH / (float) width;
-                newHeight = (int) (height * rate);
-                newWidth = MAX_WIDTH;
+                height = (int) (height * rate);
+                width = MAX_WIDTH;
             } else {
                 float rate = MAX_HEIGHT / (float) height;
-                newWidth = (int) (width * rate);
-                newHeight = MAX_HEIGHT;
-
+                width = (int) (width * rate);
+                height = MAX_HEIGHT;
             }
-            scaledBitmap = Bitmap.createScaledBitmap(source, newWidth, newHeight, true);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(source, width, height, true);
             source.recycle();
+            return scaledBitmap;
+        } else {
+            return source;
         }
-        return scaledBitmap;
     }
 
 }

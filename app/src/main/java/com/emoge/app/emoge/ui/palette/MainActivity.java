@@ -141,6 +141,16 @@ public class MainActivity extends AppCompatActivity {
         }, 500);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mFrameAdapter != null) {
+            mFrameAdapter.clear();
+        }
+    }
+
+
+
 
     // 보정 기능 ( Message from PaletteFragment )
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -220,6 +230,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
 
     // 움짤 평가소

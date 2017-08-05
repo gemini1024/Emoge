@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.emoge.app.emoge.model.Frame;
+import com.emoge.app.emoge.ui.VideoActivity;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -74,9 +75,9 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
     public void addFrameFromVideo(@NonNull Intent videoData) {
         if(videoData.getData() != null) {
             List<Bitmap> bitmaps = frameAdder.captureVideo(videoData.getData(),
-                    videoData.getIntExtra("startSec", 0),
-                    videoData.getIntExtra("count", 0),
-                    videoData.getIntExtra("fps", 1));
+                    videoData.getIntExtra(VideoActivity.INTENT_NAME_START_SEC, 0),
+                    videoData.getIntExtra(VideoActivity.INTENT_NAME_CAPTURE_COUNT, 0),
+                    videoData.getIntExtra(VideoActivity.INTENT_NAME_CAPTURE_DELAY, 100));
             int firstAddPosition = getItemCount();
             for (Bitmap bitmap : bitmaps) {
                 addItemWithoutNotify(new Frame(nextId(), bitmap));

@@ -29,6 +29,11 @@ import butterknife.OnClick;
 public class VideoActivity extends AppCompatActivity {
     private static final String LOG_TAG = VideoView.class.getSimpleName();
 
+    public static final String INTENT_NAME_START_SEC        = "startSec";
+    public static final String INTENT_NAME_CAPTURE_COUNT    = "count";
+    public static final String INTENT_NAME_CAPTURE_DELAY    = "delay";
+
+
     @BindView(R.id.video_video)
     VideoView mVideoView;
     @BindView(R.id.video_count)
@@ -72,9 +77,9 @@ public class VideoActivity extends AppCompatActivity {
     void onCaptureVideo() {
         Intent returnIntent = new Intent();
         returnIntent.setData(videoUri);
-        returnIntent.putExtra("startSec", mVideoView.getCurrentPosition());
-        returnIntent.putExtra("count", mCountBar.getProgress());
-        returnIntent.putExtra("fps", mFpsBar.getProgress());
+        returnIntent.putExtra(INTENT_NAME_START_SEC, mVideoView.getCurrentPosition());
+        returnIntent.putExtra(INTENT_NAME_CAPTURE_COUNT, mCountBar.getProgress());
+        returnIntent.putExtra(INTENT_NAME_CAPTURE_DELAY, mFpsBar.getProgress());
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }

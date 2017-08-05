@@ -177,4 +177,11 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         }
         tmpFrames.clear();
     }
+
+    @Override
+    public void clear() {
+        super.clear();
+        clearStage();
+        clearPreviousFrames();
+    }
 }

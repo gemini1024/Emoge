@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
@@ -54,6 +55,8 @@ public class FrameAddTask extends AsyncTask<Intent, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
+        // TODO : frame 추가 실패시 UI 작업 (Toast or Alert?)
+        Log.i(LOG_TAG, String.valueOf(aBoolean));
         dialog.dismissWithAnimation();
     }
 }

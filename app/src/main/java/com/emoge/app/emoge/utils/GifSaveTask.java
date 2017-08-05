@@ -27,9 +27,9 @@ public class GifSaveTask extends AsyncTask<GifMakingInfo, Integer, File> {
 
     private SweetAlertDialog progressDialog;
 
-    private Activity activity;
-    private List<Frame> frames;
-    private GifMakingInfo info;
+    private Activity activity;      // called Activity
+    private List<Frame> frames;     // 움짤을 구성할 frame 들
+    private GifMakingInfo info;     // 저장 옵션
 
     public GifSaveTask(Activity activity, List<Frame> frames) {
         this.activity = activity;
@@ -82,7 +82,7 @@ public class GifSaveTask extends AsyncTask<GifMakingInfo, Integer, File> {
         }).setShareServerButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GifSharer.shareServer(info.getCategory(),info.getTitle(), fileUri);
+                GifSharer.shareServer(activity, info.getCategory(),info.getTitle(), fileUri);
                 imageDialog.dismiss();
             }
         }).show();

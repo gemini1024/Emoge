@@ -7,8 +7,8 @@ package com.emoge.app.emoge.model;
  */
 
 public class PaletteMessage {
-    private int type;
-    private int value;
+    private int type;       // 보정 종류
+    private int value;      // 보정 값
 
     public PaletteMessage(int type, int value) {
         this.type = type;

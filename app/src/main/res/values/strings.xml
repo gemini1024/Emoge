@@ -29,6 +29,10 @@
     <string name="saved_gif">저장되었습니다.</string>
     <string name="modifying">수정 중</string>
     <string name="remove">삭제</string>
+    <string name="upload_gif_title">업로드</string>
+    <string name="upload_gif_content">움짤 업로드를 완료 했습니다</string>
+    <string name="loading_image">이미지를 불러오는 중입니다</string>
+    <string name="naming_gif_hint">움짤의 이름을 입력하세요</string>
 
     <!--correct-->
     <string name="fps" translatable="false">Fps</string>
@@ -49,8 +53,6 @@
     <string name="menu_add_image">이미지 추가 메뉴</string>
     <string name="menu_correct_image">보정 메뉴</string>
     <string name="server_image">서버 이미지</string>
-    <string name="loading_image">이미지를 불러오는 중입니다</string>
     <string name="back_button">뒤로가기</string>
-    <string name="naming_gif_hint">움짤의 이름을 입력하세요</string>
     <string name="category_store">저장소</string>
 </resources>

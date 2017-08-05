@@ -112,31 +112,16 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
     }
 
 
+
+
     /**
      * 기본조작들.
      * CRUD 순
      */
+
     // C
-    public boolean addItem(@NonNull Frame item) {
-        if (addItemWithoutNotify(item)) {
-            notifyItemInserted(frames.size() - 1);
-            return true;
-        } else {
-            return false;
-        }
-    }
 
-    boolean addItemWithoutNotify(@NonNull Frame item) {
-        if( MAX_ITEM_SIZE > frames.size() ) {
-            item.setBitmap(applyPreFrameAttr(item.getBitmap()));
-            frames.add(item);
-            return true;
-        } else {
-            EventBus.getDefault().post(FrameStatusMessage.FULL);
-            return false;
-        }
-    }
-
+    // Frame Id 지정 (For move)
     long nextId() {
         if(frames.isEmpty()) {
             return 1;
@@ -150,6 +135,31 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
         }
     }
 
+    // add + notify
+    public boolean addItem(@NonNull Frame item) {
+        if (addItemWithoutNotify(item)) {
+            notifyItemInserted(frames.size() - 1);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // add
+    boolean addItemWithoutNotify(@NonNull Frame item) {
+        if( MAX_ITEM_SIZE > frames.size() ) {
+            item.setBitmap(applyPreFrameAttr(item.getBitmap()));
+            frames.add(item);
+            return true;
+        } else {
+            // TODO : frame 추가 실패시 UI 작업 (Toast or Alert?)
+            // 한번에 여러번 뜰 수 있음.
+            EventBus.getDefault().post(FrameStatusMessage.FULL);
+            return false;
+        }
+    }
+
+    // resize and trans type(ARGB_8888)  (For make gif)
     @NonNull
     private Bitmap applyPreFrameAttr(@NonNull Bitmap source) {
         Bitmap argbBitmap;

@@ -4,6 +4,7 @@ import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
 /**
  * Created by jh on 17. 8. 5.
+ * DiscreteSeekBar 에 표시되는 수 변경
  */
 
 public class SeekBarNumberTransformers {

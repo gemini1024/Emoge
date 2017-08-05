@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.StoreGif;
+import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,7 +34,7 @@ class GifSharer {
         activity.startActivity(Intent.createChooser(shareIntent, activity.getString(R.string.share_gif)));
     }
 
-    static void shareServer(final String category, final String title, Uri sharingGifFile) {
+    static void shareServer(final Activity activity, final String category, final String title, Uri sharingGifFile) {
         StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://emoge-50942.appspot.com");
         StorageReference mountainsRef = storageRef.child(UUID.randomUUID().toString());
 
@@ -48,18 +49,18 @@ class GifSharer {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 @SuppressWarnings("VisibleForTests")
                 Uri downloadUri = taskSnapshot.getDownloadUrl();
-                sendServer(category, title,  downloadUri);
+                sendServer(activity, category, title, downloadUri);
             }
         });
     }
 
-    private static void sendServer(String category, String title, Uri downloadUri) {
+    private static void sendServer(final Activity activity, String category, String title, Uri downloadUri) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference(category);
         StoreGif user = new StoreGif(title, downloadUri.toString(), 0);
         database.push().setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-
+                SweetDialogs.showSuccessDialog(activity, R.string.upload_gif_title, R.string.upload_gif_content);
             }
         });
     }

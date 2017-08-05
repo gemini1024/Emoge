@@ -66,6 +66,8 @@ public class CategoryFragment extends Fragment {
         return view;
     }
 
+
+    // 서버연결 ( Firebase )
     void loadGifImages() {
         final SweetAlertDialog dialog = SweetDialogs.showLoadingProgressDialog(getActivity(), R.string.loading_image);
         DatabaseReference database = FirebaseDatabase.getInstance().getReference(

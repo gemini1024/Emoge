@@ -31,6 +31,8 @@ class GifMaker {
     private static final int QUALITY_SUPER_HIGH = 3;
 
 
+    // 초고화질 - AnimatedGifEncoder
+    // 저~고화질 - GifEncoder(Android NDK Gif)  (속도가 빠르지만 화질에 한계가 있음)
     @Nullable
     File saveAsGif(@NonNull List<Frame> images, @NonNull GifMakingInfo info) {
         if(QUALITY_SUPER_HIGH == info.getQuality()) {
@@ -41,6 +43,7 @@ class GifMaker {
         }
     }
 
+    // position (int) -> quality type (enum)
     @NonNull
     private GifEncoder.EncodingType getEncodingTypeByQuality(int quality) {
         switch (quality) {
@@ -53,6 +56,8 @@ class GifMaker {
         }
     }
 
+
+    // using GifEncoder(Android NDK Gif)
     @Nullable
     private File saveAsGif(@NonNull String title, @NonNull List<Frame> images,
                            int frameDelay, @NonNull GifEncoder.EncodingType encodingType) {
@@ -77,6 +82,8 @@ class GifMaker {
         }
     }
 
+
+    // using AnimatedGifEncoder
     @Nullable
     private File saveAsGif(@NonNull String title, @NonNull List<Frame> images, int frameDelay) {
         ByteArrayOutputStream gifBos = makeGifByImages(images, frameDelay);
@@ -111,6 +118,8 @@ class GifMaker {
     }
 
 
+
+    // Directory 생성 및 덮어쓰기 방지
     private File makeFile(String wantedFileName) {
         String fileName = wantedFileName+".gif";
 
@@ -127,6 +136,4 @@ class GifMaker {
         }
         return new File(MainApplication.defaultDir, fileName);
     }
-
-
 }
