@@ -118,27 +118,30 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
     private void setSeekBarByType(int type) {
         switch (type) {
             case Correcter.CORRECT_BRIGHTNESS :
-                mSeekBar.setMin(-100);
-                mSeekBar.setMax(100);
+                mSeekBar.setMin(-50);
+                mSeekBar.setMax(50);
                 mSeekBar.setProgress(mDefaultValue);
                 mApplyButton.setText(getString(R.string.apply));
                 break;
             case Correcter.CORRECT_CONTRAST :
-                mSeekBar.setMin(0);
-                mSeekBar.setMax(200);
+                mSeekBar.setMin(50);
+                mSeekBar.setMax(150);
+                mSeekBar.setNumericTransformer(SeekBarNumberTransformers.Subtract(100));
                 mSeekBar.setProgress(mDefaultValue);
                 mApplyButton.setText(getString(R.string.apply));
                 break;
             case Correcter.CORRECT_GAMMA :
-                mSeekBar.setMin(0);
-                mSeekBar.setMax(200);
+                mSeekBar.setMin(78);
+                mSeekBar.setMax(178);
+                mSeekBar.setNumericTransformer(SeekBarNumberTransformers.Subtract(128));
                 mSeekBar.setProgress(mDefaultValue);
                 mApplyButton.setText(getString(R.string.apply));
                 break;
             default :
-                mSeekBar.setMin(100);
-                mSeekBar.setMax(3000);
-                mSeekBar.setProgress(mDefaultValue);
+                mSeekBar.setMin(1);
+                mSeekBar.setMax(200);
+                mSeekBar.setNumericTransformer(SeekBarNumberTransformers.Multiply(10));
+                mSeekBar.setProgress(mDefaultValue/10);
                 mApplyButton.setText(getString(R.string.reverse));
                 break;
         }
@@ -148,7 +151,11 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
     // (보정) SeekBar 변경
     @Override
     public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
-        EventBus.getDefault().post(new PaletteMessage(mPaletteType, value));
+        if(mPaletteType == Correcter.MAIN_PALETTE) {
+            EventBus.getDefault().post(new PaletteMessage(mPaletteType, value*10));
+        } else {
+            EventBus.getDefault().post(new PaletteMessage(mPaletteType, value));
+        }
     }
 
     @Override
