@@ -13,6 +13,8 @@
     <string name="err_modifying">수정 사항을 적용한 후 다시 시도해 주세요</string>
     <string name="err_loading_image_content">서버에서 이미지를 가져오는데 실패했습니다. 다시 시도해 주세요.</string>
     <string name="err_loading_image_title">서버 연결 실패</string>
+    <string name="err_upload_gif_title">업로드 실패</string>
+    <string name="err_upload_gif_content">움짤 업로드를 실패 했습니다\n다시 시도해 주세요</string>
     <string name="err_no_image_title">이미지 없음</string>
     <string name="err_no_image_content">만들고있는 이미지가 없습니다</string>
 
@@ -29,10 +31,16 @@
     <string name="saved_gif">저장되었습니다.</string>
     <string name="modifying">수정 중</string>
     <string name="remove">삭제</string>
+    <string name="upload_gif_loading">업로드하는 중</string>
     <string name="upload_gif_title">업로드</string>
     <string name="upload_gif_content">움짤 업로드를 완료 했습니다</string>
     <string name="loading_image">이미지를 불러오는 중입니다</string>
     <string name="naming_gif_hint">움짤의 이름을 입력하세요</string>
+    <string name="check_network">인터넷 연결 확인</string>
+    <string name="non_network">인터넷에 연결되어 있지 않습니다</string>
+    <string name="warning_mobile_network">데이터 네트워크를 사용 중 입니다\n계속 하시겠습니까?</string>
+    <string name="continue_work">계속</string>
+    <string name="cancel">취소</string>
 
     <!--correct-->
     <string name="fps" translatable="false">Fps</string>
@@ -41,7 +49,6 @@
     <string name="gamma">감마</string>
     <string name="apply">적용</string>
     <string name="reverse">역방향</string>
-    <string name="cancel">취소</string>
     <string name="complete">완료</string>
 
     <!--video capture-->

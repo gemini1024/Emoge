@@ -76,13 +76,13 @@ public class GifSaveTask extends AsyncTask<GifMakingInfo, Integer, File> {
         imageDialog.setShareOtherAppButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GifSharer.shareOtherApps(activity, fileUri);
+                new GifSharer(activity).shareOtherApps(fileUri);
                 imageDialog.dismiss();
             }
         }).setShareServerButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GifSharer.shareServer(activity, info.getCategory(),info.getTitle(), fileUri);
+                new GifSharer(activity).shareServer(info.getCategory(), info.getTitle(), fileUri);
                 imageDialog.dismiss();
             }
         }).show();

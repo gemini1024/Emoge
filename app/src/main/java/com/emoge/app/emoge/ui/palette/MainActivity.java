@@ -29,6 +29,7 @@ import com.emoge.app.emoge.ui.frame.FrameAdder;
 import com.emoge.app.emoge.ui.server.ServerActivity;
 import com.emoge.app.emoge.ui.view.MenuButtons;
 import com.emoge.app.emoge.utils.GifSaveTask;
+import com.emoge.app.emoge.utils.NetworkStatus;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.emoge.app.emoge.utils.dialog.EditorDialog;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -237,8 +238,13 @@ public class MainActivity extends AppCompatActivity {
     // 움짤 평가소
     @OnClick(R.id.toolbar_share)
     void onShareButton() {
-        Intent intent = new Intent(getBaseContext(), ServerActivity.class);
-        startActivity(intent);
+        NetworkStatus.executeWithCheckingNetwork(this, new NetworkStatus.RequireIntentTask() {
+            @Override
+            public void Task() {
+                Intent intent = new Intent(getBaseContext(), ServerActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 

@@ -76,4 +76,30 @@ public class SweetDialogs {
         exitDialog.show();
         return exitDialog;
     }
+
+
+    @NonNull
+    public static SweetAlertDialog showWarningMobileNetworkDialog(@NonNull final Activity activity) {
+        SweetAlertDialog exitDialog = new SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(activity.getString(R.string.check_network))
+                .setContentText(activity.getString(R.string.warning_mobile_network))
+                .setCancelText(activity.getString(R.string.cancel))
+                .setConfirmText(activity.getString(R.string.continue_work))
+                .showCancelButton(true)
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismissWithAnimation();
+                    }
+                })
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.cancel();
+                    }
+                });
+        exitDialog.setCancelable(false);
+        exitDialog.show();
+        return exitDialog;
+    }
 }

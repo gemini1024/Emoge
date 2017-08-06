@@ -20,6 +20,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 /**
  * Created by jh on 17. 7. 30.
  * GIF 이미지 공유
@@ -27,41 +29,87 @@ import java.util.UUID;
 
 class GifSharer {
 
-    static void shareOtherApps(Activity activity, Uri sharingGifFile) {
-        Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-        shareIntent.setType("image/gif");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, sharingGifFile);
-        activity.startActivity(Intent.createChooser(shareIntent, activity.getString(R.string.share_gif)));
+    private Activity activity;
+    private SweetAlertDialog loadingDialog;
+
+    GifSharer(Activity activity) {
+        this.activity = activity;
     }
 
-    static void shareServer(final Activity activity, final String category, final String title, Uri sharingGifFile) {
-        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://emoge-50942.appspot.com");
-        StorageReference mountainsRef = storageRef.child(UUID.randomUUID().toString());
-
-        UploadTask uploadTask = mountainsRef.putFile(sharingGifFile);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
+    void shareOtherApps(final Uri sharingGifFile) {
+        NetworkStatus.executeWithCheckingNetwork(activity, new NetworkStatus.RequireIntentTask() {
             @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                @SuppressWarnings("VisibleForTests")
-                Uri downloadUri = taskSnapshot.getDownloadUrl();
-                sendServer(activity, category, title, downloadUri);
+            public void Task() {
+                Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+                shareIntent.setType("image/gif");
+                shareIntent.putExtra(Intent.EXTRA_STREAM, sharingGifFile);
+                activity.startActivity(Intent.createChooser(shareIntent, activity.getString(R.string.share_gif)));
             }
         });
     }
 
-    private static void sendServer(final Activity activity, String category, String title, Uri downloadUri) {
+    void shareServer(final String category, final String title, final Uri sharingGifFile) {
+        NetworkStatus.executeWithCheckingNetwork(activity, new NetworkStatus.RequireIntentTask() {
+            @Override
+            public void Task() {
+                UploadTask uploadTask = sendFile(sharingGifFile);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        showError();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        @SuppressWarnings("VisibleForTests")
+                        Uri downloadUri = taskSnapshot.getDownloadUrl();
+                        if(downloadUri != null) {
+                            sendServerDB(category, new StoreGif(title, downloadUri.toString(), 0));
+                        } else {
+                            showError();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
+    private UploadTask sendFile(Uri sharingGifFile) {
+        loadingDialog = SweetDialogs.showLoadingProgressDialog(activity, R.string.upload_gif_loading);
+
+        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://emoge-50942.appspot.com").child("Emoge");
+        StorageReference imageRef = storageRef.child(UUID.randomUUID().toString());
+
+        return imageRef.putFile(sharingGifFile);
+    }
+
+    private void sendServerDB(String category, StoreGif storeGif) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference(category);
-        StoreGif user = new StoreGif(title, downloadUri.toString(), 0);
-        database.push().setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+        database.push().setValue(storeGif).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                SweetDialogs.showSuccessDialog(activity, R.string.upload_gif_title, R.string.upload_gif_content);
+                showSuccess();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                showError();
             }
         });
+    }
+
+    private void showError() {
+        SweetDialogs.showErrorDialog(activity, R.string.err_upload_gif_title, R.string.err_upload_gif_content);
+        if(loadingDialog != null) {
+            loadingDialog.dismissWithAnimation();
+        }
+    }
+
+    private void showSuccess() {
+        SweetDialogs.showSuccessDialog(activity, R.string.upload_gif_title, R.string.upload_gif_content);
+        if(loadingDialog != null) {
+            loadingDialog.dismissWithAnimation();
+        }
     }
 }
