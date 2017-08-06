@@ -1,4 +1,4 @@
-package com.emoge.app.emoge.ui.palette;
+package com.emoge.app.emoge.utils;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
@@ -9,7 +9,7 @@ import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
 public class SeekBarNumberTransformers {
 
-    static DiscreteSeekBar.NumericTransformer Subtract(final int transNum) {
+    public static DiscreteSeekBar.NumericTransformer Subtract(final int transNum) {
         return new DiscreteSeekBar.NumericTransformer() {
             @Override
             public int transform(int value) {
@@ -18,7 +18,7 @@ public class SeekBarNumberTransformers {
         };
     }
 
-    static DiscreteSeekBar.NumericTransformer Multiply(final int transNum) {
+    public static DiscreteSeekBar.NumericTransformer Multiply(final int transNum) {
         return new DiscreteSeekBar.NumericTransformer() {
             @Override
             public int transform(int value) {

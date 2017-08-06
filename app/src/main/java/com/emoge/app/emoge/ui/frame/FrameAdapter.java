@@ -224,7 +224,7 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
         if(inRange(position)) {
             frames.remove(position);
             notifyItemRemoved(position);
-            notifyItemRangeChanged(position, frames.size());
+            notifyItemRangeChanged(position, frames.size()-position);
             sendFrameStatusMessage();
         } else {
             Log.e(LOG_TAG, "잘못된 frame list 접근");

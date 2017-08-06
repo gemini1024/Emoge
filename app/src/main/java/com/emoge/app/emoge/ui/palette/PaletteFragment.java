@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.PaletteMessage;
 import com.emoge.app.emoge.ui.correction.Correcter;
+import com.emoge.app.emoge.utils.SeekBarNumberTransformers;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.greenrobot.eventbus.EventBus;

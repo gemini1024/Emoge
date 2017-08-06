@@ -25,7 +25,7 @@
     <string name="splash_image" translatable="false">logo_image</string>
     <string name="share_gif" translatable="false">Share Gif</string>
     <string name="adding_frames">프레임 불러오는 중</string>
-    <string name="saving_gif">움짤 생성 중</string>
+    <string name="saving_gif">열씨미 움짤 찌고 있습니다</string>
     <string name="exit">종료</string>
     <string name="exit_content">모든 작업 상황을 버리고 종료합니다. 계속 하시겠습니까?</string>
     <string name="saved_gif">저장되었습니다.</string>
@@ -52,7 +52,8 @@
     <string name="complete">완료</string>
 
     <!--video capture-->
-    <string name="count">count</string>
+    <string name="frame_delay">프레임 딜레이</string>
+    <string name="count">캡쳐 수</string>
     <string name="capture">캡처 시작</string>
 
     <!--other-->

@@ -10,6 +10,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.encoder.GifDecoder;
@@ -143,10 +144,14 @@ public class FrameAdder implements OnBMClickListener {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         List<Bitmap> bitmapArrayList = new ArrayList<>();
 
-        retriever.setDataSource(activity, videoUri);
+        retriever.setDataSource(getRealPathFromUri(activity, videoUri));
         for(int i = 0; i < count; i++){
-            Bitmap videoFrame = retriever.getFrameAtTime((startSec + i*fps)*1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-            bitmapArrayList.add(resizeVideoFrame(videoFrame));
+            Bitmap videoFrame = retriever.getFrameAtTime((startSec + i*fps)*1000L, MediaMetadataRetriever.OPTION_NEXT_SYNC);
+            if(videoFrame != null) {
+                bitmapArrayList.add(resizeVideoFrame(videoFrame));
+            } else {
+                Log.e(LOG_TAG, "not found video frame : " + i);
+            }
         }
         retriever.release();
 

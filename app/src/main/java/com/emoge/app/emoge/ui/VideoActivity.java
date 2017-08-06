@@ -12,6 +12,7 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.utils.SeekBarNumberTransformers;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
@@ -65,6 +66,10 @@ public class VideoActivity extends AppCompatActivity {
             mVideoView.setMediaController(new MediaController(mVideoView.getContext()));
             mVideoView.start();
 
+            mFpsBar.setNumericTransformer(SeekBarNumberTransformers.Multiply(100));
+            mFpsBar.setMin(1);
+            mFpsBar.setMax(20);
+            mFpsBar.setProgress(5);
         } else {
             Log.e(LOG_TAG, getString(R.string.err_not_found_video_title));
             SweetDialogs.showErrorDialog(this,
@@ -79,7 +84,7 @@ public class VideoActivity extends AppCompatActivity {
         returnIntent.setData(videoUri);
         returnIntent.putExtra(INTENT_NAME_START_SEC, mVideoView.getCurrentPosition());
         returnIntent.putExtra(INTENT_NAME_CAPTURE_COUNT, mCountBar.getProgress());
-        returnIntent.putExtra(INTENT_NAME_CAPTURE_DELAY, mFpsBar.getProgress());
+        returnIntent.putExtra(INTENT_NAME_CAPTURE_DELAY, mFpsBar.getProgress()*100);
         setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }

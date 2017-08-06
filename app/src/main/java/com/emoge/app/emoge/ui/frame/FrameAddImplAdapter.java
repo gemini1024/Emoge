@@ -47,7 +47,7 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
                     addItemWithoutNotify(new Frame(nextId(),
                             frameAdder.loadBitmapSampleSize(clipData.getItemAt(i).getUri())));
                 }
-                notifyItemRangeInserted(firstAddPosition, getItemCount()-1);
+                notifyItemRangeInserted(firstAddPosition, clipData.getItemCount());
             }
         } catch (FileNotFoundException e) {
             Log.e(LOG_TAG, e.getClass().getName(), e);
@@ -64,7 +64,7 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
                 for(Bitmap bitmap : bitmaps) {
                     addItemWithoutNotify(new Frame(nextId(), bitmap));
                 }
-                notifyItemRangeInserted(firstAddPosition, getItemCount()-1);
+                notifyItemRangeInserted(firstAddPosition, bitmaps.size());
             }
         } catch (FileNotFoundException e) {
             Log.e(LOG_TAG, e.getClass().getName(), e);
@@ -82,7 +82,7 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
             for (Bitmap bitmap : bitmaps) {
                 addItemWithoutNotify(new Frame(nextId(), bitmap));
             }
-            notifyItemRangeInserted(firstAddPosition, getItemCount()-1);
+            notifyItemRangeInserted(firstAddPosition, bitmaps.size());
         }
     }
 }
