@@ -23,6 +23,7 @@ import com.nightonke.boommenu.BoomMenuButton;
  */
 
 public class MenuButtons {
+    private static final String LOG_TAG = MenuButtons.class.getSimpleName();
 
     private static final int ANIMATION_DELAY    = 400;
     private static final Rect IMAGE_PADDING     = new Rect(24,24,24,24);
@@ -69,28 +70,26 @@ public class MenuButtons {
 
 
     // Animation
-    public static void showWithAnimation(@NonNull final BoomMenuButton bmb) {
-        ScaleAnimation anim = new ScaleAnimation(0,1,0,1,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        anim.setFillBefore(true);
-        anim.setFillAfter(true);
-        anim.setFillEnabled(true);
-        anim.setDuration(ANIMATION_DELAY);
-        anim.setInterpolator(new OvershootInterpolator());
-        bmb.startAnimation(anim);
-        bmb.setVisibility(View.VISIBLE);
+    public static void showWithAnimation(@NonNull BoomMenuButton bmb) {
+        if(View.GONE == bmb.getVisibility() || View.INVISIBLE == bmb.getVisibility()) {
+            ScaleAnimation anim = new ScaleAnimation(0, 1, 0, 1,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            anim.setDuration(ANIMATION_DELAY);
+            anim.setInterpolator(new OvershootInterpolator());
+            bmb.startAnimation(anim);
+            bmb.setVisibility(View.VISIBLE);
+        }
     }
 
-    public static void hideWithAnimation(@NonNull final BoomMenuButton bmb) {
-        ScaleAnimation anim = new ScaleAnimation(1,0,1,0,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        anim.setFillBefore(true);
-        anim.setFillAfter(true);
-        anim.setFillEnabled(true);
-        anim.setDuration(ANIMATION_DELAY);
-        anim.setInterpolator(new OvershootInterpolator());
-        bmb.startAnimation(anim);
-        bmb.setVisibility(View.GONE);
+    public static void hideWithAnimation(@NonNull BoomMenuButton bmb) {
+        if(View.VISIBLE == bmb.getVisibility()) {
+            ScaleAnimation anim = new ScaleAnimation(1, 0, 1, 0,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            anim.setDuration(ANIMATION_DELAY);
+            anim.setInterpolator(new OvershootInterpolator());
+            bmb.startAnimation(anim);
+            bmb.setVisibility(View.GONE);
+        }
     }
 
 }

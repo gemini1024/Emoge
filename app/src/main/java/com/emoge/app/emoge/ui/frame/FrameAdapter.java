@@ -150,11 +150,11 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
         if( MAX_ITEM_SIZE > frames.size() ) {
             item.setBitmap(applyPreFrameAttr(item.getBitmap()));
             frames.add(item);
+            sendFrameStatusMessage();
             return true;
         } else {
             // TODO : frame 추가 실패시 UI 작업 (Toast or Alert?)
             // 한번에 여러번 뜰 수 있음.
-            EventBus.getDefault().post(FrameStatusMessage.FULL);
             return false;
         }
     }
@@ -225,7 +225,7 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
             frames.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, frames.size());
-            EventBus.getDefault().post(FrameStatusMessage.NOT_FULL);
+            sendFrameStatusMessage();
         } else {
             Log.e(LOG_TAG, "잘못된 frame list 접근");
         }
@@ -244,6 +244,18 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
             }
             frames.clear();
             notifyDataSetChanged();
+        }
+    }
+
+
+    // Event Bus
+    private void sendFrameStatusMessage() {
+        if(frames.isEmpty()) {
+            EventBus.getDefault().post(FrameStatusMessage.EMPTY);
+        } else if(MAX_ITEM_SIZE <= frames.size()) {
+            EventBus.getDefault().post(FrameStatusMessage.FULL);
+        } else {
+            EventBus.getDefault().post(FrameStatusMessage.NOT_FULL);
         }
     }
 }

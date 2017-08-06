@@ -185,8 +185,11 @@ public class MainActivity extends AppCompatActivity {
     void receiveFrameStatusMessage(FrameStatusMessage message) {
         if(message.equals(FrameStatusMessage.FULL)) {
             MenuButtons.hideWithAnimation(mAddMenu);
-        } else {
+        } else if(message.equals(FrameStatusMessage.NOT_FULL)){
             showAddMenuOnlyMainPalette();
+            MenuButtons.showWithAnimation(mCorrectMenu);
+        } else {
+            MenuButtons.hideWithAnimation(mCorrectMenu);
         }
     }
 
@@ -224,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 new FrameAddTask(this, mFrameAdapter, requestCode).execute(data);
-                MenuButtons.showWithAnimation(mCorrectMenu);
             } else {
                 // show error or do nothing
                 Log.e(LOG_TAG, getString(R.string.err_intent_return_null));
