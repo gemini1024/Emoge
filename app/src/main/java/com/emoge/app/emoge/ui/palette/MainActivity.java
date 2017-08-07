@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
     private void addPalette(Correcter correcter) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
         fragmentTransaction.add(R.id.main_palette_container,
                 PaletteFragment.newInstance(Correcter.MAIN_PALETTE, correcter.getCurrentFps()));
         fragmentTransaction.commit();

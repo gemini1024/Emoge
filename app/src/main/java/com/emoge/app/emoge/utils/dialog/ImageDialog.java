@@ -49,14 +49,6 @@ public class ImageDialog extends CustomDialog {
         return this;
     }
 
-    public ImageDialog setShareOtherAppButton(View.OnClickListener listener) {
-        shareLayout.setVisibility(View.VISIBLE);
-        ImageButton shareOtherAppButton = (ImageButton)findViewById(R.id.dialog_share_kakao);
-        shareOtherAppButton.setOnClickListener(listener);
-        shareOtherAppButton.setVisibility(View.VISIBLE);
-        return this;
-    }
-
     public ImageDialog setShareServerButton(View.OnClickListener listener) {
         shareLayout.setVisibility(View.VISIBLE);
         ImageButton shareServerButton = (ImageButton)findViewById(R.id.dialog_share_server);
@@ -65,4 +57,35 @@ public class ImageDialog extends CustomDialog {
         return this;
     }
 
+    public ImageDialog setShareKakaoButton(View.OnClickListener listener) {
+        shareLayout.setVisibility(View.VISIBLE);
+        ImageButton shareOtherAppButton = (ImageButton)findViewById(R.id.dialog_share_kakao);
+        shareOtherAppButton.setOnClickListener(listener);
+        shareOtherAppButton.setVisibility(View.VISIBLE);
+        return this;
+    }
+
+    public ImageDialog setShareGoogleDriveButton(View.OnClickListener listener) {
+        shareLayout.setVisibility(View.VISIBLE);
+        ImageButton shareOtherAppButton = (ImageButton)findViewById(R.id.dialog_share_gdrive);
+        shareOtherAppButton.setOnClickListener(listener);
+        shareOtherAppButton.setVisibility(View.VISIBLE);
+        return this;
+    }
+
+    public ImageDialog setShareFacebookButton(View.OnClickListener listener) {
+        shareLayout.setVisibility(View.VISIBLE);
+        ImageButton shareOtherAppButton = (ImageButton)findViewById(R.id.dialog_share_facebook);
+        shareOtherAppButton.setOnClickListener(listener);
+        shareOtherAppButton.setVisibility(View.VISIBLE);
+        return this;
+    }
+
+    public ImageDialog setShareOtherAppButton(View.OnClickListener listener) {
+        shareLayout.setVisibility(View.VISIBLE);
+        ImageButton shareOtherAppButton = (ImageButton)findViewById(R.id.dialog_share_others);
+        shareOtherAppButton.setOnClickListener(listener);
+        shareOtherAppButton.setVisibility(View.VISIBLE);
+        return this;
+    }
 }

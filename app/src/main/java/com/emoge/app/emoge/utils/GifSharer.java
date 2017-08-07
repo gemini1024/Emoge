@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ShareCompat;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.StoreGif;
@@ -44,6 +45,29 @@ class GifSharer {
                 shareIntent.setType("image/gif");
                 shareIntent.putExtra(Intent.EXTRA_STREAM, sharingGifFile);
                 activity.startActivity(Intent.createChooser(shareIntent, activity.getString(R.string.share_gif)));
+            }
+        });
+    }
+
+    void shareOtherApps(final Uri sharingGifFile, final String destPackage) {
+        NetworkStatus.executeWithCheckingNetwork(activity, new NetworkStatus.RequireIntentTask() {
+            @Override
+            public void Task() {
+                if( activity.getPackageManager().getLaunchIntentForPackage(destPackage) != null ) {
+                    Intent shareIntent = ShareCompat.IntentBuilder.from(activity).getIntent().setPackage(destPackage);
+                    shareIntent.setAction(android.content.Intent.ACTION_SEND);
+                    shareIntent.setType("image/gif");
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, sharingGifFile);
+                    activity.startActivity(shareIntent);
+                } else {
+                    try {
+                        activity.startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("market://details?id=" + destPackage)));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        activity.startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/apps/details?id=" + destPackage)));
+                    }
+                }
             }
         });
     }

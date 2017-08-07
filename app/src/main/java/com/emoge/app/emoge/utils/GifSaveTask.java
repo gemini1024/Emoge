@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.GifMakingInfo;
@@ -56,6 +57,7 @@ public class GifSaveTask extends AsyncTask<GifMakingInfo, Integer, File> {
         super.onPostExecute(savedFile);
         progressDialog.dismissWithAnimation();
         if(savedFile != null) {
+            Glide.with(activity).load(savedFile);
             SweetAlertDialog dialog = SweetDialogs.showSuccessDialog(activity, R.string.complete, R.string.saved_gif);
             dialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                 @Override
@@ -72,18 +74,33 @@ public class GifSaveTask extends AsyncTask<GifMakingInfo, Integer, File> {
 
     private void showResultImageDialog(@NonNull File file) {
         final Uri fileUri = Uri.fromFile(file);
+        final GifSharer gifSharer = new GifSharer(activity);
         final ImageDialog imageDialog = new ImageDialog(activity, fileUri);
-        imageDialog.setShareOtherAppButton(new View.OnClickListener() {
+        imageDialog.setShareServerButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new GifSharer(activity).shareOtherApps(fileUri);
+                gifSharer.shareServer(info.getCategory(), info.getTitle(), fileUri);
                 imageDialog.dismiss();
             }
-        }).setShareServerButton(new View.OnClickListener() {
+        }).setShareKakaoButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new GifSharer(activity).shareServer(info.getCategory(), info.getTitle(), fileUri);
-                imageDialog.dismiss();
+                gifSharer.shareOtherApps(fileUri, "com.kakao.talk");
+            }
+        }).setShareGoogleDriveButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gifSharer.shareOtherApps(fileUri, "com.google.android.apps.docs");
+            }
+        }).setShareFacebookButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gifSharer.shareOtherApps(fileUri, "com.facebook.katana");
+            }
+        }).setShareOtherAppButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gifSharer.shareOtherApps(fileUri);
             }
         }).show();
     }

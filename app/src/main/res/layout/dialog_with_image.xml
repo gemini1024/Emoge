@@ -36,6 +36,17 @@
         android:visibility="gone">
 
         <ImageButton
+            android:id="@+id/dialog_share_server"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_marginEnd="@dimen/half_unit_dimen"
+            android:layout_marginStart="@dimen/half_unit_dimen"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_upload" />
+
+        <ImageButton
             android:id="@+id/dialog_share_kakao"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
@@ -47,7 +58,7 @@
             android:src="@drawable/img_kakaotalk" />
 
         <ImageButton
-            android:id="@+id/dialog_share_server"
+            android:id="@+id/dialog_share_gdrive"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_marginEnd="@dimen/half_unit_dimen"
@@ -55,10 +66,23 @@
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@android:drawable/ic_menu_share" />
+            android:src="@drawable/img_google_drive"
+            android:visibility="gone" />
 
         <ImageButton
-            android:id="@+id/dialog_share_3"
+            android:id="@+id/dialog_share_facebook"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_marginEnd="@dimen/half_unit_dimen"
+            android:layout_marginStart="@dimen/half_unit_dimen"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/img_facebook"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/dialog_share_others"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_marginEnd="@dimen/half_unit_dimen"
