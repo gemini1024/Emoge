@@ -111,7 +111,7 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
             case Correcter.CORRECT_GAMMA :
                 return getString(R.string.gamma);
             default :
-                return getString(R.string.fps);
+                return getString(R.string.frame_delay);
         }
     }
 

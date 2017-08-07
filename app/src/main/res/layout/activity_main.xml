@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.62" />
+        app:layout_constraintGuide_percent="0.80" />
 
     <!--Image List-->
     <android.support.v7.widget.RecyclerView
@@ -71,7 +71,7 @@
         app:bmb_buttonRadius="@dimen/boombutton_size"
         app:bmb_dimColor="@color/colorBoomDim"
         app:bmb_dotRadius="0dp"
-        app:bmb_normalColor="@color/colorPrimary"
+        app:bmb_normalColor="@color/colorPrimaryDark"
         app:bmb_piecePlaceEnum="piecePlace_ham_3"
         app:layout_constraintBottom_toBottomOf="@id/guideline2"
         app:layout_constraintRight_toLeftOf="@+id/main_bt_correction"
@@ -81,7 +81,7 @@
             android:layout_width="@dimen/boombutton_image_size"
             android:layout_height="@dimen/boombutton_image_size"
             android:layout_gravity="center"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorPrimaryDark"
             android:src="@drawable/ic_add"
             android:contentDescription="@string/menu_add_image" />
     </com.nightonke.boommenu.BoomMenuButton>
@@ -96,7 +96,7 @@
         app:bmb_buttonPlaceEnum="buttonPlace_sc_3_1"
         app:bmb_buttonRadius="@dimen/boombutton_size"
         app:bmb_dimColor="@color/colorBoomDim"
-        app:bmb_normalColor="@color/colorPrimary"
+        app:bmb_normalColor="@color/colorPrimaryDark"
         app:bmb_piecePlaceEnum="piecePlace_dot_3_1"
         app:layout_constraintBottom_toBottomOf="@id/guideline2"
         app:layout_constraintRight_toRightOf="parent"
@@ -106,7 +106,7 @@
             android:layout_width="@dimen/boombutton_image_size"
             android:layout_height="@dimen/boombutton_image_size"
             android:layout_gravity="center"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorPrimaryDark"
             android:src="@drawable/ic_correct"
             android:contentDescription="@string/menu_correct_image" />
     </com.nightonke.boommenu.BoomMenuButton>
