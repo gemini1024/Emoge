@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 
 import com.emoge.app.emoge.R;
 
+import io.realm.Realm;
+
 /**
  * Created by jh on 17. 8. 3.
  * 서버 메인 페이지
@@ -20,9 +22,10 @@ public class ServerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server);
+        findViewById(R.id.toolbar).setElevation(0.f);
+        Realm.init(this);
 
         ImageButton backButton = (ImageButton) findViewById(R.id.toolbar_back);
-        backButton.setVisibility(View.VISIBLE);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

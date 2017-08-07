@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
@@ -30,8 +31,8 @@ import com.emoge.app.emoge.ui.server.ServerActivity;
 import com.emoge.app.emoge.ui.view.MenuButtons;
 import com.emoge.app.emoge.utils.GifSaveTask;
 import com.emoge.app.emoge.utils.NetworkStatus;
-import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.emoge.app.emoge.utils.dialog.EditorDialog;
+import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.nightonke.boommenu.BoomMenuButton;
 
@@ -130,7 +131,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void enableMenuButtons(FrameAdder frameAdder, Correcter correcter) {
-        findViewById(R.id.toolbar_share).setVisibility(View.VISIBLE);
+        ImageButton backButton = (ImageButton) findViewById(R.id.toolbar_back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.this.onBackPressed();
+            }
+        });
         findViewById(R.id.toolbar_save).setVisibility(View.VISIBLE);
         MenuButtons.buildAddButton(this,mAddMenu, frameAdder);
         MenuButtons.buildSelectButton(this,mCorrectMenu, correcter);
@@ -238,7 +245,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     // 움짤 평가소
-    @OnClick(R.id.toolbar_share)
+    // TODO : 평가소/움짤생성 선택 Activity 로 이동
+//    @OnClick(R.id.toolbar_share)
     void onShareButton() {
         NetworkStatus.executeWithCheckingNetwork(this, new NetworkStatus.RequireIntentTask() {
             @Override

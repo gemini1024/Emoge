@@ -42,7 +42,7 @@ public class MenuButtons {
                     .normalText(titles[i])
                     .subNormalText(subTitles[i])
                     .normalColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-                    .highlightedColor(ContextCompat.getColor(context, R.color.colorAccent))
+                    .highlightedColor(ContextCompat.getColor(context, R.color.colorPrimary))
                     .listener(frameAdder);
             bmb.addBuilder(builder);
         }
@@ -61,7 +61,7 @@ public class MenuButtons {
                     .imagePadding(IMAGE_PADDING)
                     .normalText(titles[i])
                     .normalColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-                    .highlightedColor(ContextCompat.getColor(context, R.color.colorAccent))
+                    .highlightedColor(ContextCompat.getColor(context, R.color.colorPrimary))
                     .listener(correcter);
             bmb.addBuilder(builder);
         }

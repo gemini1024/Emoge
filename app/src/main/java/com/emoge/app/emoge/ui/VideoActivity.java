@@ -51,7 +51,6 @@ public class VideoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ImageButton backButton = (ImageButton) findViewById(R.id.toolbar_back);
-        backButton.setVisibility(View.VISIBLE);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

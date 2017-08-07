@@ -3,6 +3,7 @@ package com.emoge.app.emoge.ui.server;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 /**
  * Created by jh on 17. 8. 3.
@@ -20,12 +21,18 @@ class CategoryPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return CategoryFragment.newInstance(category.getCategoryName(position));
+        if(position < category.getCategoryNum()) {
+            Log.d(LOG_TAG, "Server "+category.getCategoryName(position));
+            return CategoryFragment.newInstance(category.getCategoryName(position));
+        } else {
+            Log.d(LOG_TAG, "Realm "+category.getCategoryName(position));
+            return CategoryFavoriteFragment.newInstance();
+        }
     }
 
     @Override
     public int getCount() {
-        return category.getCategoryNum();
+        return category.getCategoryNum()+1; // +store
     }
 
     @Override

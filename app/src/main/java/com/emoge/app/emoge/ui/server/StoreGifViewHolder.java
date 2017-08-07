@@ -1,5 +1,6 @@
 package com.emoge.app.emoge.ui.server;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +17,8 @@ import butterknife.ButterKnife;
  */
 
 class StoreGifViewHolder extends RecyclerView.ViewHolder {
+    @BindView(R.id.server_item_card)
+    CardView card;
     @BindView(R.id.server_item_image)
     ImageView image;
     @BindView(R.id.server_item_title)

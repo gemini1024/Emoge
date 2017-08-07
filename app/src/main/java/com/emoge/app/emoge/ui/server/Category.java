@@ -29,6 +29,6 @@ class Category {
     }
 
     int getCategoryNum() {
-        return categoryNames.length +1;  // +store
+        return categoryNames.length;
     }
 }
