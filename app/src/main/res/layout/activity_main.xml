@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.80" />
+        app:layout_constraintGuide_percent="0.72" />
 
     <!--Image List-->
     <android.support.v7.widget.RecyclerView
@@ -59,6 +59,21 @@
     </android.support.v7.widget.ContentFrameLayout>
 
 
+    <!--Save Button-->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/main_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/half_unit_dimen"
+        android:contentDescription="@string/save"
+        android:padding="@dimen/half_unit_dimen"
+        android:src="@android:drawable/ic_menu_save"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/guideline2"
+        app:layout_constraintRight_toLeftOf="@+id/main_bt_add_frame"
+        app:layout_constraintTop_toTopOf="@id/guideline2" />
+
+
     <!--Menu Buttons-->
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/main_bt_add_frame"
@@ -82,8 +97,8 @@
             android:layout_height="@dimen/boombutton_image_size"
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
-            android:src="@drawable/ic_add"
-            android:contentDescription="@string/menu_add_image" />
+            android:contentDescription="@string/menu_add_image"
+            android:src="@drawable/ic_add" />
     </com.nightonke.boommenu.BoomMenuButton>
 
     <com.nightonke.boommenu.BoomMenuButton
@@ -107,8 +122,8 @@
             android:layout_height="@dimen/boombutton_image_size"
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
-            android:src="@drawable/ic_correct"
-            android:contentDescription="@string/menu_correct_image" />
+            android:contentDescription="@string/menu_correct_image"
+            android:src="@drawable/ic_correct" />
     </com.nightonke.boommenu.BoomMenuButton>
 
 

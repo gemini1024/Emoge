@@ -5,6 +5,8 @@ import android.os.Environment;
 
 import com.squareup.leakcanary.LeakCanary;
 
+import io.realm.Realm;
+
 /**
  * Created by jh on 17. 7. 25.
  * leakCanary 사용.
@@ -20,5 +22,6 @@ public class MainApplication extends Application {
             return;
         }
         LeakCanary.install(this);
+        Realm.init(this);
     }
 }

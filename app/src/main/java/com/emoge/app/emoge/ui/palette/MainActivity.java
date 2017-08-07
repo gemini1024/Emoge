@@ -27,10 +27,8 @@ import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
 import com.emoge.app.emoge.ui.correction.Correcter;
 import com.emoge.app.emoge.ui.frame.FrameAddTask;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
-import com.emoge.app.emoge.ui.server.ServerActivity;
 import com.emoge.app.emoge.ui.view.MenuButtons;
 import com.emoge.app.emoge.utils.GifSaveTask;
-import com.emoge.app.emoge.utils.NetworkStatus;
 import com.emoge.app.emoge.utils.dialog.EditorDialog;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -139,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.onBackPressed();
             }
         });
-        findViewById(R.id.toolbar_save).setVisibility(View.VISIBLE);
         MenuButtons.buildAddButton(this,mAddMenu, frameAdder);
         MenuButtons.buildSelectButton(this,mCorrectMenu, correcter);
         new Handler().postDelayed(new Runnable() {
@@ -244,23 +241,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-    // 움짤 평가소
-    // TODO : 평가소/움짤생성 선택 Activity 로 이동
-//    @OnClick(R.id.toolbar_share)
-    void onShareButton() {
-        NetworkStatus.executeWithCheckingNetwork(this, new NetworkStatus.RequireIntentTask() {
-            @Override
-            public void Task() {
-                Intent intent = new Intent(getBaseContext(), ServerActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-
     // 저장 기능
-    @OnClick(R.id.toolbar_save)
+    @OnClick(R.id.main_save)
     void showEditorDialog() {
         if(!Correcter.isMainPalette(getSupportFragmentManager())) {
             SweetDialogs.showErrorDialog(this, R.string.modifying, R.string.err_modifying);
@@ -295,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
     // 실수로 나가기 방지
     @Override
     public void onBackPressed() {
-        if(Correcter.isMainPalette(getSupportFragmentManager())) {
+        if(Correcter.isMainPalette(getSupportFragmentManager()) && !mFrameAdapter.isEmpty()) {
             SweetDialogs.showExitDialog(this);
         } else {
             super.onBackPressed();

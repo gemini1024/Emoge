@@ -9,7 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.emoge.app.emoge.R;
-import com.emoge.app.emoge.ui.palette.MainActivity;
+import com.emoge.app.emoge.ui.server.ServerActivity;
+import com.emoge.app.emoge.utils.NetworkStatus;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -45,9 +46,14 @@ public class SplashActivity extends AppCompatActivity implements PermissionListe
 
     @Override
     public void onPermissionGranted() {
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this,
-                findViewById(R.id.splash_image), getString(R.string.splash_image));
-        startActivity(new Intent(this, MainActivity.class), options.toBundle());
+        NetworkStatus.executeWithCheckingNetwork(this, new NetworkStatus.RequireIntentTask() {
+            @Override
+            public void Task() {
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this,
+                        findViewById(R.id.splash_image), getString(R.string.splash_image));
+                startActivity(new Intent(SplashActivity.this, ServerActivity.class), options.toBundle());
+            }
+        });
     }
 
     @Override

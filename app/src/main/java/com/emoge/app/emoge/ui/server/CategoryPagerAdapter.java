@@ -21,12 +21,12 @@ class CategoryPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if(position < category.getCategoryNum()) {
-            Log.d(LOG_TAG, "Server "+category.getCategoryName(position));
-            return CategoryFragment.newInstance(category.getCategoryName(position));
-        } else {
+        if(position == 0) {
             Log.d(LOG_TAG, "Realm "+category.getCategoryName(position));
             return CategoryFavoriteFragment.newInstance();
+        } else {
+            Log.d(LOG_TAG, "Server "+category.getCategoryName(position));
+            return CategoryFragment.newInstance(category.getCategoryName(position));
         }
     }
 

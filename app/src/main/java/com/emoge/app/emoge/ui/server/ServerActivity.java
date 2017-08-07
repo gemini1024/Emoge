@@ -1,5 +1,6 @@
 package com.emoge.app.emoge.ui.server;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -8,8 +9,10 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.ui.palette.MainActivity;
 
-import io.realm.Realm;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by jh on 17. 8. 3.
@@ -22,8 +25,8 @@ public class ServerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server);
+        ButterKnife.bind(this);
         findViewById(R.id.toolbar).setElevation(0.f);
-        Realm.init(this);
 
         ImageButton backButton = (ImageButton) findViewById(R.id.toolbar_back);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -39,6 +42,12 @@ public class ServerActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.server_tabs);
         tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @OnClick(R.id.server_bt_making)
+    void startMakingGif() {
+        overridePendingTransition(0, android.R.anim.fade_in);
+        startActivity(new Intent(this, MainActivity.class));
     }
 
 

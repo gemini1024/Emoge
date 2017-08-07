@@ -11,20 +11,20 @@ import com.emoge.app.emoge.R;
  */
 
 class Category {
-    private final String[] categoryNames;
     private final String storeName;
+    private final String[] categoryNames;
 
     Category(Resources res) {
-        this.categoryNames = res.getStringArray(R.array.server_category);
         this.storeName = res.getString(R.string.category_store);
+        this.categoryNames = res.getStringArray(R.array.server_category);
     }
 
     @NonNull
-    String getCategoryName(int category) {
-        if(category >= 0 && category < categoryNames.length) {
-            return categoryNames[category];
-        } else {
+    String getCategoryName(int index) {
+        if(index == 0) {
             return storeName;
+        } else {
+            return categoryNames[index-1];
         }
     }
 
