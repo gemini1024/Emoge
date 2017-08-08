@@ -9,7 +9,7 @@
     app:cardElevation="@dimen/half_unit_dimen"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true"
-    tools:context="com.emoge.app.emoge.ui.palette.PaletteFragment">
+    tools:fragment="com.emoge.app.emoge.ui.palette.PaletteFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

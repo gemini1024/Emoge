@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPalette"
-    tools:context="com.emoge.app.emoge.ui.VideoActivity">
+    tools:fragment="com.emoge.app.emoge.ui.VideoActivity">
 
     <include layout="@layout/toolbar_main" />
 

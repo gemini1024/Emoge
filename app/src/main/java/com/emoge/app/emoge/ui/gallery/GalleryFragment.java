@@ -62,7 +62,7 @@ public class GalleryFragment extends Fragment {
         // RecyclerView 설정
         List<String> fileFormat = mImageType == ImageFormatChecker.IMAGE_TYPE ?
                 ImageFormatChecker.IMAGE_FORMAT : ImageFormatChecker.GIF_FORMAT;
-        mGalleryAdapter = new GalleryAdapter(getContext(), fileFormat, new ArrayList<File>(), TextUtils.isEmpty(mDirPath));
+        mGalleryAdapter = new GalleryAdapter(this, fileFormat, new ArrayList<File>(), TextUtils.isEmpty(mDirPath));
         mGallery.setHasFixedSize(true);
         mGallery.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
         mGallery.setAdapter(mGalleryAdapter);

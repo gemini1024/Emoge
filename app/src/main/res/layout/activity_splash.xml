@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_splash"
-    tools:context="com.emoge.app.emoge.ui.splash.SplashActivity">
+    tools:fragment="com.emoge.app.emoge.ui.splash.SplashActivity">
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline_left"

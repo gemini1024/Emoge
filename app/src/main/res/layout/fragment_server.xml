@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/half_unit_dimen"
-    tools:context="com.emoge.app.emoge.ui.server.CategoryFragment">
+    tools:fragment="com.emoge.app.emoge.ui.server.CategoryFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/server_gif_list"
