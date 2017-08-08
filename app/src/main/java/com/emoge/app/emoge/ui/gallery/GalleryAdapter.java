@@ -11,6 +11,8 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
 import com.emoge.app.emoge.R;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +28,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
     private ArrayList<File> files;
     private List<String> format;
     private RequestOptions placeholderOption;
+    private boolean canSendMsg;
 
-    GalleryAdapter(Context context, List<String> format, ArrayList<File> files) {
+    GalleryAdapter(Context context, List<String> format, ArrayList<File> files, boolean canSendMsg) {
         this.context = context;
         this.format = format;
         this.files = files;
+        this.canSendMsg = canSendMsg;
         this.placeholderOption = new RequestOptions()
                 .format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_no_image);
     }
@@ -46,6 +50,14 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
         final File file = files.get(position);
 
         Glide.with(context).load(file).apply(placeholderOption).into(holder.image);
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(canSendMsg) {
+                    EventBus.getDefault().post(file);
+                }
+            }
+        });
     }
 
     boolean addItem(File file) {

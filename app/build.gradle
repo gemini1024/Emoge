@@ -44,6 +44,7 @@ dependencies {
     compile 'com.github.zomato:androidphotofilters:1.0.1'
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.snatik:storage:2.1.0'
     compile 'com.google.firebase:firebase-core:10.2.1'
     compile 'com.google.firebase:firebase-database:10.2.1'
     compile 'com.google.firebase:firebase-storage:10.2.1'

@@ -1,11 +1,14 @@
 package com.emoge.app.emoge.ui.palette;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +20,6 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.bumptech.glide.Glide;
-import com.emoge.app.emoge.MainApplication;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.FrameStatusMessage;
@@ -28,7 +30,8 @@ import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
 import com.emoge.app.emoge.ui.correction.Correcter;
 import com.emoge.app.emoge.ui.frame.FrameAddTask;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
-import com.emoge.app.emoge.ui.gallery.GalleryFragment;
+import com.emoge.app.emoge.ui.gallery.GalleryViewPagerAdapter;
+import com.emoge.app.emoge.ui.gallery.ImageFormatChecker;
 import com.emoge.app.emoge.ui.view.MenuButtons;
 import com.emoge.app.emoge.utils.GifSaveTask;
 import com.emoge.app.emoge.utils.dialog.EditorDialog;
@@ -40,6 +43,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -57,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)             Toolbar mToolbar;
     @BindView(R.id.main_preview)        PhotoView mPreview;
     @BindView(R.id.main_frame_list)     RecyclerView mFrameRecyclerView;
+    @BindView(R.id.main_gallery_container)
+    ViewPager mGallery;
     @BindView(R.id.main_bt_add_frame)   BoomMenuButton mAddMenu;
     @BindView(R.id.main_bt_correction)  BoomMenuButton mCorrectMenu;
 
@@ -111,6 +117,12 @@ public class MainActivity extends AppCompatActivity {
         addPalette(correcter);
         setFrameList(frameAdder, correcter);
         enableMenuButtons(frameAdder, correcter);
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.main_gallery_container);
+        viewPager.setAdapter(new GalleryViewPagerAdapter(getSupportFragmentManager()));
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.main_gallery_tab);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private void addPalette(Correcter correcter) {
@@ -120,13 +132,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.main_palette_container,
                 PaletteFragment.newInstance(Correcter.MAIN_PALETTE, correcter.getCurrentFps()));
         fragmentTransaction.commit();
-
-
-        FragmentTransaction fragmentTransaction2 = fm.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-        fragmentTransaction.add(R.id.main_gallery_container,
-                GalleryFragment.newInstance(MainApplication.defaultDir));
-        fragmentTransaction2.commit();
     }
 
     private void setFrameList(FrameAdder frameAdder, Correcter correcter) {
@@ -207,6 +212,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    void addFileFromGallery(File file) {
+        int requestCode = FrameAdder.INTENT_GET_IMAGE;
+        if(ImageFormatChecker.inFormat(file, ImageFormatChecker.IMAGE_FORMAT)) {
+            requestCode = FrameAdder.INTENT_GET_IMAGE;
+        } else if(ImageFormatChecker.inFormat(file, ImageFormatChecker.GIF_FORMAT)) {
+            requestCode = FrameAdder.INTENT_GET_GIF;
+        } else {
+            Log.e(LOG_TAG, "파일 형식을 알 수 없음.");
+            return;
+        }
+
+        new FrameAddTask(this, mFrameAdapter, requestCode)
+                .execute(new Intent().setData(Uri.fromFile(file)));
+    }
 
 
 

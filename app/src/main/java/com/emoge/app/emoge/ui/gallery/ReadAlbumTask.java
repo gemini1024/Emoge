@@ -6,7 +6,11 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.snatik.storage.Storage;
+
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by jh on 17. 8. 8.
@@ -25,27 +29,11 @@ public class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(String... params) {
-        String[] projection = { MediaStore.Images.Media.DATA };
-
-        Cursor imageCursor = fragment.getActivity().getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                projection,
-                null,
-                null,
-                null);
-
-        if(imageCursor != null) {
-            int dataColumnIndex = imageCursor.getColumnIndex(projection[0]);
-            imageCursor.moveToFirst();
-            do {
-                String filePath = imageCursor.getString(dataColumnIndex);
-                File imageFile = new File(filePath);
-                adapter.addItemWithoutNotify(imageFile);
-            } while(imageCursor.moveToNext());
-            imageCursor.close();
-            return true;
+        if(params[0] != null) {
+            return findDirectory(params[0]);
+        } else {
+            return findAllDirectory();
         }
-        return false;
     }
 
     @Override
@@ -56,5 +44,37 @@ public class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
         } else {
             Log.e(LOG_TAG, "not found images");
         }
+    }
+
+    private boolean findDirectory(String filepath) {
+        List<File> myFiles = new Storage(fragment.getContext()).getFiles(filepath);
+        for(File file : myFiles) {
+            adapter.addItemWithoutNotify(file);
+        }
+        return true;
+    }
+
+    private boolean findAllDirectory() {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor imageCursor = fragment.getActivity().getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
+
+        if(imageCursor != null) {
+            int dataColumnIndex = imageCursor.getColumnIndex(projection[0]);
+            if(imageCursor.moveToFirst()) {
+                do {
+                    String filePath = imageCursor.getString(dataColumnIndex);
+                    File imageFile = new File(filePath);
+                    adapter.addItemWithoutNotify(imageFile);
+                } while (imageCursor.moveToNext());
+            }
+            imageCursor.close();
+            return true;
+        }
+        return false;
     }
 }
