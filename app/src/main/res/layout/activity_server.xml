@@ -25,8 +25,7 @@
         android:id="@+id/server_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/server_appbar"
-        android:background="@color/colorPalette" />
+        android:layout_below="@id/server_appbar" />
 
     <!--Add Buttons-->
     <android.support.design.widget.FloatingActionButton

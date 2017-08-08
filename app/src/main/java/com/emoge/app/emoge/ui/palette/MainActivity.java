@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.bumptech.glide.Glide;
+import com.emoge.app.emoge.MainApplication;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.FrameStatusMessage;
@@ -27,6 +28,7 @@ import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
 import com.emoge.app.emoge.ui.correction.Correcter;
 import com.emoge.app.emoge.ui.frame.FrameAddTask;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
+import com.emoge.app.emoge.ui.gallery.GalleryFragment;
 import com.emoge.app.emoge.ui.view.MenuButtons;
 import com.emoge.app.emoge.utils.GifSaveTask;
 import com.emoge.app.emoge.utils.dialog.EditorDialog;
@@ -118,6 +120,13 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.main_palette_container,
                 PaletteFragment.newInstance(Correcter.MAIN_PALETTE, correcter.getCurrentFps()));
         fragmentTransaction.commit();
+
+
+        FragmentTransaction fragmentTransaction2 = fm.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+        fragmentTransaction.add(R.id.main_gallery_container,
+                GalleryFragment.newInstance(MainApplication.defaultDir));
+        fragmentTransaction2.commit();
     }
 
     private void setFrameList(FrameAdder frameAdder, Correcter correcter) {

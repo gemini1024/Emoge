@@ -41,7 +41,7 @@
             android:contentDescription="@string/app_name"
             android:padding="@dimen/half_unit_dimen"
             android:scaleType="centerInside"
-            android:src="@drawable/app_name"
+            android:src="@drawable/app_name_bk"
             android:transitionName="@string/splash_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

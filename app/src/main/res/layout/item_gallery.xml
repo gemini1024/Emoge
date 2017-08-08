@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.emoge.app.emoge.ui.view.SquareImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gallery_item_image"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:adjustViewBounds="true"
+    android:scaleType="centerCrop" >
+
+</com.emoge.app.emoge.ui.view.SquareImageView>

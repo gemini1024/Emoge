@@ -59,6 +59,20 @@
     </android.support.v7.widget.ContentFrameLayout>
 
 
+    <!--Palette-->
+    <android.support.v7.widget.ContentFrameLayout
+        android:id="@+id/main_gallery_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline1">
+
+    </android.support.v7.widget.ContentFrameLayout>
+
+
+
     <!--Save Button-->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/main_save"
@@ -68,7 +82,7 @@
         android:contentDescription="@string/save"
         android:padding="@dimen/half_unit_dimen"
         android:src="@android:drawable/ic_menu_save"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="@id/guideline2"
         app:layout_constraintRight_toLeftOf="@+id/main_bt_add_frame"
         app:layout_constraintTop_toTopOf="@id/guideline2" />
@@ -86,7 +100,7 @@
         app:bmb_buttonRadius="@dimen/boombutton_size"
         app:bmb_dimColor="@color/colorBoomDim"
         app:bmb_dotRadius="0dp"
-        app:bmb_normalColor="@color/colorPrimary"
+        app:bmb_normalColor="@color/colorAccent"
         app:bmb_piecePlaceEnum="piecePlace_ham_3"
         app:layout_constraintBottom_toBottomOf="@id/guideline2"
         app:layout_constraintRight_toLeftOf="@+id/main_bt_correction"
@@ -96,7 +110,7 @@
             android:layout_width="@dimen/boombutton_image_size"
             android:layout_height="@dimen/boombutton_image_size"
             android:layout_gravity="center"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorAccent"
             android:contentDescription="@string/menu_add_image"
             android:src="@drawable/ic_add" />
     </com.nightonke.boommenu.BoomMenuButton>
@@ -111,7 +125,7 @@
         app:bmb_buttonPlaceEnum="buttonPlace_sc_3_1"
         app:bmb_buttonRadius="@dimen/boombutton_size"
         app:bmb_dimColor="@color/colorBoomDim"
-        app:bmb_normalColor="@color/colorPrimary"
+        app:bmb_normalColor="@color/colorAccent"
         app:bmb_piecePlaceEnum="piecePlace_dot_3_1"
         app:layout_constraintBottom_toBottomOf="@id/guideline2"
         app:layout_constraintRight_toRightOf="parent"
@@ -121,7 +135,7 @@
             android:layout_width="@dimen/boombutton_image_size"
             android:layout_height="@dimen/boombutton_image_size"
             android:layout_gravity="center"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorAccent"
             android:contentDescription="@string/menu_correct_image"
             android:src="@drawable/ic_correct" />
     </com.nightonke.boommenu.BoomMenuButton>
