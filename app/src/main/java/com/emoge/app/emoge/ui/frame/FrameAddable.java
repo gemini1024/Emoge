@@ -9,6 +9,6 @@ import android.support.annotation.NonNull;
 
 interface FrameAddable {
     void addFrameFromImages(@NonNull Intent imageData);
-    void addFrameFromGif(@NonNull Intent imageData);
-    void addFrameFromVideo(@NonNull Intent videoData);
+    void addFrameFromGif(@NonNull Intent imageData, int maxSize);
+    void addFrameFromVideo(@NonNull Intent videoData, int maxSize);
 }

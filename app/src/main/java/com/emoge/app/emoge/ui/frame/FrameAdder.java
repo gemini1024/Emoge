@@ -121,11 +121,12 @@ public class FrameAdder implements OnBMClickListener {
     }
 
     @NonNull
-    List<Bitmap> loadBitmapsFromGif(@NonNull Uri imageUri) throws FileNotFoundException {
+    List<Bitmap> loadBitmapsFromGif(@NonNull Uri imageUri, int maxSize) throws FileNotFoundException {
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         GifDecoder decoder = new GifDecoder();
         decoder.read(activity.getContentResolver().openInputStream(imageUri));
-        for(int i=0; i<decoder.getFrameCount(); i++) {
+        int addCount = Math.min(decoder.getFrameCount(), maxSize);
+        for(int i=0; i<addCount; i++) {
             bitmaps.add(decoder.getFrame(i));
         }
         return bitmaps;
@@ -143,12 +144,13 @@ public class FrameAdder implements OnBMClickListener {
 
 
     @NonNull
-    List<Bitmap> captureVideo(@NonNull Uri videoUri, int startSec, int count, int fps) {
+    List<Bitmap> captureVideo(@NonNull Uri videoUri, int maxSize, int startSec, int count, int fps) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         List<Bitmap> bitmapArrayList = new ArrayList<>();
 
+        int addCount = Math.min(count, maxSize);
         retriever.setDataSource(getRealPathFromUri(activity, videoUri));
-        for(int i = 0; i < count; i++){
+        for(int i = 0; i < addCount; i++){
             Bitmap videoFrame = retriever.getFrameAtTime((startSec + i*fps)*1000L, MediaMetadataRetriever.OPTION_NEXT_SYNC);
             if(videoFrame != null) {
                 bitmapArrayList.add(resizeVideoFrame(videoFrame));

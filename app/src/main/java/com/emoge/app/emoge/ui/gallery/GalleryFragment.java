@@ -79,6 +79,6 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        mGalleryAdapter.clear();
+        mGalleryAdapter.clearWithoutNotify();
     }
 }

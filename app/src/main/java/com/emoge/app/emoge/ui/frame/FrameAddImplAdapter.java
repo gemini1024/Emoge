@@ -55,11 +55,11 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
     }
 
     @Override
-    public void addFrameFromGif(@NonNull Intent imageData) {
+    public void addFrameFromGif(@NonNull Intent imageData, int maxSize) {
         try {
             Uri imageUri = imageData.getData();
             if( imageUri != null ) {
-                List<Bitmap> bitmaps = frameAdder.loadBitmapsFromGif(imageUri);
+                List<Bitmap> bitmaps = frameAdder.loadBitmapsFromGif(imageUri, maxSize);
                 int firstAddPosition = getItemCount();
                 for(Bitmap bitmap : bitmaps) {
                     addItemWithoutNotify(new Frame(nextId(), bitmap));
@@ -72,9 +72,9 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
     }
 
     @Override
-    public void addFrameFromVideo(@NonNull Intent videoData) {
+    public void addFrameFromVideo(@NonNull Intent videoData, int maxSize) {
         if(videoData.getData() != null) {
-            List<Bitmap> bitmaps = frameAdder.captureVideo(videoData.getData(),
+            List<Bitmap> bitmaps = frameAdder.captureVideo(videoData.getData(), maxSize,
                     videoData.getIntExtra(VideoActivity.INTENT_NAME_START_SEC, 0),
                     videoData.getIntExtra(VideoActivity.INTENT_NAME_CAPTURE_COUNT, 0),
                     videoData.getIntExtra(VideoActivity.INTENT_NAME_CAPTURE_DELAY, 100));

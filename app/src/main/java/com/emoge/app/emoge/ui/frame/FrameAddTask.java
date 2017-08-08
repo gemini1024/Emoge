@@ -43,10 +43,10 @@ public class FrameAddTask extends AsyncTask<Intent, Void, Boolean> {
                 adapter.addFrameFromImages(params[0]);
                 break;
             case FrameAdder.INTENT_GET_GIF:
-                adapter.addFrameFromGif(params[0]);
+                adapter.addFrameFromGif(params[0], adapter.getMaxItemSize()-adapter.getItemCount());
                 break;
             case FrameAdder.INTENT_CAPTURE_VIDEO:
-                adapter.addFrameFromVideo(params[0]);
+                adapter.addFrameFromVideo(params[0], adapter.getMaxItemSize()-adapter.getItemCount());
                 break;
         }
         return true;

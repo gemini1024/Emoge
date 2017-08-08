@@ -17,6 +17,8 @@
     <string name="err_upload_gif_content">움짤 업로드를 실패 했습니다\n다시 시도해 주세요</string>
     <string name="err_no_image_title">이미지 없음</string>
     <string name="err_no_image_content">만들고있는 이미지가 없습니다</string>
+    <string name="err_add_file_title">프레임 추가 실패</string>
+    <string name="err_add_file_content">파일 형식을 알 수 없습니다</string>
 
 
     <!--dialog-->
@@ -66,4 +68,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="next">다음</string>
 </resources>

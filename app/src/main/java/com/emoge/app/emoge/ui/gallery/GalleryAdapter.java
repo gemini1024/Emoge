@@ -77,8 +77,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
     }
 
     void clear() {
-        files.clear();
+        clear();
         notifyDataSetChanged();
+    }
+
+    void clearWithoutNotify() {
+        files.clear();
     }
 
 

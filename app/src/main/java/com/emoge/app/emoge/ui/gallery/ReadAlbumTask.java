@@ -9,7 +9,6 @@ import android.util.Log;
 import com.snatik.storage.Storage;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -55,13 +54,14 @@ public class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
     }
 
     private boolean findAllDirectory() {
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = { MediaStore.Images.Media.DATA,
+                MediaStore.Images.ImageColumns.DATE_TAKEN };
         Cursor imageCursor = fragment.getActivity().getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 projection,
                 null,
                 null,
-                null);
+                MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
 
         if(imageCursor != null) {
             int dataColumnIndex = imageCursor.getColumnIndex(projection[0]);

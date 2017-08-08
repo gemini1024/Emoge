@@ -82,6 +82,10 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
         return frames.size();
     }
 
+    public int getMaxItemSize() {
+        return MAX_ITEM_SIZE;
+    }
+
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);

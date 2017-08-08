@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 
 import com.bumptech.glide.Glide;
@@ -59,12 +62,18 @@ public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.toolbar)             Toolbar mToolbar;
+    @BindView(R.id.toolbar_next)        ImageButton mNextButton;
     @BindView(R.id.main_preview)        PhotoView mPreview;
     @BindView(R.id.main_frame_list)     RecyclerView mFrameRecyclerView;
-    @BindView(R.id.main_gallery_container)
-    ViewPager mGallery;
     @BindView(R.id.main_bt_add_frame)   BoomMenuButton mAddMenu;
     @BindView(R.id.main_bt_correction)  BoomMenuButton mCorrectMenu;
+
+    @BindView(R.id.main_palette)
+    ConstraintLayout mPaletteLayout;
+    @BindView(R.id.main_gallery)
+    ConstraintLayout mGalleryLayout;
+    @BindView(R.id.main_gallery_container)
+    ViewPager mGallery;
 
     // Frame 저장 및 수정용 Adapter
     private CorrectImplAdapter mFrameAdapter;
@@ -102,6 +111,18 @@ public class MainActivity extends AppCompatActivity {
         mHandler.removeCallbacks(mTask);
     }
 
+    private void enterViews(View view) {
+        final Animation enterAnim = AnimationUtils.loadAnimation(this, R.anim.enter);
+        view.setAnimation(enterAnim);
+        view.setVisibility(View.VISIBLE);
+    }
+
+    private void exitViews(View view) {
+        final Animation exitAnim = AnimationUtils.loadAnimation(this, R.anim.exit);
+        view.setAnimation(exitAnim);
+        view.setVisibility(View.GONE);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,21 +135,24 @@ public class MainActivity extends AppCompatActivity {
         Correcter correcter = new Correcter(this);
         FrameAdder frameAdder = new FrameAdder(this);
 
+        addGallery();
         addPalette(correcter);
         setFrameList(frameAdder, correcter);
         enableMenuButtons(frameAdder, correcter);
+    }
 
+    private void addGallery() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.main_gallery_container);
         viewPager.setAdapter(new GalleryViewPagerAdapter(getSupportFragmentManager()));
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.main_gallery_tab);
         tabLayout.setupWithViewPager(viewPager);
+        enterViews(mGalleryLayout);
     }
 
     private void addPalette(Correcter correcter) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+        fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.enter, R.anim.exit);
         fragmentTransaction.add(R.id.main_palette_container,
                 PaletteFragment.newInstance(Correcter.MAIN_PALETTE, correcter.getCurrentFps()));
         fragmentTransaction.commit();
@@ -151,14 +175,22 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.onBackPressed();
             }
         });
+        mNextButton.setVisibility(View.VISIBLE);
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mFrameAdapter.isEmpty()) {
+                    SweetDialogs.showErrorDialog(MainActivity.this,
+                            R.string.err_no_image_title, R.string.err_no_image_content);
+                } else if(mGalleryLayout.getVisibility() == View.VISIBLE) {
+                    exitViews(mGalleryLayout);
+                    enterViews(mPaletteLayout);
+                    mNextButton.setVisibility(View.GONE);
+                }
+            }
+        });
         MenuButtons.buildAddButton(this,mAddMenu, frameAdder);
         MenuButtons.buildSelectButton(this,mCorrectMenu, correcter);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                MenuButtons.showWithAnimation(mAddMenu);
-            }
-        }, 500);
     }
 
     @Override
@@ -176,36 +208,16 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     void onPaletteEvent(PaletteMessage message) {
         mHandler.removeCallbacks(mTask);
-        if(isTransPalette(message.getType())) {
-            showAddMenuOnlyMainPalette();
-        }
         mFrameAdapter.correct(message.getType(), message.getValue());
         mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
         mHandler.postDelayed(mTask, mFrameAdapter.getFps());
         mFrameAdapter.clearPreviousFrames();    // View 에서 띄우는 이미지를 변경했으므로 -> 제거
     }
 
-    private boolean isTransPalette(int type) {
-        return type == Correcter.CORRECT_ADD
-                || type == Correcter.CORRECT_APPLY
-                || type == Correcter.CORRECT_RESET;
-    }
-
-    private void showAddMenuOnlyMainPalette() {
-        if (Correcter.isMainPalette(getSupportFragmentManager())
-                && !mFrameAdapter.isFull()) {
-            MenuButtons.showWithAnimation(mAddMenu);
-        } else {
-            MenuButtons.hideWithAnimation(mAddMenu);
-        }
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     void receiveFrameStatusMessage(FrameStatusMessage message) {
         if(message.equals(FrameStatusMessage.FULL)) {
-            MenuButtons.hideWithAnimation(mAddMenu);
         } else if(message.equals(FrameStatusMessage.NOT_FULL)){
-            showAddMenuOnlyMainPalette();
             MenuButtons.showWithAnimation(mCorrectMenu);
         } else {
             MenuButtons.hideWithAnimation(mCorrectMenu);
@@ -214,13 +226,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     void addFileFromGallery(File file) {
-        int requestCode = FrameAdder.INTENT_GET_IMAGE;
+        int requestCode;
         if(ImageFormatChecker.inFormat(file, ImageFormatChecker.IMAGE_FORMAT)) {
             requestCode = FrameAdder.INTENT_GET_IMAGE;
         } else if(ImageFormatChecker.inFormat(file, ImageFormatChecker.GIF_FORMAT)) {
             requestCode = FrameAdder.INTENT_GET_GIF;
         } else {
-            Log.e(LOG_TAG, "파일 형식을 알 수 없음.");
+            SweetDialogs.showErrorDialog(this,
+                    R.string.err_add_file_title, R.string.err_add_file_content);
             return;
         }
 
@@ -306,10 +319,22 @@ public class MainActivity extends AppCompatActivity {
     // 실수로 나가기 방지
     @Override
     public void onBackPressed() {
-        if(Correcter.isMainPalette(getSupportFragmentManager()) && !mFrameAdapter.isEmpty()) {
-            SweetDialogs.showExitDialog(this);
+        if(mGalleryLayout.getVisibility() == View.VISIBLE) {
+            // 이미지 추가 중인 경우
+            if(!mFrameAdapter.isEmpty()) {
+                SweetDialogs.showExitDialog(this);
+            } else {
+                super.onBackPressed();
+            }
         } else {
-            super.onBackPressed();
+            // 보정 중인 경우
+            if(Correcter.isMainPalette(getSupportFragmentManager())) {
+                exitViews(mPaletteLayout);
+                enterViews(mGalleryLayout);
+                mNextButton.setVisibility(View.VISIBLE);
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 }

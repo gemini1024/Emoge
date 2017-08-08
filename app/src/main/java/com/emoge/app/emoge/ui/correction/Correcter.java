@@ -68,7 +68,7 @@ public class Correcter implements OnBMClickListener {
     public void onBoomButtonClick(int index) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+        fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.enter, R.anim.exit);
         fragmentTransaction.replace(R.id.main_palette_container,
                 PaletteFragment.newInstance(index, getDefaultValueByType(index)));
         if(isMainPalette(fragmentManager)) {
