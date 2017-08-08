@@ -38,7 +38,7 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
         this.files = files;
         this.canSendMsg = canSendMsg;
         this.placeholderOption = new RequestOptions()
-                .format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_no_image);
+                .format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_loading);
     }
 
     @Override

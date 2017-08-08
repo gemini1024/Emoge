@@ -38,7 +38,7 @@ public class ImageDialog extends CustomDialog {
         this(activity);
         PhotoView image = (PhotoView)findViewById(R.id.dialog_image);
         RequestOptions requestOptions = new RequestOptions();
-        requestOptions.format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_no_image);
+        requestOptions.format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_loading);
         Glide.with(activity).load(uri).apply(requestOptions).into(image);
     }
 

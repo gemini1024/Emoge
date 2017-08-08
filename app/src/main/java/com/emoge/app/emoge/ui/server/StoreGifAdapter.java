@@ -31,7 +31,7 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
         this.context = context;
         this.gifs = gifs;
         this.placeholderOption = new RequestOptions()
-                .format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_no_image);
+                .format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_loading);
     }
 
     @Override

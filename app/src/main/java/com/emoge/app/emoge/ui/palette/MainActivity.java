@@ -218,9 +218,10 @@ public class MainActivity extends AppCompatActivity {
     void receiveFrameStatusMessage(FrameStatusMessage message) {
         if(message.equals(FrameStatusMessage.FULL)) {
         } else if(message.equals(FrameStatusMessage.NOT_FULL)){
-            MenuButtons.showWithAnimation(mCorrectMenu);
         } else {
-            MenuButtons.hideWithAnimation(mCorrectMenu);
+            while(mGalleryLayout.getVisibility() != View.VISIBLE) {
+                MainActivity.this.onBackPressed();
+            }
         }
     }
 

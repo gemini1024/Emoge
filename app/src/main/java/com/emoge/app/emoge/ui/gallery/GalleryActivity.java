@@ -1,6 +1,7 @@
 package com.emoge.app.emoge.ui.gallery;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,6 +14,7 @@ import com.emoge.app.emoge.MainApplication;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.StoreGif;
 import com.emoge.app.emoge.ui.palette.MainActivity;
+import com.emoge.app.emoge.utils.dialog.ImageDialog;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +37,7 @@ public class GalleryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         ButterKnife.bind(this);
-        Glide.with(this).load(R.drawable.img_no_image).into(bestPhoto);
+        Glide.with(this).load(R.drawable.img_loading).into(bestPhoto);
         loadGifImages();
 
         findViewById(R.id.toolbar_back).setVisibility(View.GONE);
@@ -68,9 +70,18 @@ public class GalleryActivity extends AppCompatActivity {
                             bestFavoriteGif = storeGif;
                         }
                     }
-                    Glide.with(GalleryActivity.this)
-                            .load(bestFavoriteGif.getDownloadUrl())
-                            .into(bestPhoto);
+                    if(bestFavoriteGif != null) {
+                        final Uri downloadUri = Uri.parse(bestFavoriteGif.downloadUrl);
+                        Glide.with(GalleryActivity.this)
+                                .load(downloadUri)
+                                .into(bestPhoto);
+                        bestPhoto.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new ImageDialog(GalleryActivity.this, downloadUri).show();
+                            }
+                        });
+                    }
                 }
             }
 
