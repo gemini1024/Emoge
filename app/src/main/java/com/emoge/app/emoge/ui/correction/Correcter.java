@@ -42,10 +42,10 @@ public class Correcter implements OnBMClickListener {
     public static final int CORRECT_RESET       = 103;
 
     // 기본값 (For Fragment's SeekBar)
-    private static final int DEFAULT_FPS         = 500;
-    private static final int DEFAULT_BRIGHTNESS  = 0;
-    private static final int DEFAULT_CONTRAST    = 100;
-    private static final int DEFAULT_GAMMA       = 128;
+    public static final int DEFAULT_FPS         = 500;
+    public static final int DEFAULT_BRIGHTNESS  = 0;
+    public static final int DEFAULT_CONTRAST    = 100;
+    public static final int DEFAULT_GAMMA       = 128;
 
 
     // NDK Libraries

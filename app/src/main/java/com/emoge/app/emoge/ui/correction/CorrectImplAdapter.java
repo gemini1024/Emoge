@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.emoge.app.emoge.model.Frame;
+import com.emoge.app.emoge.model.History;
 import com.emoge.app.emoge.ui.frame.FrameAddImplAdapter;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
 
@@ -23,6 +24,9 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     private List<Frame> stageFrames;    // 현 상태 Preview 용. Palette 제거 시 같이 제거
     private List<Frame> tmpFrames;      // View Looper 용. 변경된 이미지가 View 에서 내려온 후 제거
 
+    private int modifiedBrightness;
+    private int modifiedContrast;
+    private int modifiedGamma;
 
     public CorrectImplAdapter(@NonNull RecyclerView recyclerView,
                               @NonNull List<Frame> frames,
@@ -32,6 +36,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         this.correcter = correcter;
         this.stageFrames = new ArrayList<>();
         this.tmpFrames = new ArrayList<>();
+        this.setDefualtValues();
     }
 
     @Override
@@ -107,6 +112,12 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
 
 
     // FPS(재생 속도) 변경
+    private void setDefualtValues() {
+        this.modifiedBrightness = Correcter.DEFAULT_BRIGHTNESS;
+        this.modifiedContrast   = Correcter.DEFAULT_CONTRAST;
+        this.modifiedGamma      = Correcter.DEFAULT_GAMMA;
+    }
+
     @Override
     public void setFps(int value) {
         correcter.setCurrentFps(value);
@@ -122,6 +133,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     public void setBrightness(int value) {
         tmpFrames = stageFrames;
         stageFrames = correcter.setBrightness(getFrames(), value);
+        modifiedBrightness = value;
         notifyDataSetChanged();
     }
 
@@ -130,6 +142,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     public void setContrast(int value) {
         tmpFrames = stageFrames;
         stageFrames = correcter.setContrast(getFrames(), value);
+        modifiedContrast = value;
         notifyDataSetChanged();
     }
 
@@ -138,6 +151,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     public void setGamma(int value) {
         tmpFrames = stageFrames;
         stageFrames = correcter.setGamma(getFrames(), value);
+        modifiedGamma = value;
         notifyDataSetChanged();
     }
 
@@ -146,6 +160,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     public void apply() {
         super.clear();
         super.setFrames(stageFrames);
+        setDefualtValues();
         stageFrames = new ArrayList<>();
         notifyDataSetChanged();
     }
@@ -156,6 +171,10 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         clearStage();
         stageFrames = new ArrayList<>();
         notifyDataSetChanged();
+    }
+
+    public History getModifiedValues() {
+        return new History(modifiedBrightness, modifiedContrast, modifiedGamma);
     }
 
     // stageFrames recycle

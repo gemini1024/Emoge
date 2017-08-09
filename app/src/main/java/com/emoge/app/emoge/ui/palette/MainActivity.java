@@ -28,6 +28,7 @@ import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.FrameStatusMessage;
 import com.emoge.app.emoge.model.GifMakingInfo;
+import com.emoge.app.emoge.model.History;
 import com.emoge.app.emoge.model.PaletteMessage;
 import com.emoge.app.emoge.ui.VideoActivity;
 import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
@@ -184,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setHistory() {
-        mHistoryAdapter = new HistoryImplAdapter(this, mFrameAdapter, new ArrayList<PaletteMessage>());
+        mHistoryAdapter = new HistoryImplAdapter(mFrameAdapter, new ArrayList<History>());
         mHistoryView.setHasFixedSize(true);
         mHistoryView.setAdapter(mHistoryAdapter);
         LinearLayoutManager stackLayoutManager = new LinearLayoutManager(this);
@@ -252,6 +253,8 @@ public class MainActivity extends AppCompatActivity {
         mHandler.removeCallbacks(mTask);
         if(message.getType() == Correcter.MAIN_PALETTE) {
             showFps(message.getValue());
+        } else if(message.getType() == Correcter.CORRECT_APPLY) {
+            mHistoryAdapter.addHistory();
         }
         mFrameAdapter.correct(message.getType(), message.getValue());
         mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());

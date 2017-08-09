@@ -1,6 +1,5 @@
 package com.emoge.app.emoge.ui.history;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
-import com.emoge.app.emoge.model.PaletteMessage;
+import com.emoge.app.emoge.model.History;
 import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
 import com.emoge.app.emoge.ui.correction.Correcter;
 
@@ -24,18 +23,14 @@ import java.util.List;
 public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> implements HistoryAccessible {
     private final String LOG_TAG = HistoryImplAdapter.class.getSimpleName();
 
-    private Activity activity;
     private CorrectImplAdapter frameAdapter;
-    private ArrayList<PaletteMessage> histories;
+    private ArrayList<History> histories;
     private List<Frame> originalFrames;
-    private String[] correctTitles;
 
-    public HistoryImplAdapter(Activity activity, CorrectImplAdapter frameAdapter, ArrayList<PaletteMessage> histories) {
-        this.activity = activity;
+    public HistoryImplAdapter(CorrectImplAdapter frameAdapter, ArrayList<History> histories) {
         this.frameAdapter = frameAdapter;
         this.histories = histories;
         this.originalFrames = new ArrayList<>();
-        this.correctTitles = activity.getResources().getStringArray(R.array.correct_title);
     }
 
     @Override
@@ -46,9 +41,9 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
 
     @Override
     public void onBindViewHolder(HistoryViewHolder holder, final int position) {
-        final PaletteMessage history = histories.get(position);
+        final History history = histories.get(position);
 
-        if(position == 0) {
+        if(position == histories.size()-1) {
             holder.itemView.setText("원본");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -56,8 +51,8 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
                     rollbackOrigin();
                 }
             });
-        } else if(history.getType() >= 0 && history.getType() < correctTitles.length) {
-            holder.itemView.setText(correctTitles[history.getType()]);
+        } else {
+            holder.itemView.setText(String.valueOf(histories.size()-position-1));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -74,7 +69,8 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
 
     public void setOriginalFrames() {
         if(originalFrames.isEmpty()) {
-            histories.add(new PaletteMessage(Correcter.CORRECT_ADD, 0));
+            histories.add(new History(Correcter.DEFAULT_BRIGHTNESS,
+                    Correcter.DEFAULT_CONTRAST, Correcter.DEFAULT_GAMMA));
         }
         List<Frame> frames = frameAdapter.getFrames();
         for(Frame frame : frames) {
@@ -86,20 +82,28 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
 
 
     @Override
-    public void addHistory(PaletteMessage correction) {
-        histories.add(correction);
-        notifyItemInserted(histories.size() - 1);
+    public void addHistory() {
+        histories.add(0, frameAdapter.getModifiedValues());
+        notifyDataSetChanged();
     }
 
     @Override
     public void rollbackPosition(int position) {
         rollbackOrigin();
-        for(int i=0; i<position; i++) {
-            PaletteMessage paletteMessage = histories.get(i);
-            frameAdapter.correct(paletteMessage.getType(), paletteMessage.getValue());
-            frameAdapter.apply();
+        for(int i=histories.size()-2; i>=position; i--) {
+            History history = histories.get(i);
+            correct(Correcter.CORRECT_BRIGHTNESS, history.getModifiedBrightness());
+            correct(Correcter.CORRECT_CONTRAST, history.getModifiedContrast());
+            correct(Correcter.CORRECT_GAMMA, history.getModifiedGamma());
         }
         Log.i(LOG_TAG, "rollback : "+position);
+    }
+
+    private void correct(int type, int value) {
+        frameAdapter.correct(type, value);
+        frameAdapter.clearPreviousFrames();
+        frameAdapter.apply();
+        frameAdapter.reset();
     }
 
     @Override
