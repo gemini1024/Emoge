@@ -133,7 +133,7 @@ public class GalleryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 YoYo.with(Techniques.Tada)
-                        .duration(550)
+                        .duration(HoverViews.BLUR_DURATION)
                         .playOn(v);
                 new GifDownloadTask(GalleryActivity.this).execute(mBestFavoriteGif);
             }
@@ -142,7 +142,7 @@ public class GalleryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 YoYo.with(Techniques.Swing)
-                        .duration(550)
+                        .duration(HoverViews.BLUR_DURATION)
                         .playOn(v);
 
                 NetworkStatus.executeWithCheckingNetwork(GalleryActivity.this, new NetworkStatus.RequireIntentTask() {

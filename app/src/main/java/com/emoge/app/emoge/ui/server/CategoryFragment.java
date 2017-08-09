@@ -56,19 +56,31 @@ public class CategoryFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         // RecyclerView 설정
-        mGifAdapter = new StoreGifAdapter(getContext(), new ArrayList<StoreGif>());
+        mGifAdapter = new StoreGifAdapter(this, new ArrayList<StoreGif>());
         mGifList.setHasFixedSize(true);
         mGifList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mGifList.setAdapter(mGifAdapter);
 
-        loadGifImages();
-
         return view;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(mGifAdapter != null) {
+            if(isVisibleToUser) {
+                if(!mGifAdapter.isEmpty()) {
+                    mGifAdapter.clear();
+                }
+                loadGifImages();
+            } else {
+                mGifAdapter.clear();
+            }
+        }
+    }
 
     // 서버연결 ( Firebase )
-    void loadGifImages() {
+    private void loadGifImages() {
         final SweetAlertDialog dialog = SweetDialogs.showLoadingProgressDialog(getActivity(), R.string.loading_image);
         DatabaseReference database = FirebaseDatabase.getInstance().getReference(
                 getArguments().getString(ARG_CATEGORY, getString(R.string.category_store)));
@@ -93,13 +105,5 @@ public class CategoryFragment extends Fragment {
                         R.string.err_loading_image_title, R.string.err_loading_image_content);
             }
         });
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if(mGifAdapter != null) {
-            mGifAdapter.clear();
-        }
     }
 }

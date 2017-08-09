@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.model.MyStoreGif;
 import com.emoge.app.emoge.model.StoreGif;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by jh on 17. 8. 7.
@@ -43,26 +45,38 @@ public class CategoryFavoriteFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_server, container, false);
         ButterKnife.bind(this, view);
-//        realm = Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
 
         // RecyclerView 설정
-        mGifAdapter = new StoreGifAdapter(getContext(), new ArrayList<StoreGif>());
+        mGifAdapter = new StoreGifAdapter(this, new ArrayList<StoreGif>());
         mGifList.setHasFixedSize(true);
         mGifList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mGifList.setAdapter(mGifAdapter);
 
-
-        // TODO : Realm 으로 담은 움짤 가져오기
+        loadGifImages();
 
         return view;
     }
 
-
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
         if(mGifAdapter != null) {
-            mGifAdapter.clear();
+            if(isVisibleToUser) {
+                if(!mGifAdapter.isEmpty()) {
+                    mGifAdapter.clear();
+                }
+                loadGifImages();
+            } else {
+                mGifAdapter.clear();
+            }
+        }
+    }
+
+    private void loadGifImages() {
+        RealmResults<MyStoreGif> myStoreGifs = realm.where(MyStoreGif.class).findAll();
+        for(MyStoreGif myStoreGif : myStoreGifs) {
+            mGifAdapter.addItem(new StoreGif(myStoreGif.getTitle(), myStoreGif.getDownloadUrl(), -1));
         }
     }
 }

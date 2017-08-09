@@ -73,12 +73,8 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        mGalleryAdapter.clear();
         new ReadAlbumTask(this, mGalleryAdapter).execute(mDirPath);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mGalleryAdapter.clearWithoutNotify();
-    }
 }

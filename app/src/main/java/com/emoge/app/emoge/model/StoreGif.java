@@ -4,6 +4,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
  * Created by jh on 17. 8. 3.
+ * 서버 저장용.
  */
 
 @IgnoreExtraProperties

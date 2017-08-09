@@ -17,13 +17,23 @@
             android:layout_width="@dimen/hover_icon_size"
             android:layout_height="@dimen/hover_icon_size"
             android:layout_marginEnd="@dimen/unit_dimen"
-            android:src="@drawable/ic_download" />
+            android:src="@drawable/ic_download"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/hover_favorite"
+            android:layout_width="@dimen/hover_icon_size"
+            android:layout_height="@dimen/hover_icon_size"
+            android:layout_marginEnd="@dimen/unit_dimen"
+            android:src="@drawable/ic_favorite"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/hover_more"
             android:layout_width="@dimen/hover_icon_size"
             android:layout_height="@dimen/hover_icon_size"
-            android:src="@drawable/ic_more" />
+            android:src="@drawable/ic_more"
+            android:visibility="gone" />
     </LinearLayout>
 
     <TextView
@@ -33,5 +43,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/unit_dimen"
         android:layout_marginStart="@dimen/unit_dimen"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
 </RelativeLayout>

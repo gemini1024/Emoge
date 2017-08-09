@@ -81,7 +81,7 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
     }
 
     void clear() {
-        clear();
+        clearWithoutNotify();
         notifyDataSetChanged();
     }
 
