@@ -36,6 +36,7 @@ import com.emoge.app.emoge.ui.frame.FrameAddTask;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
 import com.emoge.app.emoge.ui.gallery.GalleryViewPagerAdapter;
 import com.emoge.app.emoge.ui.gallery.ImageFormatChecker;
+import com.emoge.app.emoge.ui.history.HistoryImplAdapter;
 import com.emoge.app.emoge.ui.view.MenuButtons;
 import com.emoge.app.emoge.utils.GifSaveTask;
 import com.emoge.app.emoge.utils.dialog.EditorDialog;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.main_bt_add_frame)   BoomMenuButton mAddMenu;
     @BindView(R.id.main_bt_correction)  BoomMenuButton mCorrectMenu;
     @BindView(R.id.main_frame_list)     RecyclerView mFrameRecyclerView;
+    @BindView(R.id.main_history)        RecyclerView mHistoryView;
     @BindView(R.id.main_preview)        PhotoView mPreview;
     @BindView(R.id.main_fps_text)       TextView mFpsTextView;
 
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Frame 저장 및 수정용 Adapter
     private CorrectImplAdapter mFrameAdapter;
+    private HistoryImplAdapter mHistoryAdapter;
 
     // Preview
     private int mPreviewIndex;
@@ -145,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
         addGallery();
         addPalette(correcter);
         setFrameList(frameAdder, correcter);
+        setHistory();
         enableButtons(frameAdder, correcter);
     }
 
@@ -179,6 +183,15 @@ public class MainActivity extends AppCompatActivity {
         mFrameRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
+    private void setHistory() {
+        mHistoryAdapter = new HistoryImplAdapter(this, mFrameAdapter, new ArrayList<PaletteMessage>());
+        mHistoryView.setHasFixedSize(true);
+        mHistoryView.setAdapter(mHistoryAdapter);
+        LinearLayoutManager stackLayoutManager = new LinearLayoutManager(this);
+        stackLayoutManager.setStackFromEnd(true);
+        mHistoryView.setLayoutManager(stackLayoutManager);
+    }
+
     private void enableButtons(FrameAdder frameAdder, Correcter correcter) {
         ImageButton backButton = (ImageButton) findViewById(R.id.toolbar_back);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -198,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
                     exitViews(mGalleryWindow);
                     enterViews(mPaletteWindow);
                     mNextButton.setVisibility(View.GONE);
+                    mHistoryAdapter.setOriginalFrames();
                 }
             }
         });
@@ -210,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         if(mFrameAdapter != null) {
             mFrameAdapter.clear();
+            mHistoryAdapter.clearHistory();
         }
     }
 

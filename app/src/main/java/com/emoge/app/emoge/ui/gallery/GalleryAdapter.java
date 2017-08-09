@@ -65,8 +65,8 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
     }
 
     boolean addItem(File file) {
-        if(ImageFormatChecker.inFormat(file, format)) {
-            files.add(file);
+        if(addItemWithoutNotify(file)) {
+            notifyItemInserted(files.size() - 1);
             return true;
         }
         return false;
@@ -74,7 +74,8 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
 
 
     boolean addItemWithoutNotify(File file) {
-        if(addItem(file)) {
+        if(ImageFormatChecker.inFormat(file, format)) {
+            files.add(file);
             return true;
         }
         return false;

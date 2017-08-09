@@ -25,6 +25,15 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--history-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_history"
+        android:layout_width="@dimen/history_width"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <!--FPS Viewer-->
     <TextView
         android:id="@+id/main_fps_text"
