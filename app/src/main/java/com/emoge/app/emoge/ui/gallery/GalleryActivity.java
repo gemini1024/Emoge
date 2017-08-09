@@ -39,10 +39,8 @@ import butterknife.OnClick;
 public class GalleryActivity extends AppCompatActivity {
     private final String LOG_TAG = GalleryActivity.class.getSimpleName();
 
-    @BindView(R.id.gallery_best)
-    ImageView mBestPhoto;
-    @BindView(R.id.gallery_window)
-    ConstraintLayout mGalleryWindow;
+    @BindView(R.id.gallery_best)    ImageView mBestPhoto;
+    @BindView(R.id.gallery_window)  ConstraintLayout mGalleryWindow;
 
     private StoreGif mBestFavoriteGif;
     private Fragment mGallery;
@@ -52,17 +50,21 @@ public class GalleryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         ButterKnife.bind(this);
-        Glide.with(this).load(R.drawable.img_loading).into(mBestPhoto);
+        Glide.with(this).load(R.drawable.img_loading).into(mBestPhoto);     // holder
         loadGifImages();
 
+        addGalleryFragment();
+        enterGallery();
+    }
+
+    private void addGalleryFragment() {
         findViewById(R.id.toolbar_back).setVisibility(View.GONE);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        mGallery = GalleryFragment.newInstance(MainApplication.defaultDir, ImageFormatChecker.GIF_TYPE);
+        mGallery = GalleryFragment.newInstance(MainApplication.defaultDir,
+                ImageFormatChecker.GIF_TYPE);
         fragmentTransaction.add(R.id.gallery_container, mGallery);
         fragmentTransaction.commit();
-
-        enterGallery();
     }
 
     private void enterGallery() {
@@ -83,6 +85,7 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
 
+    // 움짤 생성하러 가기
     @OnClick(R.id.gallery_bt_making)
     void startMakingGif() {
         overridePendingTransition(0, android.R.anim.fade_in);
@@ -90,6 +93,7 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
 
+    // Server 에서 가장 인기있는 움짤 가져오기
     void loadGifImages() {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference("유머");
         database.addValueEventListener(new ValueEventListener() {

@@ -14,7 +14,11 @@ import android.util.Log;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.encoder.GifDecoder;
+import com.emoge.app.emoge.model.PaletteMessage;
+import com.emoge.app.emoge.ui.correction.Correcter;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -129,6 +133,8 @@ public class FrameAdder implements OnBMClickListener {
         for(int i=0; i<addCount; i++) {
             bitmaps.add(decoder.getFrame(i));
         }
+        EventBus.getDefault().post(new PaletteMessage(Correcter.MAIN_PALETTE,
+                decoder.getDelay(0)));
         return bitmaps;
     }
 
@@ -159,6 +165,7 @@ public class FrameAdder implements OnBMClickListener {
             }
         }
         retriever.release();
+        EventBus.getDefault().post(new PaletteMessage(Correcter.MAIN_PALETTE, fps));
 
         return bitmapArrayList;
     }

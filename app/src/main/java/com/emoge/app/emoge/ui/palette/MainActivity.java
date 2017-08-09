@@ -71,9 +71,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.main_fps_text)       TextView mFpsTextView;
 
     @BindView(R.id.main_palette_window)
-    ConstraintLayout mPaletteLayout;
+    ConstraintLayout mPaletteWindow;
     @BindView(R.id.main_gallery_window)
-    ConstraintLayout mGalleryLayout;
+    ConstraintLayout mGalleryWindow;
     @BindView(R.id.main_gallery_container)
     ViewPager mGallery;
 
@@ -113,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
         mHandler.removeCallbacks(mTask);
     }
 
+
+
+    // Gallery/Palette Animation
     private void enterViews(View view) {
         final Animation enterAnim = AnimationUtils.loadAnimation(this, R.anim.enter);
         view.setAnimation(enterAnim);
@@ -126,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    // Initialize
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         addGallery();
         addPalette(correcter);
         setFrameList(frameAdder, correcter);
-        enableMenuButtons(frameAdder, correcter);
+        enableButtons(frameAdder, correcter);
     }
 
     private void addGallery() {
@@ -148,7 +153,12 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(new GalleryViewPagerAdapter(getSupportFragmentManager()));
         TabLayout tabLayout = (TabLayout) findViewById(R.id.main_gallery_tab);
         tabLayout.setupWithViewPager(viewPager);
-        enterViews(mGalleryLayout);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                enterViews(mGalleryWindow);
+            }
+        }, 500);
     }
 
     private void addPalette(Correcter correcter) {
@@ -169,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         mFrameRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private void enableMenuButtons(FrameAdder frameAdder, Correcter correcter) {
+    private void enableButtons(FrameAdder frameAdder, Correcter correcter) {
         ImageButton backButton = (ImageButton) findViewById(R.id.toolbar_back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,9 +194,9 @@ public class MainActivity extends AppCompatActivity {
                 if(mFrameAdapter.isEmpty()) {
                     SweetDialogs.showErrorDialog(MainActivity.this,
                             R.string.err_no_image_title, R.string.err_no_image_content);
-                } else if(mGalleryLayout.getVisibility() == View.VISIBLE) {
-                    exitViews(mGalleryLayout);
-                    enterViews(mPaletteLayout);
+                } else if(mGalleryWindow.getVisibility() == View.VISIBLE) {
+                    exitViews(mGalleryWindow);
+                    enterViews(mPaletteWindow);
                     mNextButton.setVisibility(View.GONE);
                 }
             }
@@ -205,6 +215,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+    // 프레임 딜레이 보기 쉽게 프리뷰 위에 표시
     private void showFps(int value) {
         mFpsTextView.setVisibility(View.VISIBLE);
         mFpsTextView.setText(String.format("%.2f s", value/1000.f));
@@ -217,7 +229,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // 보정 기능 ( Message from PaletteFragment )
+
+    // EventBus -
+    // 보정 기능 ( Message from PaletteFragment, FrameAdder(only frame delay message) )
     @Subscribe(threadMode = ThreadMode.MAIN)
     void onPaletteEvent(PaletteMessage message) {
         mHandler.removeCallbacks(mTask);
@@ -230,17 +244,20 @@ public class MainActivity extends AppCompatActivity {
         mFrameAdapter.clearPreviousFrames();    // View 에서 띄우는 이미지를 변경했으므로 -> 제거
     }
 
+
+    // FrameAdapter 상태 Event ( Message from FrameAdapter )
     @Subscribe(threadMode = ThreadMode.MAIN)
     void receiveFrameStatusMessage(FrameStatusMessage message) {
         if(message.equals(FrameStatusMessage.FULL)) {
         } else if(message.equals(FrameStatusMessage.NOT_FULL)){
         } else {
-            while(mGalleryLayout.getVisibility() != View.VISIBLE) {
+            while(mGalleryWindow.getVisibility() != View.VISIBLE) {
                 MainActivity.this.onBackPressed();
             }
         }
     }
 
+    // Add File ( Message from GalleryAdapter )
     @Subscribe(threadMode = ThreadMode.MAIN)
     void addFileFromGallery(File file) {
         int requestCode;
@@ -258,8 +275,6 @@ public class MainActivity extends AppCompatActivity {
                 .execute(new Intent().setData(Uri.fromFile(file)));
     }
 
-
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -272,6 +287,9 @@ public class MainActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
+
+
+    // select video
     private void startVideoActivity(@NonNull Intent videoData) {
         if(videoData.getData() != null) {
             Intent videoActivityIntent = new Intent(this, VideoActivity.class);
@@ -281,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    // startVideoActivity() or FrameAddTask
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
@@ -300,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    // 저장 기능
+    // 저장 기능 (category, quality, title 설정)
     @OnClick(R.id.main_save)
     void showEditorDialog() {
         if(!Correcter.isMainPalette(getSupportFragmentManager())) {
@@ -318,6 +336,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // making gif
     private void makeToGif(EditorDialog editorDialog) {
         String gifTitle = editorDialog.getContent();
         if(TextUtils.isEmpty(gifTitle)) {
@@ -336,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
     // 실수로 나가기 방지
     @Override
     public void onBackPressed() {
-        if(mGalleryLayout.getVisibility() == View.VISIBLE) {
+        if(mGalleryWindow.getVisibility() == View.VISIBLE) {
             // 이미지 추가 중인 경우
             if(!mFrameAdapter.isEmpty()) {
                 SweetDialogs.showExitDialog(this);
@@ -346,8 +365,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // 보정 중인 경우
             if(Correcter.isMainPalette(getSupportFragmentManager())) {
-                exitViews(mPaletteLayout);
-                enterViews(mGalleryLayout);
+                exitViews(mPaletteWindow);
+                enterViews(mGalleryWindow);
                 mNextButton.setVisibility(View.VISIBLE);
             } else {
                 super.onBackPressed();

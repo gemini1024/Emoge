@@ -2,6 +2,7 @@ package com.emoge.app.emoge.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -55,6 +56,17 @@ public class VideoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        mVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                Log.e(LOG_TAG, getString(R.string.err_not_found_video_title));
+                SweetDialogs.showErrorDialog(VideoActivity.this,
+                        R.string.err_not_found_video_title, R.string.err_not_found_video_text);
+                finish();
+                return false;
             }
         });
 
