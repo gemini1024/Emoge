@@ -21,6 +21,7 @@ import io.realm.RealmResults;
 
 /**
  * Created by jh on 17. 8. 7.
+ * 내부 저장소에서 불러오기 ( Realm 이용 )
  */
 
 public class CategoryFavoriteFragment extends Fragment {
@@ -59,6 +60,15 @@ public class CategoryFavoriteFragment extends Fragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(mGifAdapter != null) {
+            mGifAdapter.closeRealm();
+        }
+    }
+
+    // 새로고침
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(mGifAdapter != null) {
@@ -73,6 +83,7 @@ public class CategoryFavoriteFragment extends Fragment {
         }
     }
 
+    // Realm 에서 불러오기
     private void loadGifImages() {
         RealmResults<MyStoreGif> myStoreGifs = realm.where(MyStoreGif.class).findAll();
         for(MyStoreGif myStoreGif : myStoreGifs) {

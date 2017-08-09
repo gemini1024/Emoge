@@ -26,7 +26,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by jh on 17. 8. 3.
- * 서버의 카테고리별 View
+ * 서버의 카테고리별 View (Firebase 이용)
  */
 public class CategoryFragment extends Fragment {
     private final String LOG_TAG = CategoryFragment.class.getSimpleName();
@@ -64,6 +64,15 @@ public class CategoryFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(mGifAdapter != null) {
+            mGifAdapter.closeRealm();
+        }
+    }
+
+    // 새로고침
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);

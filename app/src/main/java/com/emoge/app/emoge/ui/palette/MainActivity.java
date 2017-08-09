@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
@@ -63,10 +64,11 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)             Toolbar mToolbar;
     @BindView(R.id.toolbar_next)        ImageButton mNextButton;
-    @BindView(R.id.main_preview)        PhotoView mPreview;
-    @BindView(R.id.main_frame_list)     RecyclerView mFrameRecyclerView;
     @BindView(R.id.main_bt_add_frame)   BoomMenuButton mAddMenu;
     @BindView(R.id.main_bt_correction)  BoomMenuButton mCorrectMenu;
+    @BindView(R.id.main_frame_list)     RecyclerView mFrameRecyclerView;
+    @BindView(R.id.main_preview)        PhotoView mPreview;
+    @BindView(R.id.main_fps_text)       TextView mFpsTextView;
 
     @BindView(R.id.main_palette_window)
     ConstraintLayout mPaletteLayout;
@@ -203,11 +205,25 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    private void showFps(int value) {
+        mFpsTextView.setVisibility(View.VISIBLE);
+        mFpsTextView.setText(String.format("%.2f s", value/1000.f));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mFpsTextView.setVisibility(View.GONE);
+            }
+        }, 500);
+    }
+
 
     // 보정 기능 ( Message from PaletteFragment )
     @Subscribe(threadMode = ThreadMode.MAIN)
     void onPaletteEvent(PaletteMessage message) {
         mHandler.removeCallbacks(mTask);
+        if(message.getType() == Correcter.MAIN_PALETTE) {
+            showFps(message.getValue());
+        }
         mFrameAdapter.correct(message.getType(), message.getValue());
         mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
         mHandler.postDelayed(mTask, mFrameAdapter.getFps());

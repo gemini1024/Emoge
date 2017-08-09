@@ -62,6 +62,7 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
     }
 
 
+    // HoverView 로 설정
     private void setHoverByGif(BlurLayout blurLayout, final StoreGif storeGif) {
         final HoverViews hover = new HoverViews(fragment.getContext(), blurLayout);
 
@@ -95,6 +96,7 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
         });
     }
 
+    // Realm 접근
     private void applyRealm(final HoverViews hover, final String id, final StoreGif storeGif) {
         final MyStoreGif myStoreGif = realm.where(MyStoreGif.class)
                 .equalTo(MyStoreGif.KEY_FIELD, id).findFirst();
@@ -150,9 +152,11 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
         return gifs.isEmpty();
     }
 
-    boolean isMyStoreGif(StoreGif storeGif) {
+    private boolean isMyStoreGif(StoreGif storeGif) {
         return storeGif.getFavorite() == -1;
     }
 
-
+    public void closeRealm() {
+        realm.close();
+    }
 }
