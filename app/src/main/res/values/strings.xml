@@ -36,6 +36,9 @@
     <string name="upload_gif_loading">업로드하는 중</string>
     <string name="upload_gif_title">업로드</string>
     <string name="upload_gif_content">움짤 업로드를 완료 했습니다</string>
+    <string name="download_gif_loading">다운로드하는 중</string>
+    <string name="download_gif_title">다운로드</string>
+    <string name="download_gif_content">움짤 다운로드를 완료 했습니다</string>
     <string name="loading_image">이미지를 불러오는 중입니다</string>
     <string name="naming_gif_hint">움짤의 이름을 입력하세요</string>
     <string name="check_network">인터넷 연결 확인</string>

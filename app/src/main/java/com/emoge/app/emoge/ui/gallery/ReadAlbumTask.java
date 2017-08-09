@@ -46,7 +46,11 @@ public class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
     }
 
     private boolean findDirectory(String filepath) {
-        List<File> myFiles = new Storage(fragment.getContext()).getFiles(filepath);
+        Storage storage = new Storage(fragment.getContext());
+        if(!storage.isDirectoryExists(filepath)) {
+            storage.createDirectory(filepath);
+        }
+        List<File> myFiles = storage.getFiles(filepath);
         for(File file : myFiles) {
             adapter.addItemWithoutNotify(file);
         }

@@ -31,7 +31,7 @@
 
     <!--Correcter-->
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/main_palette"
+        android:id="@+id/main_palette_window"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
@@ -46,7 +46,7 @@
 
     <!--Gallery-->
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/main_gallery"
+        android:id="@+id/main_gallery_window"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/toolbar_gallery_bg"

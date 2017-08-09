@@ -3,19 +3,29 @@ package com.emoge.app.emoge.ui.gallery;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.daimajia.androidviewhover.BlurLayout;
 import com.emoge.app.emoge.MainApplication;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.StoreGif;
 import com.emoge.app.emoge.ui.palette.MainActivity;
-import com.emoge.app.emoge.utils.dialog.ImageDialog;
-import com.github.chrisbanes.photoview.PhotoView;
+import com.emoge.app.emoge.ui.server.ServerActivity;
+import com.emoge.app.emoge.ui.view.HoverViews;
+import com.emoge.app.emoge.utils.GifDownloadTask;
+import com.emoge.app.emoge.utils.NetworkStatus;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,22 +40,46 @@ public class GalleryActivity extends AppCompatActivity {
     private final String LOG_TAG = GalleryActivity.class.getSimpleName();
 
     @BindView(R.id.gallery_best)
-    PhotoView bestPhoto;
+    ImageView mBestPhoto;
+    @BindView(R.id.gallery_window)
+    ConstraintLayout mGalleryWindow;
+
+    private StoreGif mBestFavoriteGif;
+    private Fragment mGallery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         ButterKnife.bind(this);
-        Glide.with(this).load(R.drawable.img_loading).into(bestPhoto);
+        Glide.with(this).load(R.drawable.img_loading).into(mBestPhoto);
         loadGifImages();
 
         findViewById(R.id.toolbar_back).setVisibility(View.GONE);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.add(R.id.gallery_container,
-                GalleryFragment.newInstance(MainApplication.defaultDir, ImageFormatChecker.GIF_TYPE));
+        mGallery = GalleryFragment.newInstance(MainApplication.defaultDir, ImageFormatChecker.GIF_TYPE);
+        fragmentTransaction.add(R.id.gallery_container, mGallery);
         fragmentTransaction.commit();
+
+        enterGallery();
+    }
+
+    private void enterGallery() {
+        final Animation enterAnim = AnimationUtils.loadAnimation(this, R.anim.enter);
+        mGalleryWindow.setAnimation(enterAnim);
+        mGalleryWindow.setVisibility(View.VISIBLE);
+    }
+
+    private void exitGallery() {
+        final Animation exitAnim = AnimationUtils.loadAnimation(this, R.anim.exit);
+        mGalleryWindow.setAnimation(exitAnim);
+        mGalleryWindow.setVisibility(View.GONE);
+    }
+
+    public void notifyGallery() {
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().detach(mGallery).attach(mGallery).commit();
     }
 
 
@@ -63,25 +97,14 @@ public class GalleryActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(LOG_TAG, dataSnapshot.toString());
                 if(dataSnapshot.getValue(StoreGif.class) != null) {
-                    StoreGif bestFavoriteGif = dataSnapshot.getChildren().iterator().next().getValue(StoreGif.class);
+                    mBestFavoriteGif = dataSnapshot.getChildren().iterator().next().getValue(StoreGif.class);
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         StoreGif storeGif = childSnapshot.getValue(StoreGif.class);
-                        if( bestFavoriteGif.getFavorite() < storeGif.getFavorite()) {
-                            bestFavoriteGif = storeGif;
+                        if( mBestFavoriteGif.getFavorite() < storeGif.getFavorite()) {
+                            mBestFavoriteGif = storeGif;
                         }
                     }
-                    if(bestFavoriteGif != null) {
-                        final Uri downloadUri = Uri.parse(bestFavoriteGif.downloadUrl);
-                        Glide.with(GalleryActivity.this)
-                                .load(downloadUri)
-                                .into(bestPhoto);
-                        bestPhoto.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                new ImageDialog(GalleryActivity.this, downloadUri).show();
-                            }
-                        });
-                    }
+                    setBestFavoriteGif();
                 }
             }
 
@@ -92,4 +115,50 @@ public class GalleryActivity extends AppCompatActivity {
         });
     }
 
+    private void setBestFavoriteGif() {
+        if(mBestFavoriteGif == null) {
+            return;
+        }
+        Glide.with(GalleryActivity.this)
+                .load(Uri.parse(mBestFavoriteGif.downloadUrl))
+                .into(mBestPhoto);
+        setHoverByGif(mBestFavoriteGif);
+    }
+
+    private void setHoverByGif(StoreGif storeGif) {
+        HoverViews hover = new HoverViews(this, (BlurLayout)findViewById(R.id.gallery_hover));
+        hover.buildHoverView();
+        hover.setText(storeGif.getTitle());
+        hover.setDownloadButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                YoYo.with(Techniques.Tada)
+                        .duration(550)
+                        .playOn(v);
+                new GifDownloadTask(GalleryActivity.this).execute(mBestFavoriteGif);
+            }
+        });
+        hover.setMoreButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                YoYo.with(Techniques.Swing)
+                        .duration(550)
+                        .playOn(v);
+
+                NetworkStatus.executeWithCheckingNetwork(GalleryActivity.this, new NetworkStatus.RequireIntentTask() {
+                    @Override
+                    public void Task() {
+                        overridePendingTransition(0, android.R.anim.fade_in);
+                        startActivity(new Intent(GalleryActivity.this, ServerActivity.class));
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        exitGallery();
+        super.onBackPressed();
+    }
 }

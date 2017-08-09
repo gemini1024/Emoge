@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.ui.gallery.GalleryActivity;
-import com.emoge.app.emoge.ui.palette.MainActivity;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -46,15 +45,6 @@ public class SplashActivity extends AppCompatActivity implements PermissionListe
 
     @Override
     public void onPermissionGranted() {
-//        NetworkStatus.executeWithCheckingNetwork(this, new NetworkStatus.RequireIntentTask() {
-//            @Override
-//            public void Task() {
-//                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this,
-//                        findViewById(R.id.splash_image), getString(R.string.splash_image));
-//                startActivity(new Intent(SplashActivity.this, ServerActivity.class), options.toBundle());
-//            }
-//        });
-
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this,
                 findViewById(R.id.splash_image), getString(R.string.splash_image));
         startActivity(new Intent(SplashActivity.this, GalleryActivity.class), options.toBundle());

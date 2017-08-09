@@ -120,7 +120,7 @@ class GifMaker {
 
 
     // Directory 생성 및 덮어쓰기 방지
-    private File makeFile(String wantedFileName) {
+    File makeFile(String wantedFileName) {
         String fileName = wantedFileName+".gif";
 
         // Directory 생성

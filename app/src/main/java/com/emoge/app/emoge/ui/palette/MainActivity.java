@@ -68,9 +68,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.main_bt_add_frame)   BoomMenuButton mAddMenu;
     @BindView(R.id.main_bt_correction)  BoomMenuButton mCorrectMenu;
 
-    @BindView(R.id.main_palette)
+    @BindView(R.id.main_palette_window)
     ConstraintLayout mPaletteLayout;
-    @BindView(R.id.main_gallery)
+    @BindView(R.id.main_gallery_window)
     ConstraintLayout mGalleryLayout;
     @BindView(R.id.main_gallery_container)
     ViewPager mGallery;
