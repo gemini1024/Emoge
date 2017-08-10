@@ -103,7 +103,6 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
         frameAdapter.correct(type, value);
         frameAdapter.clearPreviousFrames();
         frameAdapter.apply();
-        frameAdapter.reset();
     }
 
     @Override

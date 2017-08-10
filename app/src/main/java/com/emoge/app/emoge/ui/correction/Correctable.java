@@ -10,5 +10,4 @@ interface Correctable {
     void setContrast(int value);
     void setGamma(int value);
     void apply();
-    void reset();
 }

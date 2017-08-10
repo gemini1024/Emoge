@@ -1,66 +1,56 @@
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/half_unit_dimen"
-    app:cardBackgroundColor="@color/colorPalette"
-    app:cardCornerRadius="@dimen/half_unit_dimen"
-    app:cardElevation="@dimen/half_unit_dimen"
-    app:cardPreventCornerOverlap="true"
-    app:cardUseCompatPadding="true"
+    android:background="@color/colorPalette"
+    android:orientation="horizontal"
     tools:fragment="com.emoge.app.emoge.ui.palette.PaletteFragment">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+    <TextView
+        android:id="@+id/palette_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPaletteLabel"
+        android:paddingBottom="@dimen/half_unit_dimen"
+        android:paddingEnd="@dimen/unit_dimen"
+        android:paddingStart="@dimen/unit_dimen"
+        android:paddingTop="@dimen/half_unit_dimen"
+        android:text="@string/frame_delay"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
+        android:textColor="@android:color/primary_text_dark"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/palette_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPaletteLabel"
-            android:paddingBottom="@dimen/half_unit_dimen"
-            android:paddingEnd="@dimen/unit_dimen"
-            android:paddingStart="@dimen/unit_dimen"
-            android:paddingTop="@dimen/half_unit_dimen"
-            android:text="@string/frame_delay"
-            android:textAppearance="@android:style/TextAppearance.Holo.Small"
-            android:textColor="@android:color/primary_text_dark"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+        android:id="@+id/palette_seek"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/unit_dimen"
+        app:dsb_indicatorElevation="0dp"
+        app:dsb_progressColor="@color/colorProgress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/palette_button"
+        app:layout_constraintTop_toBottomOf="@id/palette_label" />
 
-        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
-            android:id="@+id/palette_seek"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/unit_dimen"
-            app:dsb_indicatorElevation="0dp"
-            app:dsb_progressColor="@color/colorProgress"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/palette_button"
-            app:layout_constraintTop_toBottomOf="@id/palette_label" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/palette_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="@dimen/half_unit_dimen"
-            android:background="@android:color/transparent"
-            android:layout_marginEnd="@dimen/unit_dimen"
-            android:textAppearance="@android:style/TextAppearance.Holo.Small"
-            android:textColor="@android:color/primary_text_light"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/palette_label"
-            tools:text="@string/apply" />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/palette_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/half_unit_dimen"
+        android:layout_marginEnd="@dimen/unit_dimen"
+        android:background="@android:color/transparent"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
+        android:textColor="@android:color/primary_text_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/palette_label"
+        tools:text="@string/apply" />
 
 
-    </android.support.constraint.ConstraintLayout>
-</android.support.v7.widget.CardView>
+</android.support.constraint.ConstraintLayout>

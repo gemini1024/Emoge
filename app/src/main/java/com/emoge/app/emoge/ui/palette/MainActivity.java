@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     private CorrectImplAdapter mFrameAdapter;
     private HistoryImplAdapter mHistoryAdapter;
 
-    private PaletteFragment mMainPalette;
+    private TabLayout.Tab mMainTab;
 
     // Preview
     private int mPreviewIndex;
@@ -169,12 +169,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addPalette(Correcter correcter) {
-        mMainPalette = PaletteFragment.newInstance(Correcter.MOD_FRAME_DELAY, correcter.getCurrentFps());
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.enter, R.anim.exit);
-        fragmentTransaction.add(R.id.main_palette_container, mMainPalette);
+        fragmentTransaction.add(R.id.main_palette_container,
+                PaletteFragment.newInstance(Correcter.MOD_FRAME_DELAY, correcter.getCurrentFps()));
         fragmentTransaction.commit();
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.main_palette_tab);
+        mMainTab = tabLayout.newTab().setIcon(R.drawable.ic_play);
+        tabLayout.addTab(mMainTab);
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_brightness));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_contrast));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_gamma));
+        tabLayout.addOnTabSelectedListener(correcter);
+
     }
 
     private void setFrameList(FrameAdder frameAdder, Correcter correcter) {
@@ -195,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         mHistoryView.setLayoutManager(stackLayoutManager);
     }
 
-    private void enableButtons(FrameAdder frameAdder, Correcter correcter) {
+    private void enableButtons(FrameAdder frameAdder, final Correcter correcter) {
         ImageButton backButton = (ImageButton) findViewById(R.id.toolbar_back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,6 +220,8 @@ public class MainActivity extends AppCompatActivity {
                     SweetDialogs.showErrorDialog(MainActivity.this,
                             R.string.err_no_image_title, R.string.err_no_image_content);
                 } else if(mGalleryWindow.getVisibility() == View.VISIBLE) {
+                    mMainTab.select();
+                    correcter.onTabSelected(mMainTab);
                     exitViews(mGalleryWindow);
                     enterViews(mPaletteWindow);
                     mNextButton.setVisibility(View.GONE);
@@ -254,11 +265,7 @@ public class MainActivity extends AppCompatActivity {
     void onPaletteEvent(PaletteMessage message) {
         mHandler.removeCallbacks(mTask);
         if(message.getType() == Correcter.MOD_FRAME_DELAY) {
-            if(mPaletteWindow.getVisibility() == View.VISIBLE) {
-                showFps(message.getValue());
-            } else {
-                mMainPalette.setSeekBarValue(message.getValue());
-            }
+            showFps(message.getValue());
         }
         mFrameAdapter.correct(message.getType(), message.getValue());
         mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
@@ -343,11 +350,10 @@ public class MainActivity extends AppCompatActivity {
     // 저장 기능 (category, quality, title 설정)
     @OnClick(R.id.main_save)
     void showEditorDialog() {
-        if(!mMainPalette.isVisible()) {
-            SweetDialogs.showErrorDialog(this, R.string.modifying, R.string.err_modifying);
-        } else if(mFrameAdapter.isEmpty()) {
+        if(mFrameAdapter.isEmpty()) {
             SweetDialogs.showErrorDialog(this, R.string.err_no_image_title, R.string.err_no_image_content);
         } else {
+            EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_APPLY, 0));
             final EditorDialog editorDialog = new EditorDialog(this);
             editorDialog.setSaveButtonListener(new View.OnClickListener() {
                 @Override
@@ -386,13 +392,10 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             // 보정 중인 경우
-            if(mMainPalette.isVisible()) {
-                exitViews(mPaletteWindow);
-                enterViews(mGalleryWindow);
-                mNextButton.setVisibility(View.VISIBLE);
-            } else {
-                super.onBackPressed();
-            }
+            EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_APPLY, 0));
+            exitViews(mPaletteWindow);
+            enterViews(mGalleryWindow);
+            mNextButton.setVisibility(View.VISIBLE);
         }
     }
 }

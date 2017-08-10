@@ -95,17 +95,9 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
             case Correcter.CORRECT_REVERSE :
                 reverse();
                 break;
-            case Correcter.CORRECT_ADD :
-                setBrightness(0);
-                Log.i(LOG_TAG, "correct start");
-                break;
             case Correcter.CORRECT_APPLY :
                 apply();
-                Log.i(LOG_TAG, "clear");
-                break;
-            case Correcter.CORRECT_RESET :
-                reset();
-                Log.i(LOG_TAG, "reset");
+                Log.i(LOG_TAG, "apply");
                 break;
         }
     }
@@ -158,19 +150,13 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     // 변경 사항 적용. stage frame -> original frame
     @Override
     public void apply() {
-        super.clear();
-        super.setFrames(stageFrames);
-        setDefualtValues();
-        stageFrames = new ArrayList<>();
-        notifyDataSetChanged();
-    }
-
-    // 변경 사항 제거
-    @Override
-    public void reset() {
-        clearStage();
-        stageFrames = new ArrayList<>();
-        notifyDataSetChanged();
+        if(!stageFrames.isEmpty()) {
+            super.clear();
+            super.setFrames(stageFrames);
+            stageFrames = new ArrayList<>();
+            setDefualtValues();
+            notifyDataSetChanged();
+        }
     }
 
     public History getModifiedValues() {

@@ -3,7 +3,6 @@ package com.emoge.app.emoge.ui.palette;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-import static android.R.attr.value;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,32 +70,14 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
         setSeekBarByType(mPaletteType);
         mSeekBar.setOnProgressChangeListener(this);
 
-        // 보정 시작
-        if(!Correcter.isMainPalette(getActivity().getSupportFragmentManager())) {
-            EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_ADD, value));
-        }
         return view;
     }
 
-    // apply 없이 종료시 reset. 이미 apply 한 경우도 호출. 상관X.
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_RESET, value));
+        EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_APPLY, 0));
     }
-
-    // apply
-    @OnClick(R.id.palette_button)
-    void onApplyButton() {
-        if(mPaletteType == Correcter.MOD_FRAME_DELAY) {
-            EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_REVERSE, value));
-        } else {
-            EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_APPLY, value));
-        }
-        getActivity().getSupportFragmentManager().popBackStack();
-    }
-
-
 
 
     @NonNull
@@ -149,12 +127,6 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
         mSeekBar.setMax(max);
         mSeekBar.setProgress(current);
     }
-
-    public void setSeekBarValue(int value) {
-        mSeekBar.setProgress(value/10);
-        Log.d(LOG_TAG, "set seekbar");
-    }
-
 
     // (보정) SeekBar 변경
     @Override

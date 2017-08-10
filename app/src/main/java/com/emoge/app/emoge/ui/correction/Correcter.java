@@ -2,9 +2,11 @@ package com.emoge.app.emoge.ui.correction;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
@@ -26,20 +28,18 @@ import java.util.List;
  * Frame -> Frame or Frame list -> Frame list
  */
 
-public class Correcter implements OnBMClickListener {
+public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedListener {
     private static final String LOG_TAG = Correcter.class.getSimpleName();
 
     // 보정 타입 (Fragment 존재)
-    public static final int CORRECT_BRIGHTNESS  = 0;
-    public static final int CORRECT_CONTRAST    = 1;
-    public static final int CORRECT_GAMMA       = 2;
-    public static final int MOD_FRAME_DELAY     = 10;
+    public static final int MOD_FRAME_DELAY     = 0;
+    public static final int CORRECT_BRIGHTNESS  = 1;
+    public static final int CORRECT_CONTRAST    = 2;
+    public static final int CORRECT_GAMMA       = 3;
 
     // 보정 타입 (명령형. Fragment 존재 X)
     public static final int CORRECT_REVERSE     = 100;
-    public static final int CORRECT_ADD         = 101;
-    public static final int CORRECT_APPLY       = 102;
-    public static final int CORRECT_RESET       = 103;
+    public static final int CORRECT_APPLY       = 101;
 
     // 기본값 (For Fragment's SeekBar)
     public static final int DEFAULT_FPS         = 500;
@@ -63,22 +63,31 @@ public class Correcter implements OnBMClickListener {
         this.currentFps = DEFAULT_FPS;
     }
 
-    // 해당 Palette(보정을 위한 Fragment) 생성
     @Override
-    public void onBoomButtonClick(int index) {
+    public void onTabSelected(TabLayout.Tab tab) {
+        int index = tab.getPosition();
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.enter, R.anim.exit);
         fragmentTransaction.replace(R.id.main_palette_container,
                 PaletteFragment.newInstance(index, getDefaultValueByType(index)));
-        if(isMainPalette(fragmentManager)) {
-            fragmentTransaction.addToBackStack(null);
-        }
         fragmentTransaction.commit();
+        Log.d(LOG_TAG, "tab "+index);
     }
 
-    public static boolean isMainPalette(FragmentManager fragmentManager) {
-        return fragmentManager.getBackStackEntryCount() == 0;
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
+    // 해당 Palette(보정을 위한 Fragment) 생성
+    @Override
+    public void onBoomButtonClick(int index) {
     }
 
     // 각 보정 타입 별 기본값
@@ -145,5 +154,4 @@ public class Correcter implements OnBMClickListener {
         }
         return stageFrames;
     }
-
 }
