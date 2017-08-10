@@ -34,7 +34,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         this.correcter = correcter;
         this.stageFrames = new ArrayList<>();
         this.tmpFrames = new ArrayList<>();
-        this.setDefualtValues();
+        this.setDefaultValues();
     }
 
     @Override
@@ -101,7 +101,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
 
 
     // FPS(재생 속도) 변경
-    private void setDefualtValues() {
+    private void setDefaultValues() {
         modifiedValues = new History(Correcter.DEFAULT_BRIGHTNESS,
                 Correcter.DEFAULT_CONTRAST, Correcter.DEFAULT_GAMMA);
     }
@@ -159,13 +159,14 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
             super.clear();
             super.setFrames(stageFrames);
             stageFrames = new ArrayList<>();
-            setDefualtValues();
+            setDefaultValues();
             notifyDataSetChanged();
             Log.i(LOG_TAG, "apply");
         }
     }
 
     // 변경 내역 가져 감. 실행 위치 : 보정 후 - apply() 전
+    @Override @NonNull
     public History getModifiedValues() {
         return modifiedValues;
     }
@@ -181,6 +182,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     }
 
     // tmpFrames recycle
+    @Override
     public void clearPreviousFrames() {
         for (Frame frame : tmpFrames) {
             if (frame.getBitmap() != null) {

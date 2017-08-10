@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.History;
-import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
+import com.emoge.app.emoge.ui.correction.Correctable;
 import com.emoge.app.emoge.ui.correction.Correcter;
 
 import java.util.ArrayList;
@@ -24,13 +24,13 @@ import java.util.List;
 public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> implements HistoryAccessible {
     private final String LOG_TAG = HistoryImplAdapter.class.getSimpleName();
 
-    private CorrectImplAdapter frameAdapter;
+    private Correctable correctImplAdapter;
     private ArrayList<History> histories;
     private List<Frame> originalFrames;
     private int lastRefIndex;
 
-    public HistoryImplAdapter(CorrectImplAdapter frameAdapter, ArrayList<History> histories) {
-        this.frameAdapter = frameAdapter;
+    public HistoryImplAdapter(Correctable correctImplAdapter, ArrayList<History> histories) {
+        this.correctImplAdapter = correctImplAdapter;
         this.histories = histories;
         this.originalFrames = new ArrayList<>();
     }
@@ -72,7 +72,7 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
             histories.add(new History(Correcter.DEFAULT_BRIGHTNESS,
                     Correcter.DEFAULT_CONTRAST, Correcter.DEFAULT_GAMMA));
         }
-        List<Frame> frames = frameAdapter.getFrames();
+        List<Frame> frames = correctImplAdapter.getFrames();
         for(Frame frame : frames) {
             originalFrames.add(new Frame(frame.getId(),
                     frame.getBitmap().copy(Bitmap.Config.ARGB_8888, true)));
@@ -83,10 +83,10 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
 
     @Override
     public void addHistory() {
-        History history = frameAdapter.getModifiedValues();
+        History history = correctImplAdapter.getModifiedValues();
         if(!isDefaultHistory(history)) {
             removeHistory(lastRefIndex);
-            histories.add(0, frameAdapter.getModifiedValues());
+            histories.add(0, correctImplAdapter.getModifiedValues());
             notifyDataSetChanged();
             lastRefIndex = 0;
         }
@@ -109,9 +109,9 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
                 correct(Correcter.CORRECT_CONTRAST, history.getModifiedContrast());
                 correct(Correcter.CORRECT_GAMMA, history.getModifiedGamma());
             } else {
-                frameAdapter.setFilter(history.getAppliedFilter());
-                frameAdapter.clearPreviousFrames();
-                frameAdapter.apply();
+                correctImplAdapter.setFilter(history.getAppliedFilter());
+                correctImplAdapter.clearPreviousFrames();
+                correctImplAdapter.apply();
             }
         }
         Log.i(LOG_TAG, "rollback : "+position);
@@ -119,16 +119,16 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
     }
 
     private void correct(int type, int value) {
-        frameAdapter.correct(type, value);
-        frameAdapter.clearPreviousFrames();
-        frameAdapter.apply();
+        correctImplAdapter.correct(type, value);
+        correctImplAdapter.clearPreviousFrames();
+        correctImplAdapter.apply();
     }
 
     @Override
     public void rollbackOrigin() {
-        frameAdapter.clear();
+        correctImplAdapter.clear();
         for(Frame frame : originalFrames) {
-            frameAdapter.addItem(new Frame(frame.getId(),
+            correctImplAdapter.addItem(new Frame(frame.getId(),
                     frame.getBitmap().copy(Bitmap.Config.ARGB_8888, true)));
         }
         Log.i(LOG_TAG, "rollback all");
