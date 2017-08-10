@@ -34,18 +34,19 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
 
 
     @Override
-    public void addFrameFromImages(@NonNull Intent imageData) {
+    public boolean addFrameFromImages(@NonNull Intent imageData) {
+        boolean resultBool = false;
         try {
             Uri singleImageUri = imageData.getData();
             if( singleImageUri != null ) {
                 // single image
-                addItem(new Frame(nextId(), frameAdder.loadBitmapSampleSize(singleImageUri)));
+                resultBool = addItem(new Frame(nextId(), frameAdder.loadBitmapSampleSize(singleImageUri)));
             } else if( imageData.getClipData() != null ) {
                 // multiple image
                 ClipData clipData = imageData.getClipData();
                 int firstAddPosition = getItemCount();
                 for (int i = 0; i < clipData.getItemCount(); i++) {
-                    addItemWithoutNotify(new Frame(nextId(),
+                    resultBool =addItemWithoutNotify(new Frame(nextId(),
                             frameAdder.loadBitmapSampleSize(clipData.getItemAt(i).getUri())));
                 }
                 notifyItemRangeInserted(firstAddPosition, clipData.getItemCount());
@@ -53,27 +54,31 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
         } catch (IOException e) {
             Log.e(LOG_TAG, e.getClass().getName(), e);
         }
+        return resultBool;
     }
 
     @Override
-    public void addFrameFromGif(@NonNull Intent imageData, int maxSize) {
+    public boolean addFrameFromGif(@NonNull Intent imageData, int maxSize) {
+        boolean resultBool = false;
         try {
             Uri imageUri = imageData.getData();
             if( imageUri != null ) {
                 List<Bitmap> bitmaps = frameAdder.loadBitmapsFromGif(imageUri, maxSize);
                 int firstAddPosition = getItemCount();
                 for(Bitmap bitmap : bitmaps) {
-                    addItemWithoutNotify(new Frame(nextId(), bitmap));
+                    resultBool = addItemWithoutNotify(new Frame(nextId(), bitmap));
                 }
                 notifyItemRangeInserted(firstAddPosition, bitmaps.size());
             }
         } catch (FileNotFoundException e) {
             Log.e(LOG_TAG, e.getClass().getName(), e);
         }
+        return resultBool;
     }
 
     @Override
-    public void addFrameFromVideo(@NonNull Intent videoData, int maxSize) {
+    public boolean addFrameFromVideo(@NonNull Intent videoData, int maxSize) {
+        boolean resultBool = false;
         if(videoData.getData() != null) {
             List<Bitmap> bitmaps = frameAdder.captureVideo(videoData.getData(), maxSize,
                     videoData.getIntExtra(VideoActivity.INTENT_NAME_START_SEC, 0),
@@ -81,9 +86,10 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
                     videoData.getIntExtra(VideoActivity.INTENT_NAME_CAPTURE_DELAY, 100));
             int firstAddPosition = getItemCount();
             for (Bitmap bitmap : bitmaps) {
-                addItemWithoutNotify(new Frame(nextId(), bitmap));
+                resultBool = addItemWithoutNotify(new Frame(nextId(), bitmap));
             }
             notifyItemRangeInserted(firstAddPosition, bitmaps.size());
         }
+        return resultBool;
     }
 }

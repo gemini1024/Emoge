@@ -157,8 +157,6 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
             sendFrameStatusMessage();
             return true;
         } else {
-            // TODO : frame 추가 실패시 UI 작업 (Toast or Alert?)
-            // 한번에 여러번 뜰 수 있음.
             return false;
         }
     }

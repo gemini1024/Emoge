@@ -44,24 +44,27 @@ public class FrameAddTask extends AsyncTask<Intent, Void, Boolean> {
     protected Boolean doInBackground(@NonNull Intent... params) {
         switch (requestCode) {
             case FrameAdder.INTENT_GET_IMAGE:
-                adapter.addFrameFromImages(params[0]);
-                break;
+                return adapter.addFrameFromImages(params[0]);
             case FrameAdder.INTENT_GET_GIF:
-                adapter.addFrameFromGif(params[0], adapter.getMaxItemSize()-adapter.getItemCount());
-                break;
+                return adapter.addFrameFromGif(params[0], adapter.getMaxItemSize()-adapter.getItemCount()+1);
             case FrameAdder.INTENT_CAPTURE_VIDEO:
-                adapter.addFrameFromVideo(params[0], adapter.getMaxItemSize()-adapter.getItemCount());
-                break;
+                return adapter.addFrameFromVideo(params[0], adapter.getMaxItemSize()-adapter.getItemCount()+1);
+            default:
+                return false;
         }
-        return true;
     }
 
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
-        // TODO : frame 추가 실패시 UI 작업 (Toast or Alert?)
         Log.i(LOG_TAG, String.valueOf(aBoolean));
         dialog.dismissWithAnimation();
-        framesView.scrollToPosition(adapter.getItemCount()-1);
+        if(aBoolean) {
+            framesView.scrollToPosition(adapter.getItemCount()-1);
+        } else if(requestCode == FrameAdder.INTENT_GET_IMAGE) {
+            SweetDialogs.showErrorDialog(activity, R.string.err_add_file_title, R.string.err_add_file_content);
+        } else {
+            SweetDialogs.showErrorDialog(activity, R.string.err_add_frames_title, R.string.err_add_frames_content);
+        }
     }
 }
