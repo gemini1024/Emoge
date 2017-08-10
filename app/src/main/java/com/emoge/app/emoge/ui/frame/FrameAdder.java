@@ -133,7 +133,7 @@ public class FrameAdder implements OnBMClickListener {
         for(int i=0; i<addCount; i++) {
             bitmaps.add(decoder.getFrame(i));
         }
-        EventBus.getDefault().post(new PaletteMessage(Correcter.MAIN_PALETTE,
+        EventBus.getDefault().post(new PaletteMessage(Correcter.MOD_FRAME_DELAY,
                 decoder.getDelay(0)));
         return bitmaps;
     }
@@ -165,7 +165,7 @@ public class FrameAdder implements OnBMClickListener {
             }
         }
         retriever.release();
-        EventBus.getDefault().post(new PaletteMessage(Correcter.MAIN_PALETTE, fps));
+        EventBus.getDefault().post(new PaletteMessage(Correcter.MOD_FRAME_DELAY, fps));
 
         return bitmapArrayList;
     }

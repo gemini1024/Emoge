@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
     private CorrectImplAdapter mFrameAdapter;
     private HistoryImplAdapter mHistoryAdapter;
 
+    private PaletteFragment mMainPalette;
+
     // Preview
     private int mPreviewIndex;
     private Handler mHandler;
@@ -167,11 +169,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addPalette(Correcter correcter) {
+        mMainPalette = PaletteFragment.newInstance(Correcter.MOD_FRAME_DELAY, correcter.getCurrentFps());
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.enter, R.anim.exit);
-        fragmentTransaction.add(R.id.main_palette_container,
-                PaletteFragment.newInstance(Correcter.MAIN_PALETTE, correcter.getCurrentFps()));
+        fragmentTransaction.add(R.id.main_palette_container, mMainPalette);
         fragmentTransaction.commit();
     }
 
@@ -251,10 +253,12 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     void onPaletteEvent(PaletteMessage message) {
         mHandler.removeCallbacks(mTask);
-        if(message.getType() == Correcter.MAIN_PALETTE) {
-            showFps(message.getValue());
-        } else if(message.getType() == Correcter.CORRECT_APPLY) {
-            mHistoryAdapter.addHistory();
+        if(message.getType() == Correcter.MOD_FRAME_DELAY) {
+            if(mPaletteWindow.getVisibility() == View.VISIBLE) {
+                showFps(message.getValue());
+            } else {
+                mMainPalette.setSeekBarValue(message.getValue());
+            }
         }
         mFrameAdapter.correct(message.getType(), message.getValue());
         mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
@@ -339,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
     // 저장 기능 (category, quality, title 설정)
     @OnClick(R.id.main_save)
     void showEditorDialog() {
-        if(!Correcter.isMainPalette(getSupportFragmentManager())) {
+        if(!mMainPalette.isVisible()) {
             SweetDialogs.showErrorDialog(this, R.string.modifying, R.string.err_modifying);
         } else if(mFrameAdapter.isEmpty()) {
             SweetDialogs.showErrorDialog(this, R.string.err_no_image_title, R.string.err_no_image_content);
@@ -382,7 +386,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             // 보정 중인 경우
-            if(Correcter.isMainPalette(getSupportFragmentManager())) {
+            if(mMainPalette.isVisible()) {
                 exitViews(mPaletteWindow);
                 enterViews(mGalleryWindow);
                 mNextButton.setVisibility(View.VISIBLE);

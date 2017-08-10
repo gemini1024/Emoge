@@ -33,7 +33,7 @@ public class Correcter implements OnBMClickListener {
     public static final int CORRECT_BRIGHTNESS  = 0;
     public static final int CORRECT_CONTRAST    = 1;
     public static final int CORRECT_GAMMA       = 2;
-    public static final int MAIN_PALETTE        = 10;
+    public static final int MOD_FRAME_DELAY     = 10;
 
     // 보정 타입 (명령형. Fragment 존재 X)
     public static final int CORRECT_REVERSE     = 100;

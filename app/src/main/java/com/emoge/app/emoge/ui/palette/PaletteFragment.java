@@ -3,6 +3,7 @@ package com.emoge.app.emoge.ui.palette;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +75,7 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
         mSeekBar.setOnProgressChangeListener(this);
 
         // 보정 시작
-        if(! Correcter.isMainPalette(getActivity().getSupportFragmentManager())) {
+        if(!Correcter.isMainPalette(getActivity().getSupportFragmentManager())) {
             EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_ADD, value));
         }
         return view;
@@ -90,7 +91,7 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
     // apply
     @OnClick(R.id.palette_button)
     void onApplyButton() {
-        if(mPaletteType == Correcter.MAIN_PALETTE) {
+        if(mPaletteType == Correcter.MOD_FRAME_DELAY) {
             EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_REVERSE, value));
         } else {
             EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_APPLY, value));
@@ -133,7 +134,7 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
                 setSeekBarValues(SeekBarNumberTransformers.Subtract(128), 78, 178, mDefaultValue);
                 mApplyButton.setText(getString(R.string.apply));
                 break;
-            default : // MAIN_PALETTE (fps 변경)
+            default : // MOD_FRAME_DELAY (fps 변경)
                 // 10 ~ 2000
                 setSeekBarValues(SeekBarNumberTransformers.Multiply(10), 1, 200, mDefaultValue/10);
                 mApplyButton.setText(getString(R.string.reverse));
@@ -149,12 +150,16 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
         mSeekBar.setProgress(current);
     }
 
+    public void setSeekBarValue(int value) {
+        mSeekBar.setProgress(value/10);
+        Log.d(LOG_TAG, "set seekbar");
+    }
 
 
     // (보정) SeekBar 변경
     @Override
     public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
-        if(mPaletteType == Correcter.MAIN_PALETTE) {
+        if(mPaletteType == Correcter.MOD_FRAME_DELAY) {
             EventBus.getDefault().post(new PaletteMessage(mPaletteType, value*10));
         } else {
             EventBus.getDefault().post(new PaletteMessage(mPaletteType, value));

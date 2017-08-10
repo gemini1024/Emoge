@@ -80,7 +80,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     // 보정 작업
     public void correct(int type, int value) {
         switch (type) {
-            case Correcter.MAIN_PALETTE :
+            case Correcter.MOD_FRAME_DELAY:
                 setFps(value);
                 break;
             case Correcter.CORRECT_BRIGHTNESS :
