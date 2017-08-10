@@ -11,4 +11,10 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorFrameCover"
+        android:visibility="gone" />
+
 </LinearLayout>

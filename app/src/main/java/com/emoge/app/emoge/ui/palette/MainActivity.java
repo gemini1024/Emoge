@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 보정 첫 선택창. ( Frame Delay 선택 창 )
     private TabLayout.Tab mMainTab;
+    private Correcter mCorrecter;
 
     // Preview
     private int mPreviewIndex;
@@ -147,14 +148,14 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mHandler = new Handler();
-        Correcter correcter = new Correcter(this);
+        mCorrecter = new Correcter(this);
         FrameAdder frameAdder = new FrameAdder(this);
 
         addGallery();
-        addPalette(correcter);
-        setFrameList(frameAdder, correcter);
+        addPalette(mCorrecter);
+        setFrameList(frameAdder, mCorrecter);
         setHistory();
-        enableButtons(frameAdder, correcter);
+        enableButtons(frameAdder, mCorrecter);
     }
 
     private void addGallery() {
@@ -266,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
     // EventBus -
     // 보정 기능 ( Message from PaletteFragment, FrameAdder(only frame delay message) )
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void onPaletteEvent(PaletteMessage message) {
+    synchronized void onPaletteEvent(PaletteMessage message) {
         mHandler.removeCallbacks(mTask);
         if(message.getType() == Correcter.MOD_FRAME_DELAY) {
             showFps(message.getValue());
@@ -281,7 +282,9 @@ public class MainActivity extends AppCompatActivity {
 
     // 필터 적용 ( Message from Correcter )
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void onPaletteEvent(Filter filter) {
+    synchronized void onPaletteEvent(Filter filter) {
+        mMainTab.select();
+        mCorrecter.onTabSelected(mMainTab);
         mHandler.removeCallbacks(mTask);
         mFrameAdapter.setFilter(filter);
         mHistoryAdapter.addHistory();

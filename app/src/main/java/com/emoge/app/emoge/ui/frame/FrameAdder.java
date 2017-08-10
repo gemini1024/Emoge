@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -21,6 +23,7 @@ import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,14 +118,44 @@ public class FrameAdder implements OnBMClickListener {
 
 
     @NonNull
-    Bitmap loadBitmapSampleSize(@NonNull Uri imageUri) throws FileNotFoundException {
+    Bitmap loadBitmapSampleSize(@NonNull Uri imageUri) throws IOException {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri), null, options);
         options.inJustDecodeBounds = false;
         options.inSampleSize = getSampleSize(options.outWidth, options.outHeight);
-        return BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri), null, options);
+
+        Bitmap bitmap = BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri), null, options);
+        int orientation = exifOrientationToDegrees(new ExifInterface(imageUri.getPath())
+                .getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL));
+        return rotateBitmap(bitmap, orientation);
     }
+
+    private Bitmap rotateBitmap(@NonNull Bitmap bitmap, int degree) {
+        if(degree != 0) {
+            Matrix matrix = new Matrix();
+            matrix.setRotate(degree, (float)bitmap.getWidth()/2, (float)bitmap.getHeight());
+            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                    bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            bitmap.recycle();
+            return rotatedBitmap;
+        }
+        return bitmap;
+    }
+
+    private int exifOrientationToDegrees(int exifOrientation) {
+        switch (exifOrientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return 90;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return 180;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return 270;
+            default:
+                return 0;
+        }
+    }
+
 
     @NonNull
     List<Bitmap> loadBitmapsFromGif(@NonNull Uri imageUri, int maxSize) throws FileNotFoundException {

@@ -12,6 +12,7 @@ import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.ui.VideoActivity;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
                 }
                 notifyItemRangeInserted(firstAddPosition, clipData.getItemCount());
             }
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             Log.e(LOG_TAG, e.getClass().getName(), e);
         }
     }
