@@ -11,6 +11,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by jh on 17. 8. 8.
+ * 갤러리 사진 View Holder
  */
 
 class GalleryViewHolder extends RecyclerView.ViewHolder {

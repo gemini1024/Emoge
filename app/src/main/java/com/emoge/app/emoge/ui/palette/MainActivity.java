@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -65,26 +64,29 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    @BindView(R.id.toolbar)             Toolbar mToolbar;
-    @BindView(R.id.toolbar_next)        ImageButton mNextButton;
-    @BindView(R.id.main_bt_add_frame)   BoomMenuButton mAddMenu;
-    @BindView(R.id.main_bt_correction)  BoomMenuButton mCorrectMenu;
-    @BindView(R.id.main_frame_list)     RecyclerView mFrameRecyclerView;
-    @BindView(R.id.main_history)        RecyclerView mHistoryView;
-    @BindView(R.id.main_preview)        PhotoView mPreview;
-    @BindView(R.id.main_fps_text)       TextView mFpsTextView;
+    // 공통
+    @BindView(R.id.main_frame_list)     RecyclerView mFrameRecyclerView;    // Frame List
 
-    @BindView(R.id.main_palette_window)
-    ConstraintLayout mPaletteWindow;
-    @BindView(R.id.main_gallery_window)
-    ConstraintLayout mGalleryWindow;
+    // 추가 화면
+    @BindView(R.id.toolbar_next)        ImageButton mNextButton;            // (Toolbar)
+    @BindView(R.id.main_bt_add_frame)   BoomMenuButton mAddMenu;            // 외부 앱으로 추가 메뉴
+    @BindView(R.id.main_gallery_window) ConstraintLayout mGalleryWindow;    // Gallery 포함된 layout
     @BindView(R.id.main_gallery_container)
     ViewPager mGallery;
+
+    // 보정 화면
+    @BindView(R.id.main_bt_correction)  BoomMenuButton mCorrectMenu;        // 보정 필터 메뉴
+    @BindView(R.id.main_history)        RecyclerView mHistoryView;          // 보정 History List
+    @BindView(R.id.main_preview)        PhotoView mPreview;                 // 보정 결과 미리보기
+    @BindView(R.id.main_fps_text)       TextView mFpsTextView;              // Frame Delay 확인
+    @BindView(R.id.main_palette_window) ConstraintLayout mPaletteWindow;    // 보정 선택창 포함된 layout
+
 
     // Frame 저장 및 수정용 Adapter
     private CorrectImplAdapter mFrameAdapter;
     private HistoryImplAdapter mHistoryAdapter;
 
+    // 보정 첫 선택창. ( Frame Delay 선택 창 )
     private TabLayout.Tab mMainTab;
 
     // Preview
@@ -137,13 +139,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    // Initialize
+    // Initialize -
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setSupportActionBar(mToolbar);
 
         mHandler = new Handler();
         Correcter correcter = new Correcter(this);
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.enter, R.anim.exit);
         fragmentTransaction.add(R.id.main_palette_container,
-                PaletteFragment.newInstance(Correcter.MOD_FRAME_DELAY, correcter.getCurrentFps()));
+                PaletteFragment.newInstance(Correcter.MOD_FRAME_DELAY, correcter.getCurrentDelay()));
         fragmentTransaction.commit();
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.main_palette_tab);
@@ -184,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_contrast));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_gamma));
         tabLayout.addOnTabSelectedListener(correcter);
-
     }
 
     private void setFrameList(FrameAdder frameAdder, Correcter correcter) {
@@ -238,9 +238,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(mHistoryAdapter != null) {
+            mHistoryAdapter.clearHistory();
+        }
         if(mFrameAdapter != null) {
             mFrameAdapter.clear();
-            mHistoryAdapter.clearHistory();
         }
     }
 

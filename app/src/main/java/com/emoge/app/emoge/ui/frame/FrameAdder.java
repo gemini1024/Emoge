@@ -42,8 +42,8 @@ public class FrameAdder implements OnBMClickListener {
 
 
     // 이미지 크기 제한
-    private static final int MAX_WIDTH   = 600;
-    private static final int MAX_HEIGHT  = 600;
+    private static final int MAX_WIDTH   = 400;
+    private static final int MAX_HEIGHT  = 400;
 
     private Activity activity;
 
@@ -133,8 +133,10 @@ public class FrameAdder implements OnBMClickListener {
         for(int i=0; i<addCount; i++) {
             bitmaps.add(decoder.getFrame(i));
         }
-        EventBus.getDefault().post(new PaletteMessage(Correcter.MOD_FRAME_DELAY,
-                decoder.getDelay(0)));
+        if(decoder.getDelay(0) > 9 && decoder.getDelay(0) < 2001) {
+            EventBus.getDefault().post(new PaletteMessage(Correcter.MOD_FRAME_DELAY,
+                    decoder.getDelay(0)));
+        }
         return bitmaps;
     }
 

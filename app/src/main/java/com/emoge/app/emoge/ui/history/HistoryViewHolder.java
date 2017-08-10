@@ -11,6 +11,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by jh on 17. 8. 9.
+ * Correction History View Holder
  */
 
 class HistoryViewHolder extends RecyclerView.ViewHolder {

@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * Created by jh on 17. 8. 9.
+ * Correction History Adapter
  */
 
 public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> implements HistoryAccessible {
@@ -42,8 +43,6 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
 
     @Override
     public void onBindViewHolder(HistoryViewHolder holder, final int position) {
-        final History history = histories.get(position);
-
         if(position == histories.size()-1) {
             holder.itemView.setText("원본");
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +110,8 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
                 correct(Correcter.CORRECT_GAMMA, history.getModifiedGamma());
             } else {
                 frameAdapter.setFilter(history.getAppliedFilter());
+                frameAdapter.clearPreviousFrames();
+                frameAdapter.apply();
             }
         }
         Log.i(LOG_TAG, "rollback : "+position);

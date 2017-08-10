@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity implements PermissionListe
 
         mPermission = new TedPermission(this).setPermissionListener(this)
                 .setDeniedMessage(R.string.err_permission_denied)
-                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA);
+                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         new Handler().postDelayed(new Runnable(){
             @Override

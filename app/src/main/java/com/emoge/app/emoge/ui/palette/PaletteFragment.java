@@ -35,7 +35,7 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
 
     @BindView(R.id.palette_label)   TextView mLabel;
     @BindView(R.id.palette_seek)    DiscreteSeekBar mSeekBar;
-    @BindView(R.id.palette_button)  Button mApplyButton;
+    @BindView(R.id.palette_button)  Button mReverseButton;
 
 
     public PaletteFragment() {
@@ -69,7 +69,6 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
         mLabel.setText(getLabelByType(mPaletteType));
         setSeekBarByType(mPaletteType);
         mSeekBar.setOnProgressChangeListener(this);
-
         return view;
     }
 
@@ -112,8 +111,8 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
             default : // MOD_FRAME_DELAY (fps 변경)
                 // 10 ~ 2000
                 setSeekBarValues(SeekBarNumberTransformers.Multiply(10), 1, 200, mDefaultValue/10);
-                mApplyButton.setVisibility(View.VISIBLE);
-                mApplyButton.setOnClickListener(new View.OnClickListener() {
+                mReverseButton.setVisibility(View.VISIBLE);
+                mReverseButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_REVERSE, 0));

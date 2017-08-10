@@ -7,12 +7,18 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.snatik.storage.Storage;
+import com.snatik.storage.helpers.OrderType;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by jh on 17. 8. 8.
+ * execute(dirPath).
+ * dirPath 존재 시 - 해당 Dir 의 파일가져오기
+ * dirPath null - 전체 이미지 파일 가져오기
+ * 시간(최신)순 정렬
  */
 
 public class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
@@ -51,8 +57,11 @@ public class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
             storage.createDirectory(filepath);
         }
         List<File> myFiles = storage.getFiles(filepath);
-        for(File file : myFiles) {
-            adapter.addItemWithoutNotify(file);
+        if (myFiles != null) {
+            Collections.sort(myFiles, OrderType.DATE.getComparator());
+            for(File file : myFiles) {
+                adapter.addItemWithoutNotify(file);
+            }
         }
         return true;
     }

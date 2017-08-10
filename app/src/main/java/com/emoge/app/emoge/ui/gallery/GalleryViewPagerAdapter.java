@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 /**
  * Created by jh on 17. 8. 8.
+ * 움짤 생성 화면에 띄울 이미지&움짤 갤러리 ViewPager 의 Adapter
  */
 
 public class GalleryViewPagerAdapter extends FragmentPagerAdapter {
@@ -22,7 +23,7 @@ public class GalleryViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2; // +store
+        return 2;
     }
 
     @Override

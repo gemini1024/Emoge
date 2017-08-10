@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  * Created by jh on 17. 7. 26.
- * 보정.
+ * 보정. ( Recycle 안함! )
  * Bitmap -> Bitmap or Bitmap list -> Bitmap list
  * Frame -> Frame or Frame list -> Frame list
  */
@@ -45,7 +45,7 @@ public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedList
     public static final int CORRECT_APPLY       = 101;
 
     // 기본값 (For Fragment's SeekBar)
-    public static final int DEFAULT_FPS         = 500;
+    public static final int DEFAULT_FRAME_DELAY = 500;
     public static final int DEFAULT_BRIGHTNESS  = 0;
     public static final int DEFAULT_CONTRAST    = 100;
     public static final int DEFAULT_GAMMA       = 128;
@@ -67,13 +67,14 @@ public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedList
     }
 
     private AppCompatActivity activity;     // 호출한 Activity (SupportFragment 생성)
-    private int currentFps;                 // 현재 FPS (재생 속도)
+    private int currentDelay;               // 현재 FPS (재생 속도)
 
     public Correcter(@NonNull AppCompatActivity activity) {
         this.activity   = activity;
-        this.currentFps = DEFAULT_FPS;
+        this.currentDelay = DEFAULT_FRAME_DELAY;
     }
 
+    // 해당 Palette(보정을 위한 Fragment) 생성
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         int index = tab.getPosition();
@@ -96,7 +97,7 @@ public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedList
 
     }
 
-    // 해당 Palette(보정을 위한 Fragment) 생성
+    // EventBus 로 해당 필터 보냄
     @Override
     public void onBoomButtonClick(int index) {
         switch (index) {
@@ -128,22 +129,23 @@ public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedList
             case CORRECT_GAMMA :
                 return DEFAULT_GAMMA;
             default :
-                return currentFps;
+                return currentDelay;
         }
     }
 
     // FPS 변경
-    public int getCurrentFps() {
-        return currentFps;
+    public int getCurrentDelay() {
+        return currentDelay;
     }
 
-    void setCurrentFps(int currentFps) {
-        this.currentFps = currentFps;
+    void setCurrentDelay(int currentDelay) {
+        this.currentDelay = currentDelay;
     }
 
 
     // 밝기 변경
-    List<Frame> setBrightness(List<Frame> frames, int value) {
+    @NonNull
+    List<Frame> setBrightness(@NonNull List<Frame> frames, int value) {
         ArrayList<Frame> stageFrames = new ArrayList<>();
         Filter brightFilter = new Filter();
         brightFilter.addSubFilter(new BrightnessSubfilter(value));
@@ -155,7 +157,8 @@ public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedList
     }
 
     // 대비 변경
-    List<Frame> setContrast(List<Frame> frames, int value) {
+    @NonNull
+    List<Frame> setContrast(@NonNull List<Frame> frames, int value) {
         ArrayList<Frame> stageFrames = new ArrayList<>();
         Filter contrastFilter = new Filter();
         contrastFilter.addSubFilter(new ContrastSubfilter((float)(value)/100.0f));
@@ -167,7 +170,8 @@ public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedList
     }
 
     // 감마 변경
-    List<Frame> setGamma(List<Frame> frames, int value) {
+    @NonNull
+    List<Frame> setGamma(@NonNull List<Frame> frames, int value) {
         ArrayList<Frame> stageFrames = new ArrayList<>();
         Point[] rgbKnots;
         rgbKnots = new Point[3];
@@ -184,7 +188,8 @@ public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedList
     }
 
     // 필터 적용
-    List<Frame> setFilter(List<Frame> frames, Filter filter) {
+    @NonNull
+    List<Frame> setFilter(@NonNull List<Frame> frames, Filter filter) {
         ArrayList<Frame> stageFrames = new ArrayList<>();
         for(Frame frame : frames) {
             stageFrames.add(new Frame(frame.getId(),

@@ -21,10 +21,10 @@ import butterknife.ButterKnife;
 public class GalleryFragment extends Fragment {
     private final String LOG_TAG = GalleryFragment.class.getSimpleName();
 
-    private static final String ARG_DIR_PATH = "dir_path";
-    private static final String ARG_TYPE = "image_type";
-    private String mDirPath;
-    private int mImageType;
+    private static final String ARG_DIR_PATH    = "dir_path";
+    private static final String ARG_TYPE        = "image_type";
+    private String mDirPath;        // Nullable. (움짤 생성 화면에서 null)
+    private int mImageType;         // 포함시킬 파일 Format (ImageFormatChecker)
 
     @BindView(R.id.gallery)
     RecyclerView mGallery;

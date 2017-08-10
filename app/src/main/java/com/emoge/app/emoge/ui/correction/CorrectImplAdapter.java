@@ -24,8 +24,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     private Correcter correcter;        // 보정 작업 처리
     private List<Frame> stageFrames;    // 현 상태 Preview 용. Palette 제거 시 같이 제거
     private List<Frame> tmpFrames;      // View Looper 용. 변경된 이미지가 View 에서 내려온 후 제거
-
-    private History modifiedValues;
+    private History modifiedValues;     // apply() 직전 get()하여 가져갈 수 있는 변경 내역
 
     public CorrectImplAdapter(@NonNull RecyclerView recyclerView,
                               @NonNull List<Frame> frames,
@@ -109,11 +108,11 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
 
     @Override
     public void setFps(int value) {
-        correcter.setCurrentFps(value);
+        correcter.setCurrentDelay(value);
     }
 
     public int getFps() {
-        return correcter.getCurrentFps();
+        return correcter.getCurrentDelay();
     }
 
 
@@ -144,6 +143,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         notifyDataSetChanged();
     }
 
+    // Frame 전체 Filter 적용
     @Override
     public void setFilter(Filter filter) {
         tmpFrames = stageFrames;
@@ -165,6 +165,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         }
     }
 
+    // 변경 내역 가져 감. 실행 위치 : 보정 후 - apply() 전
     public History getModifiedValues() {
         return modifiedValues;
     }

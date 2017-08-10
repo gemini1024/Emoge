@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * Created by jh on 17. 8. 8.
+ * 확장자로 이미지 고르기 용.
  */
 
 public class ImageFormatChecker {

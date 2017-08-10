@@ -15,6 +15,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.request.RequestOptions;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.daimajia.androidviewhover.BlurLayout;
@@ -57,6 +59,7 @@ public class GalleryActivity extends AppCompatActivity {
         enterGallery();
     }
 
+    // Gallery Fragment 불러오기
     private void addGalleryFragment() {
         findViewById(R.id.toolbar_back).setVisibility(View.GONE);
         FragmentManager fm = getSupportFragmentManager();
@@ -67,6 +70,7 @@ public class GalleryActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    // GalleryWindow Animation
     private void enterGallery() {
         final Animation enterAnim = AnimationUtils.loadAnimation(this, R.anim.enter);
         mGalleryWindow.setAnimation(enterAnim);
@@ -79,6 +83,7 @@ public class GalleryActivity extends AppCompatActivity {
         mGalleryWindow.setVisibility(View.GONE);
     }
 
+    // 변경 사항 적용
     public void notifyGallery() {
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().detach(mGallery).attach(mGallery).commit();
@@ -119,16 +124,20 @@ public class GalleryActivity extends AppCompatActivity {
         });
     }
 
+    // Server 에서 인기 있는 움짤 가져와서 보여주기
     private void setBestFavoriteGif() {
         if(mBestFavoriteGif == null) {
             return;
         }
         Glide.with(GalleryActivity.this)
                 .load(Uri.parse(mBestFavoriteGif.downloadUrl))
+                .apply(new RequestOptions().format(DecodeFormat.PREFER_RGB_565)
+                        .placeholder(R.drawable.img_loading))
                 .into(mBestPhoto);
         setHoverByGif(mBestFavoriteGif);
     }
 
+    // 인기 있는 움짤 칸을 덮어씌울 Hover View 설정
     private void setHoverByGif(StoreGif storeGif) {
         HoverViews hover = new HoverViews(this, (BlurLayout)findViewById(R.id.gallery_hover));
         hover.buildHoverView();
