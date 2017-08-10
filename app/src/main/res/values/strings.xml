@@ -28,8 +28,10 @@
     <string name="share_gif" translatable="false">Share Gif</string>
     <string name="adding_frames">프레임 불러오는 중</string>
     <string name="saving_gif">열씨미 움짤 찌고 있습니다</string>
+    <string name="stop_making">생성 종료</string>
+    <string name="stop_making_content">움짤 생성을 그만둡니다 \n계속 하시겠습니까?</string>
     <string name="exit">종료</string>
-    <string name="exit_content">모든 작업 상황을 버리고 종료합니다. 계속 하시겠습니까?</string>
+    <string name="exit_content">어플을 종료합니다 \n계속 하시겠습니까?</string>
     <string name="saved_gif">저장되었습니다.</string>
     <string name="modifying">수정 중</string>
     <string name="remove">삭제</string>

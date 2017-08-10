@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.emoge.app.emoge.R;
@@ -20,12 +21,15 @@ public class FrameAddTask extends AsyncTask<Intent, Void, Boolean> {
     private final String LOG_TAG = FrameAddTask.class.getSimpleName();
 
     private Activity activity;
+    private RecyclerView framesView;
     private FrameAddImplAdapter adapter;
     private int requestCode;
     private SweetAlertDialog dialog;
 
-    public FrameAddTask(Activity activity, FrameAddImplAdapter adapter, int requestCode) {
+    public FrameAddTask(Activity activity, RecyclerView framesView,
+                        FrameAddImplAdapter adapter, int requestCode) {
         this.activity = activity;
+        this.framesView = framesView;
         this.adapter = adapter;
         this.requestCode = requestCode;
     }
@@ -58,5 +62,6 @@ public class FrameAddTask extends AsyncTask<Intent, Void, Boolean> {
         // TODO : frame 추가 실패시 UI 작업 (Toast or Alert?)
         Log.i(LOG_TAG, String.valueOf(aBoolean));
         dialog.dismissWithAnimation();
+        framesView.scrollToPosition(adapter.getItemCount()-1);
     }
 }

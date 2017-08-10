@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        new FrameAddTask(this, mFrameAdapter, requestCode)
+        new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, requestCode)
                 .execute(new Intent().setData(Uri.fromFile(file)));
     }
 
@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
                     startVideoActivity(data);
                     return;
                 }
-                new FrameAddTask(this, mFrameAdapter, requestCode).execute(data);
+                new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, requestCode).execute(data);
             } else {
                 // show error or do nothing
                 Log.e(LOG_TAG, getString(R.string.err_intent_return_null));
@@ -380,6 +380,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     makeToGif(editorDialog);
+                }
+            }).setCancelButtonListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editorDialog.cancel();
                 }
             }).show();
         }
@@ -407,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
         if(mGalleryWindow.getVisibility() == View.VISIBLE) {
             // 이미지 추가 중인 경우
             if(!mFrameAdapter.isEmpty()) {
-                SweetDialogs.showExitDialog(this);
+                SweetDialogs.showExitMakingDialog(this);
             } else {
                 super.onBackPressed();
             }

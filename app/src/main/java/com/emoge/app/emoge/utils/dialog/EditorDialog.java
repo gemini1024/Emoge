@@ -97,6 +97,12 @@ public class EditorDialog extends CustomDialog {
         editText.setError(error);
     }
 
+    public EditorDialog setCancelButtonListener(View.OnClickListener listener) {
+        Button saveButton = (Button)findViewById(R.id.dialog_bt_cancel);
+        saveButton.setOnClickListener(listener);
+        return this;
+    }
+
     public EditorDialog setSaveButtonListener(View.OnClickListener listener) {
         Button saveButton = (Button)findViewById(R.id.dialog_bt_save);
         saveButton.setOnClickListener(listener);

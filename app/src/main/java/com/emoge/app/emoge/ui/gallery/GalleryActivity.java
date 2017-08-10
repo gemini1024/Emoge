@@ -28,6 +28,7 @@ import com.emoge.app.emoge.ui.server.ServerActivity;
 import com.emoge.app.emoge.ui.view.HoverViews;
 import com.emoge.app.emoge.utils.GifDownloadTask;
 import com.emoge.app.emoge.utils.NetworkStatus;
+import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class GalleryActivity extends AppCompatActivity {
     private final String LOG_TAG = GalleryActivity.class.getSimpleName();
@@ -171,7 +173,13 @@ public class GalleryActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        exitGallery();
-        super.onBackPressed();
+        SweetDialogs.showExitAppDialog(this).setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                exitGallery();
+                sweetAlertDialog.dismissWithAnimation();
+                finish();
+            }
+        });
     }
 }
