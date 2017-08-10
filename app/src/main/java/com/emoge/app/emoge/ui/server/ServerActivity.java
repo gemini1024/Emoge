@@ -9,8 +9,6 @@ import android.widget.ImageButton;
 
 import com.emoge.app.emoge.R;
 
-import butterknife.ButterKnife;
-
 /**
  * Created by jh on 17. 8. 3.
  * 서버 메인 페이지
@@ -22,7 +20,6 @@ public class ServerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server);
-        ButterKnife.bind(this);
         findViewById(R.id.toolbar).setElevation(0.f);
 
         ImageButton backButton = (ImageButton) findViewById(R.id.toolbar_back);

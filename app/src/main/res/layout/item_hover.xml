@@ -17,6 +17,7 @@
             android:layout_width="@dimen/hover_icon_size"
             android:layout_height="@dimen/hover_icon_size"
             android:layout_marginEnd="@dimen/unit_dimen"
+            android:padding="@dimen/small_dimen"
             android:src="@drawable/ic_download"
             android:visibility="gone" />
 
@@ -25,6 +26,7 @@
             android:layout_width="@dimen/hover_icon_size"
             android:layout_height="@dimen/hover_icon_size"
             android:layout_marginEnd="@dimen/unit_dimen"
+            android:padding="@dimen/small_dimen"
             android:src="@drawable/ic_favorite"
             android:visibility="gone" />
 
@@ -32,6 +34,7 @@
             android:id="@+id/hover_more"
             android:layout_width="@dimen/hover_icon_size"
             android:layout_height="@dimen/hover_icon_size"
+            android:padding="@dimen/small_dimen"
             android:src="@drawable/ic_more"
             android:visibility="gone" />
     </LinearLayout>
