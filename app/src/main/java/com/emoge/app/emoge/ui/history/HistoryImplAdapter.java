@@ -26,6 +26,7 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
     private CorrectImplAdapter frameAdapter;
     private ArrayList<History> histories;
     private List<Frame> originalFrames;
+    private int lastRefIndex;
 
     public HistoryImplAdapter(CorrectImplAdapter frameAdapter, ArrayList<History> histories) {
         this.frameAdapter = frameAdapter;
@@ -83,8 +84,20 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
 
     @Override
     public void addHistory() {
-        histories.add(0, frameAdapter.getModifiedValues());
-        notifyDataSetChanged();
+        History history = frameAdapter.getModifiedValues();
+        if(!isDefaultHistory(history)) {
+            removeHistory(lastRefIndex);
+            histories.add(0, frameAdapter.getModifiedValues());
+            notifyDataSetChanged();
+            lastRefIndex = 0;
+        }
+    }
+
+    private boolean isDefaultHistory(History history) {
+        return history.getAppliedFilter() == null
+                && history.getModifiedBrightness() == Correcter.DEFAULT_BRIGHTNESS
+                && history.getModifiedContrast() == Correcter.DEFAULT_CONTRAST
+                && history.getModifiedGamma() == Correcter.DEFAULT_GAMMA;
     }
 
     @Override
@@ -92,11 +105,16 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
         rollbackOrigin();
         for(int i=histories.size()-2; i>=position; i--) {
             History history = histories.get(i);
-            correct(Correcter.CORRECT_BRIGHTNESS, history.getModifiedBrightness());
-            correct(Correcter.CORRECT_CONTRAST, history.getModifiedContrast());
-            correct(Correcter.CORRECT_GAMMA, history.getModifiedGamma());
+            if(history.getAppliedFilter() == null) {
+                correct(Correcter.CORRECT_BRIGHTNESS, history.getModifiedBrightness());
+                correct(Correcter.CORRECT_CONTRAST, history.getModifiedContrast());
+                correct(Correcter.CORRECT_GAMMA, history.getModifiedGamma());
+            } else {
+                frameAdapter.setFilter(history.getAppliedFilter());
+            }
         }
         Log.i(LOG_TAG, "rollback : "+position);
+        lastRefIndex = position;
     }
 
     private void correct(int type, int value) {
@@ -113,6 +131,14 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
                     frame.getBitmap().copy(Bitmap.Config.ARGB_8888, true)));
         }
         Log.i(LOG_TAG, "rollback all");
+        lastRefIndex = histories.size()-1;
+    }
+
+    private void removeHistory(int index) {
+        for(int i=index-1; i>=0; i--) {
+            histories.remove(i);
+            Log.d(LOG_TAG, index+"");
+        }
     }
 
     @Override
@@ -128,4 +154,5 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
             notifyDataSetChanged();
         }
     }
+
 }

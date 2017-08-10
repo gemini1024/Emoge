@@ -44,6 +44,7 @@ import com.emoge.app.emoge.utils.dialog.EditorDialog;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.nightonke.boommenu.BoomMenuButton;
+import com.zomato.photofilters.imageprocessors.Filter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -225,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
                     exitViews(mGalleryWindow);
                     enterViews(mPaletteWindow);
                     mNextButton.setVisibility(View.GONE);
+                    mHistoryAdapter.clearHistory();
                     mHistoryAdapter.setOriginalFrames();
                 }
             }
@@ -266,8 +268,22 @@ public class MainActivity extends AppCompatActivity {
         mHandler.removeCallbacks(mTask);
         if(message.getType() == Correcter.MOD_FRAME_DELAY) {
             showFps(message.getValue());
+        } else if(message.getType() == Correcter.CORRECT_APPLY) {
+            mHistoryAdapter.addHistory();
         }
         mFrameAdapter.correct(message.getType(), message.getValue());
+        mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
+        mHandler.postDelayed(mTask, mFrameAdapter.getFps());
+        mFrameAdapter.clearPreviousFrames();    // View 에서 띄우는 이미지를 변경했으므로 -> 제거
+    }
+
+    // 필터 적용 ( Message from Correcter )
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    void onPaletteEvent(Filter filter) {
+        mHandler.removeCallbacks(mTask);
+        mFrameAdapter.setFilter(filter);
+        mHistoryAdapter.addHistory();
+        mFrameAdapter.apply();
         mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
         mHandler.postDelayed(mTask, mFrameAdapter.getFps());
         mFrameAdapter.clearPreviousFrames();    // View 에서 띄우는 이미지를 변경했으므로 -> 제거

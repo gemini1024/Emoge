@@ -51,7 +51,7 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
     public void onBindViewHolder(final GalleryViewHolder holder, int position) {
         final File file = files.get(position);
 
-        Glide.with(fragment).load(file).apply(placeholderOption).into(holder.image);
+        Glide.with(fragment).load(file).thumbnail(0.5f).apply(placeholderOption).into(holder.image);
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

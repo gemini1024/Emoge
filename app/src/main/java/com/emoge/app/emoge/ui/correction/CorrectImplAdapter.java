@@ -8,6 +8,7 @@ import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.History;
 import com.emoge.app.emoge.ui.frame.FrameAddImplAdapter;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
+import com.zomato.photofilters.imageprocessors.Filter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +25,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     private List<Frame> stageFrames;    // 현 상태 Preview 용. Palette 제거 시 같이 제거
     private List<Frame> tmpFrames;      // View Looper 용. 변경된 이미지가 View 에서 내려온 후 제거
 
-    private int modifiedBrightness;
-    private int modifiedContrast;
-    private int modifiedGamma;
+    private History modifiedValues;
 
     public CorrectImplAdapter(@NonNull RecyclerView recyclerView,
                               @NonNull List<Frame> frames,
@@ -97,7 +96,6 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
                 break;
             case Correcter.CORRECT_APPLY :
                 apply();
-                Log.i(LOG_TAG, "apply");
                 break;
         }
     }
@@ -105,9 +103,8 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
 
     // FPS(재생 속도) 변경
     private void setDefualtValues() {
-        this.modifiedBrightness = Correcter.DEFAULT_BRIGHTNESS;
-        this.modifiedContrast   = Correcter.DEFAULT_CONTRAST;
-        this.modifiedGamma      = Correcter.DEFAULT_GAMMA;
+        modifiedValues = new History(Correcter.DEFAULT_BRIGHTNESS,
+                Correcter.DEFAULT_CONTRAST, Correcter.DEFAULT_GAMMA);
     }
 
     @Override
@@ -125,7 +122,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     public void setBrightness(int value) {
         tmpFrames = stageFrames;
         stageFrames = correcter.setBrightness(getFrames(), value);
-        modifiedBrightness = value;
+        modifiedValues.setModifiedBrightness(value);
         notifyDataSetChanged();
     }
 
@@ -134,7 +131,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     public void setContrast(int value) {
         tmpFrames = stageFrames;
         stageFrames = correcter.setContrast(getFrames(), value);
-        modifiedContrast = value;
+        modifiedValues.setModifiedContrast(value);
         notifyDataSetChanged();
     }
 
@@ -143,7 +140,15 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
     public void setGamma(int value) {
         tmpFrames = stageFrames;
         stageFrames = correcter.setGamma(getFrames(), value);
-        modifiedGamma = value;
+        modifiedValues.setModifiedGamma(value);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void setFilter(Filter filter) {
+        tmpFrames = stageFrames;
+        stageFrames = correcter.setFilter(getFrames(), filter);
+        modifiedValues.setAppliedFilter(filter);
         notifyDataSetChanged();
     }
 
@@ -156,11 +161,12 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
             stageFrames = new ArrayList<>();
             setDefualtValues();
             notifyDataSetChanged();
+            Log.i(LOG_TAG, "apply");
         }
     }
 
     public History getModifiedValues() {
-        return new History(modifiedBrightness, modifiedContrast, modifiedGamma);
+        return modifiedValues;
     }
 
     // stageFrames recycle

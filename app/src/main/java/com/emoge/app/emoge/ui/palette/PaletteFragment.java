@@ -100,22 +100,25 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
             case Correcter.CORRECT_BRIGHTNESS :
                 // -50 ~ 50
                 setSeekBarValues(null /* DefaultNumericTransformer */, -50, 50, mDefaultValue);
-                mApplyButton.setText(getString(R.string.apply));
                 break;
             case Correcter.CORRECT_CONTRAST :
                 // -50 ~ 50
                 setSeekBarValues(SeekBarNumberTransformers.Subtract(100), 50, 150, mDefaultValue);
-                mApplyButton.setText(getString(R.string.apply));
                 break;
             case Correcter.CORRECT_GAMMA :
                 // -50 ~ 50
                 setSeekBarValues(SeekBarNumberTransformers.Subtract(128), 78, 178, mDefaultValue);
-                mApplyButton.setText(getString(R.string.apply));
                 break;
             default : // MOD_FRAME_DELAY (fps 변경)
                 // 10 ~ 2000
                 setSeekBarValues(SeekBarNumberTransformers.Multiply(10), 1, 200, mDefaultValue/10);
-                mApplyButton.setText(getString(R.string.reverse));
+                mApplyButton.setVisibility(View.VISIBLE);
+                mApplyButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_REVERSE, 0));
+                    }
+                });
                 break;
         }
     }

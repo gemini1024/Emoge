@@ -19,14 +19,18 @@
 
     <!--ImageCorrectionButton-->
     <string-array name="correct_title">
-        <item>밝기 보정</item>
-        <item>대비 보정</item>
-        <item>감마 보정</item>
+        <item>StarLit</item>
+        <item>BlueMess</item>
+        <item>AweStruckVibe</item>
+        <item>LimeStutter</item>
+        <item>NightWhisper</item>
     </string-array>
     <array name="correct_image">
-        <item>@drawable/ic_brightness</item>
-        <item>@drawable/ic_contrast</item>
-        <item>@drawable/ic_gamma</item>
+        <item>@drawable/ic_healing</item>
+        <item>@drawable/ic_healing</item>
+        <item>@drawable/ic_healing</item>
+        <item>@drawable/ic_healing</item>
+        <item>@drawable/ic_healing</item>
     </array>
 
     <!--category-->
