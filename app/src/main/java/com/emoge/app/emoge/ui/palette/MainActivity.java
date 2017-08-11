@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
     // EventBus -
     // 보정 기능 ( Message from PaletteFragment, FrameAdder(only frame delay message) )
     @Subscribe(threadMode = ThreadMode.MAIN)
-    synchronized void onPaletteEvent(PaletteMessage message) {
+    public synchronized void onPaletteEvent(PaletteMessage message) {
         mHandler.removeCallbacks(mTask);
         if(message.getType() == Correcter.MOD_FRAME_DELAY) {
             showFps(message.getValue());
@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 필터 적용 ( Message from Correcter )
     @Subscribe(threadMode = ThreadMode.MAIN)
-    synchronized void onPaletteEvent(Filter filter) {
+    public synchronized void onPaletteEvent(Filter filter) {
         mMainTab.select();
         mCorrecter.onTabSelected(mMainTab);
         mHandler.removeCallbacks(mTask);
@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
 
     // FrameAdapter 상태 Event ( Message from FrameAdapter )
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void receiveFrameStatusMessage(FrameStatusMessage message) {
+    public void receiveFrameStatusMessage(FrameStatusMessage message) {
         if(message.equals(FrameStatusMessage.FULL)) {
         } else if(message.equals(FrameStatusMessage.NOT_FULL)){
         } else {
@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Add File ( Message from GalleryAdapter )
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void addFileFromGallery(File file) {
+    public void addFileFromGallery(File file) {
         int requestCode;
         if(ImageFormatChecker.inFormat(file, ImageFormatChecker.IMAGE_FORMAT)) {
             requestCode = FrameAdder.INTENT_GET_IMAGE;
