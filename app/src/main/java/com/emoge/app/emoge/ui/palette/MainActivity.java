@@ -203,9 +203,9 @@ public class MainActivity extends AppCompatActivity {
         mHistoryAdapter = new HistoryImplAdapter(mFrameAdapter, new ArrayList<History>());
         mHistoryView.setHasFixedSize(true);
         mHistoryView.setAdapter(mHistoryAdapter);
-        LinearLayoutManager stackLayoutManager = new LinearLayoutManager(this);
-        stackLayoutManager.setStackFromEnd(true);
-        mHistoryView.setLayoutManager(stackLayoutManager);
+        LinearLayoutManager reverseLayoutManager = new LinearLayoutManager(this);
+        reverseLayoutManager.setReverseLayout(true);
+        mHistoryView.setLayoutManager(reverseLayoutManager);
         findViewById(R.id.main_bt_history).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

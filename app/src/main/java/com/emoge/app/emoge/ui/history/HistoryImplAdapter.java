@@ -43,23 +43,17 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
 
     @Override
     public void onBindViewHolder(HistoryViewHolder holder, final int position) {
-        if(position == histories.size()-1) {
+        if(position == 0) {
             holder.itemView.setText("원본");
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    rollbackOrigin();
-                }
-            });
         } else {
-            holder.itemView.setText(String.valueOf(histories.size()-position-1));
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    rollbackPosition(position);
-                }
-            });
+            holder.itemView.setText(String.valueOf(position));
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rollbackPosition(position);
+            }
+        });
     }
 
     @Override
@@ -86,17 +80,17 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
         History history = correctImplAdapter.getModifiedValues();
         if(!isDefaultHistory(history)) {
             removeHistory(lastRefIndex);
-            histories.add(0, correctImplAdapter.getModifiedValues());
+            histories.add(correctImplAdapter.getModifiedValues());
             notifyDataSetChanged();
-            lastRefIndex = 0;
+            lastRefIndex = histories.size()-1;
         }
     }
 
     // 한 단계씩 되돌리기. ( 원본인경우 false )
     @Override
     public boolean rollbackOneStep() {
-        if(lastRefIndex < histories.size()-1) {
-            rollbackPosition(lastRefIndex+1);
+        if(lastRefIndex > 0) {
+            rollbackPosition(lastRefIndex-1);
             return true;
         } else {
             return false;
@@ -113,7 +107,7 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
     @Override
     public void rollbackPosition(int position) {
         rollbackOrigin();
-        for(int i=histories.size()-2; i>=position; i--) {
+        for(int i=1; i<=position; i++) {
             History history = histories.get(i);
             if(history.getAppliedFilter() == null) {
                 correct(Correcter.CORRECT_BRIGHTNESS, history.getModifiedBrightness());
@@ -147,9 +141,8 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
     }
 
     private void removeHistory(int index) {
-        for(int i=index-1; i>=0; i--) {
+        for(int i=histories.size()-1; i>index; i--) {
             histories.remove(i);
-            Log.d(LOG_TAG, index+"");
         }
     }
 
