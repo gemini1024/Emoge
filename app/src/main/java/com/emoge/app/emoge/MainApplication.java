@@ -14,7 +14,8 @@ import io.realm.Realm;
  */
 
 public class MainApplication extends Application {
-    public static final String defaultDir = Environment.getExternalStorageDirectory().getAbsolutePath()+"/madeGif/";
+    public static final String defaultDir =
+            Environment.getExternalStorageDirectory().getAbsolutePath()+"/madeGif/";
 
     @Override
     public void onCreate() {

@@ -13,6 +13,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by jh on 17. 8. 6.
+ * 네트워크 상태 확인 후 작업. (데이터 송수신 많을 때)
  */
 
 public class NetworkStatus {

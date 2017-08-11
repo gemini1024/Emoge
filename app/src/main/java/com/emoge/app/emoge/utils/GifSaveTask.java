@@ -85,17 +85,17 @@ public class GifSaveTask extends AsyncTask<GifMakingInfo, Integer, File> {
         }).setShareKakaoButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gifSharer.shareOtherApps(fileUri, "com.kakao.talk");
+                gifSharer.shareOtherApps(fileUri, activity.getString(R.string.app_package_kakao));
             }
         }).setShareGoogleDriveButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gifSharer.shareOtherApps(fileUri, "com.google.android.apps.docs");
+                gifSharer.shareOtherApps(fileUri, activity.getString(R.string.app_package_google_drive));
             }
         }).setShareFacebookButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gifSharer.shareOtherApps(fileUri, "com.facebook.katana");
+                gifSharer.shareOtherApps(fileUri, activity.getString(R.string.app_package_facebook));
             }
         }).setShareOtherAppButton(new View.OnClickListener() {
             @Override

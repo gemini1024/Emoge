@@ -102,7 +102,9 @@ class GifSharer {
     private UploadTask sendFile(Uri sharingGifFile) {
         loadingDialog = SweetDialogs.showLoadingProgressDialog(activity, R.string.upload_gif_loading);
 
-        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://emoge-50942.appspot.com").child("Emoge");
+        StorageReference storageRef = FirebaseStorage.getInstance()
+                .getReferenceFromUrl(activity.getString(R.string.firebase_bucket))
+                .child(activity.getString(R.string.firebase_directory));
         StorageReference imageRef = storageRef.child(UUID.randomUUID().toString());
 
         return imageRef.putFile(sharingGifFile);

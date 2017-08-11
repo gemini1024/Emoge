@@ -43,7 +43,6 @@
     <string name="download_gif_loading">다운로드하는 중</string>
     <string name="download_gif_title">다운로드</string>
     <string name="download_gif_content">움짤 다운로드를 완료 했습니다</string>
-    <string name="loading_image">이미지를 불러오는 중입니다</string>
     <string name="naming_gif_hint">움짤의 이름을 입력하세요</string>
     <string name="check_network">인터넷 연결 확인</string>
     <string name="non_network">인터넷에 연결되어 있지 않습니다</string>
@@ -61,9 +60,17 @@
     <string name="complete">완료</string>
 
     <!--video capture-->
+    <string name="video_capture_label">비디오 캡쳐 설정</string>
     <string name="frame_delay">프레임 딜레이</string>
     <string name="count">캡쳐 수</string>
     <string name="capture">캡처 시작</string>
+
+    <!--upload data-->
+    <string name="firebase_bucket" translatable="false">gs://emoge-50942.appspot.com</string>
+    <string name="firebase_directory" translatable="false">Emoge</string>
+    <string name="app_package_kakao" translatable="false">com.kakao.talk</string>
+    <string name="app_package_google_drive" translatable="false">com.google.android.apps.docs</string>
+    <string name="app_package_facebook" translatable="false">com.facebook.katana</string>
 
     <!--other-->
     <string name="save">움짤 저장</string>
@@ -75,5 +82,4 @@
     <string name="next">다음</string>
     <string name="remove_favorite">담아가기 해제 되었습니다.</string>
     <string name="add_favorite">움짤을 담았습니다</string>
-    <string name="video_capture_label">비디오 캡쳐 설정</string>
 </resources>

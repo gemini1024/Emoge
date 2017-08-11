@@ -8,7 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
+import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.StoreGif;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
@@ -22,7 +25,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by jh on 17. 8. 3.
@@ -34,6 +36,10 @@ public class CategoryFragment extends Fragment {
 
     @BindView(R.id.server_gif_list)
     RecyclerView mGifList;
+    @BindView(R.id.server_no_image)
+    ImageView mNoImage;
+    @BindView(R.id.server_progress)
+    ProgressBar mProgress;
 
     private StoreGifAdapter mGifAdapter;
 
@@ -90,12 +96,13 @@ public class CategoryFragment extends Fragment {
 
     // 서버연결 ( Firebase )
     private void loadGifImages() {
-        final SweetAlertDialog dialog = SweetDialogs.showLoadingProgressDialog(getActivity(), R.string.loading_image);
+        mProgress.setVisibility(View.VISIBLE);
         DatabaseReference database = FirebaseDatabase.getInstance().getReference(
                 getArguments().getString(ARG_CATEGORY, getString(R.string.category_store)));
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mProgress.setVisibility(View.GONE);
                 Log.i(LOG_TAG, dataSnapshot.toString());
                 mGifAdapter.clear();
                 if(dataSnapshot.getValue(StoreGif.class) != null) {
@@ -104,12 +111,17 @@ public class CategoryFragment extends Fragment {
                         mGifAdapter.addItem(storeGif);
                     }
                 }
-                dialog.dismissWithAnimation();
+                if(mGifAdapter.isEmpty()) {
+                    Glide.with(getContext()).load(R.drawable.img_no_image).into(mNoImage);
+                    mNoImage.setVisibility(View.VISIBLE);
+                } else {
+                    mNoImage.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                dialog.dismissWithAnimation();
+                mProgress.setVisibility(View.GONE);
                 SweetDialogs.showErrorDialog(getActivity(),
                         R.string.err_loading_image_title, R.string.err_loading_image_content);
             }

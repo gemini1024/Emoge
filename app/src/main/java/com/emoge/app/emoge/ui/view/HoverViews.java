@@ -18,14 +18,12 @@ import com.emoge.app.emoge.R;
 public class HoverViews {
     public static final int BLUR_DURATION = 300;
 
-    private Context context;
-    private BlurLayout blurLayout;
     private View hoverView;
+    private BlurLayout blurLayout;
 
     public HoverViews(Context context, BlurLayout blurLayout) {
-        this.context = context;
-        this.blurLayout = blurLayout;
         this.hoverView = LayoutInflater.from(context).inflate(R.layout.item_hover, null);
+        this.blurLayout = blurLayout;
     }
 
     public void buildHoverView() {

@@ -23,11 +23,11 @@ import java.util.List;
 public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
     private static final String LOG_TAG = FrameAddImplAdapter.class.getSimpleName();
 
-    private LocalImageAccessible frameAdder;      // 파일 접근 처리
+    private BitmapLoadable frameAdder;      // 파일 접근 처리
 
     public FrameAddImplAdapter(@NonNull RecyclerView recyclerView,
                                @NonNull List<Frame> frames,
-                               @NonNull LocalImageAccessible frameAdder) {
+                               @NonNull BitmapLoadable frameAdder) {
         super(recyclerView, frames);
         this.frameAdder = frameAdder;
     }

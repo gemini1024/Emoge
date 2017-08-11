@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.emoge.app.emoge.R;
 
@@ -28,6 +29,8 @@ public class GalleryFragment extends Fragment {
 
     @BindView(R.id.gallery)
     RecyclerView mGallery;
+    @BindView(R.id.gallery_no_image)
+    ImageView mNoImage;
 
     private GalleryAdapter mGalleryAdapter;
 
@@ -74,7 +77,7 @@ public class GalleryFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mGalleryAdapter.clear();
-        new ReadAlbumTask(this, mGalleryAdapter).execute(mDirPath);
+        new ReadAlbumTask(this, mGalleryAdapter, mNoImage).execute(mDirPath);
     }
 
 }

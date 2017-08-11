@@ -34,7 +34,7 @@ import java.util.List;
  */
 
 
-public class FrameAdder implements OnBMClickListener, LocalImageAccessible {
+public class FrameAdder implements OnBMClickListener, BitmapLoadable {
     private static final String LOG_TAG = FrameAdder.class.getSimpleName();
 
     // Menu Position

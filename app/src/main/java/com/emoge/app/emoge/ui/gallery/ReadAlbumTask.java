@@ -4,8 +4,11 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.emoge.app.emoge.R;
 import com.snatik.storage.Storage;
 import com.snatik.storage.helpers.OrderType;
 
@@ -21,15 +24,17 @@ import java.util.List;
  * 시간(최신)순 정렬
  */
 
-public class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
+class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
     private final String LOG_TAG = ReadAlbumTask.class.getSimpleName();
 
     private Fragment fragment;
-    private GalleryAdapter adapter;
+    private LocalImageLoadable adapter;
+    private ImageView noImageView;
 
-    public ReadAlbumTask(Fragment fragment, GalleryAdapter adapter) {
+    ReadAlbumTask(Fragment fragment, LocalImageLoadable adapter, ImageView noImageView) {
         this.fragment = fragment;
         this.adapter = adapter;
+        this.noImageView = noImageView;
     }
 
     @Override
@@ -42,12 +47,14 @@ public class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
-        super.onPostExecute(aBoolean);
-        if(aBoolean) {
-            adapter.notifyDataSetChanged();
+    protected void onPostExecute(Boolean hasLoaded) {
+        super.onPostExecute(hasLoaded);
+        if(!hasLoaded || adapter.isEmpty()) {
+            Glide.with(fragment.getContext()).load(R.drawable.img_no_image).into(noImageView);
+            noImageView.setVisibility(View.VISIBLE);
         } else {
-            Log.e(LOG_TAG, "not found images");
+            noImageView.setVisibility(View.GONE);
+            adapter.notifyDataSetChanged();
         }
     }
 

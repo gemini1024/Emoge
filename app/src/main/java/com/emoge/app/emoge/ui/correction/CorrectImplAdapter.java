@@ -7,7 +7,7 @@ import android.util.Log;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.History;
 import com.emoge.app.emoge.ui.frame.FrameAddImplAdapter;
-import com.emoge.app.emoge.ui.frame.LocalImageAccessible;
+import com.emoge.app.emoge.ui.frame.BitmapLoadable;
 import com.zomato.photofilters.imageprocessors.Filter;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
 
     public CorrectImplAdapter(@NonNull RecyclerView recyclerView,
                               @NonNull List<Frame> frames,
-                              @NonNull LocalImageAccessible frameAdder,
+                              @NonNull BitmapLoadable frameAdder,
                               @NonNull BitmapModifiable correcter) {
         super(recyclerView, frames, frameAdder);
         this.correcter = correcter;

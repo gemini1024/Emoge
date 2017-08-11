@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager mGallery;
 
     // 보정 화면
+    @BindView(R.id.toolbar_save)        ImageButton mSaveButton;            // (Toolbar)
     @BindView(R.id.main_bt_correction)  BoomMenuButton mCorrectMenu;        // 보정 필터 메뉴
     @BindView(R.id.main_history)        RecyclerView mHistoryView;          // 보정 History List
     @BindView(R.id.main_preview)        PhotoView mPreview;                 // 보정 결과 미리보기
@@ -227,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
                     exitViews(mGalleryWindow);
                     enterViews(mPaletteWindow);
                     mNextButton.setVisibility(View.GONE);
+                    mSaveButton.setVisibility(View.VISIBLE);
                     mHistoryAdapter.clearHistory();
                     mHistoryAdapter.setOriginalFrames();
                 }
@@ -369,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // 저장 기능 (category, quality, title 설정)
-    @OnClick(R.id.main_save)
+    @OnClick(R.id.toolbar_save)
     void showEditorDialog() {
         if(mFrameAdapter.isEmpty()) {
             SweetDialogs.showErrorDialog(this, R.string.err_no_image_title, R.string.err_no_image_content);
@@ -421,6 +423,7 @@ public class MainActivity extends AppCompatActivity {
             EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_APPLY, 0));
             exitViews(mPaletteWindow);
             enterViews(mGalleryWindow);
+            mSaveButton.setVisibility(View.GONE);
             mNextButton.setVisibility(View.VISIBLE);
         }
     }

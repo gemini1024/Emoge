@@ -9,6 +9,22 @@
         android:id="@+id/server_gif_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        android:id="@+id/server_no_image"
+        android:layout_width="@dimen/no_image_size"
+        android:layout_height="@dimen/no_image_size"
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/server_progress"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 </RelativeLayout>

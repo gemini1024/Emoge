@@ -7,7 +7,9 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.MyStoreGif;
 import com.emoge.app.emoge.model.StoreGif;
@@ -29,6 +31,8 @@ public class CategoryFavoriteFragment extends Fragment {
 
     @BindView(R.id.server_gif_list)
     RecyclerView mGifList;
+    @BindView(R.id.server_no_image)
+    ImageView mNoImage;
 
     private StoreGifAdapter mGifAdapter;
     private Realm realm;
@@ -88,6 +92,12 @@ public class CategoryFavoriteFragment extends Fragment {
         RealmResults<MyStoreGif> myStoreGifs = realm.where(MyStoreGif.class).findAll();
         for(MyStoreGif myStoreGif : myStoreGifs) {
             mGifAdapter.addItem(new StoreGif(myStoreGif.getTitle(), myStoreGif.getDownloadUrl(), -1));
+        }
+        if(mGifAdapter.isEmpty()) {
+            Glide.with(getContext()).load(R.drawable.img_no_image).into(mNoImage);
+            mNoImage.setVisibility(View.VISIBLE);
+        } else {
+            mNoImage.setVisibility(View.GONE);
         }
     }
 }

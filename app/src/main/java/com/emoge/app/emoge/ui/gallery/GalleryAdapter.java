@@ -24,7 +24,8 @@ import java.util.List;
  * Gallery 에 사진을 띄우기 위한 Adapter
  */
 
-class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
+class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
+        implements LocalImageLoadable {
     private final String LOG_TAG = GalleryAdapter.class.getSimpleName();
 
     private Fragment fragment;                  // 호출한 Fragment (GalleryFragment)
@@ -69,8 +70,13 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
         }
     }
 
+    @Override
+    public boolean isEmpty() {
+        return files.isEmpty();
+    }
+
     // 해당 포맷(format)만 추가 함.
-    boolean addItem(File file) {
+    public boolean addItem(File file) {
         if(addItemWithoutNotify(file)) {
             notifyItemInserted(files.size() - 1);
             return true;
@@ -78,7 +84,8 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
         return false;
     }
 
-    boolean addItemWithoutNotify(File file) {
+    @Override
+    public boolean addItemWithoutNotify(File file) {
         if(ImageFormatChecker.inFormat(file, format)) {
             files.add(file);
             return true;
@@ -87,14 +94,9 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
     }
 
     void clear() {
-        clearWithoutNotify();
+        files.clear();
         notifyDataSetChanged();
     }
-
-    void clearWithoutNotify() {
-        files.clear();
-    }
-
 
     @Override
     public int getItemCount() {
