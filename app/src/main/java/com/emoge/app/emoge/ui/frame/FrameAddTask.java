@@ -22,12 +22,12 @@ public class FrameAddTask extends AsyncTask<Intent, Void, Boolean> {
 
     private Activity activity;
     private RecyclerView framesView;
-    private FrameAddImplAdapter adapter;
+    private FrameAddable adapter;
     private int requestCode;
     private SweetAlertDialog dialog;
 
     public FrameAddTask(Activity activity, RecyclerView framesView,
-                        FrameAddImplAdapter adapter, int requestCode) {
+                        FrameAddable adapter, int requestCode) {
         this.activity = activity;
         this.framesView = framesView;
         this.adapter = adapter;

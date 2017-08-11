@@ -31,7 +31,8 @@ import java.util.List;
  * Frame -> Frame or Frame list -> Frame list
  */
 
-public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedListener {
+public class Correcter
+        implements OnBMClickListener, TabLayout.OnTabSelectedListener, BitmapModifiable {
     private static final String LOG_TAG = Correcter.class.getSimpleName();
 
     // 보정 타입 (Fragment 존재)
@@ -134,18 +135,20 @@ public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedList
     }
 
     // FPS 변경
+    @Override
     public int getCurrentDelay() {
         return currentDelay;
     }
 
-    void setCurrentDelay(int currentDelay) {
+    @Override
+    public void setCurrentDelay(int currentDelay) {
         this.currentDelay = currentDelay;
     }
 
 
     // 밝기 변경
-    @NonNull
-    List<Frame> setBrightness(@NonNull List<Frame> frames, int value) {
+    @Override @NonNull
+    public List<Frame> setBrightness(@NonNull List<Frame> frames, int value) {
         ArrayList<Frame> stageFrames = new ArrayList<>();
         Filter brightFilter = new Filter();
         brightFilter.addSubFilter(new BrightnessSubfilter(value));
@@ -157,8 +160,8 @@ public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedList
     }
 
     // 대비 변경
-    @NonNull
-    List<Frame> setContrast(@NonNull List<Frame> frames, int value) {
+    @Override @NonNull
+    public List<Frame> setContrast(@NonNull List<Frame> frames, int value) {
         ArrayList<Frame> stageFrames = new ArrayList<>();
         Filter contrastFilter = new Filter();
         contrastFilter.addSubFilter(new ContrastSubfilter((float)(value)/100.0f));
@@ -170,8 +173,8 @@ public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedList
     }
 
     // 감마 변경
-    @NonNull
-    List<Frame> setGamma(@NonNull List<Frame> frames, int value) {
+    @Override @NonNull
+    public List<Frame> setGamma(@NonNull List<Frame> frames, int value) {
         ArrayList<Frame> stageFrames = new ArrayList<>();
         Point[] rgbKnots;
         rgbKnots = new Point[3];
@@ -188,8 +191,8 @@ public class Correcter implements OnBMClickListener, TabLayout.OnTabSelectedList
     }
 
     // 필터 적용
-    @NonNull
-    List<Frame> setFilter(@NonNull List<Frame> frames, Filter filter) {
+    @Override @NonNull
+    public List<Frame> setFilter(@NonNull List<Frame> frames, Filter filter) {
         ArrayList<Frame> stageFrames = new ArrayList<>();
         for(Frame frame : frames) {
             stageFrames.add(new Frame(frame.getId(),

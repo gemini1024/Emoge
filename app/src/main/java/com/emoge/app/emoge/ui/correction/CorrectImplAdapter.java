@@ -7,7 +7,7 @@ import android.util.Log;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.History;
 import com.emoge.app.emoge.ui.frame.FrameAddImplAdapter;
-import com.emoge.app.emoge.ui.frame.FrameAdder;
+import com.emoge.app.emoge.ui.frame.LocalImageAccessible;
 import com.zomato.photofilters.imageprocessors.Filter;
 
 import java.util.ArrayList;
@@ -21,15 +21,15 @@ import java.util.List;
 public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctable {
     private static final String LOG_TAG = CorrectImplAdapter.class.getSimpleName();
 
-    private Correcter correcter;        // 보정 작업 처리
+    private BitmapModifiable correcter;        // 보정 작업 처리
     private List<Frame> stageFrames;    // 현 상태 Preview 용. Palette 제거 시 같이 제거
     private List<Frame> tmpFrames;      // View Looper 용. 변경된 이미지가 View 에서 내려온 후 제거
     private History modifiedValues;     // apply() 직전 get()하여 가져갈 수 있는 변경 내역
 
     public CorrectImplAdapter(@NonNull RecyclerView recyclerView,
                               @NonNull List<Frame> frames,
-                              @NonNull FrameAdder frameAdder,
-                              @NonNull Correcter correcter) {
+                              @NonNull LocalImageAccessible frameAdder,
+                              @NonNull BitmapModifiable correcter) {
         super(recyclerView, frames, frameAdder);
         this.correcter = correcter;
         this.stageFrames = new ArrayList<>();

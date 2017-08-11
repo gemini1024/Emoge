@@ -11,4 +11,6 @@ interface FrameAddable {
     boolean addFrameFromImages(@NonNull Intent imageData);
     boolean addFrameFromGif(@NonNull Intent imageData, int maxSize);
     boolean addFrameFromVideo(@NonNull Intent videoData, int maxSize);
+    int getMaxItemSize();
+    int getItemCount();
 }

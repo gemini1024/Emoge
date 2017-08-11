@@ -97,16 +97,16 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
     private void setSeekBarByType(int type) {
         switch (type) {
             case Correcter.CORRECT_BRIGHTNESS :
-                // -50 ~ 50
-                setSeekBarValues(null /* DefaultNumericTransformer */, -50, 50, mDefaultValue);
+                // -30 ~ 30
+                setSeekBarValues(null /* DefaultNumericTransformer */, -30, 30, mDefaultValue);
                 break;
             case Correcter.CORRECT_CONTRAST :
-                // -50 ~ 50
-                setSeekBarValues(SeekBarNumberTransformers.Subtract(100), 50, 150, mDefaultValue);
+                // -30 ~ 30
+                setSeekBarValues(SeekBarNumberTransformers.Subtract(100), 30, 130, mDefaultValue);
                 break;
             case Correcter.CORRECT_GAMMA :
-                // -50 ~ 50
-                setSeekBarValues(SeekBarNumberTransformers.Subtract(128), 78, 178, mDefaultValue);
+                // -30 ~ 30
+                setSeekBarValues(SeekBarNumberTransformers.Subtract(128), 58, 158, mDefaultValue);
                 break;
             default : // MOD_FRAME_DELAY (fps 변경)
                 // 10 ~ 2000

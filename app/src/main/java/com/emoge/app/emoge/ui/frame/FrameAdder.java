@@ -34,7 +34,7 @@ import java.util.List;
  */
 
 
-public class FrameAdder implements OnBMClickListener {
+public class FrameAdder implements OnBMClickListener, LocalImageAccessible {
     private static final String LOG_TAG = FrameAdder.class.getSimpleName();
 
     // Menu Position
@@ -86,39 +86,30 @@ public class FrameAdder implements OnBMClickListener {
                 MediaStore.Images.Media.MIME_TYPE };
 
         Cursor cursor = context.getContentResolver().query(selectedUri, columns, null, null, null);
-        cursor.moveToFirst();
+        if (cursor != null) {
+            cursor.moveToFirst();
 
-        int pathColumnIndex     = cursor.getColumnIndex( columns[0] );
-        int mimeTypeColumnIndex = cursor.getColumnIndex( columns[1] );
+            int pathColumnIndex     = cursor.getColumnIndex( columns[0] );
+            int mimeTypeColumnIndex = cursor.getColumnIndex( columns[1] );
 
-        String contentPath = cursor.getString(pathColumnIndex);
-        String mimeType    = cursor.getString(mimeTypeColumnIndex);
-        cursor.close();
+            String contentPath = cursor.getString(pathColumnIndex);
+            String mimeType    = cursor.getString(mimeTypeColumnIndex);
+            cursor.close();
 
-        if(mimeType.startsWith("image")) {
-            // image
+            if(mimeType.startsWith("image")) {
+                // image
+            }
+            else if(mimeType.startsWith("video")) {
+                // video
+            }
+
+            return contentPath;
         }
-        else if(mimeType.startsWith("video")) {
-            // video
-        }
-
-        return contentPath;
+        return selectedUri.getPath();
     }
 
-
-    @NonNull
-    public Bitmap loadBitmapSampleSize(int resourceId) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(activity.getResources(), resourceId, options);
-        options.inJustDecodeBounds = false;
-        options.inSampleSize = getSampleSize(options.outWidth, options.outHeight);
-        return BitmapFactory.decodeResource(activity.getResources(), resourceId, options);
-    }
-
-
-    @NonNull
-    Bitmap loadBitmapSampleSize(@NonNull Uri imageUri) throws IOException {
+    @Override @NonNull
+    public Bitmap loadBitmapSampleSize(@NonNull Uri imageUri) throws IOException {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(imageUri), null, options);
@@ -157,8 +148,8 @@ public class FrameAdder implements OnBMClickListener {
     }
 
 
-    @NonNull
-    List<Bitmap> loadBitmapsFromGif(@NonNull Uri imageUri, int maxSize) throws FileNotFoundException {
+    @Override @NonNull
+    public List<Bitmap> loadBitmapsFromGif(@NonNull Uri imageUri, int maxSize) throws FileNotFoundException {
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         GifDecoder decoder = new GifDecoder();
         decoder.read(activity.getContentResolver().openInputStream(imageUri));
@@ -184,8 +175,8 @@ public class FrameAdder implements OnBMClickListener {
 
 
 
-    @NonNull
-    List<Bitmap> captureVideo(@NonNull Uri videoUri, int maxSize, int startSec, int count, int fps) {
+    @Override @NonNull
+    public List<Bitmap> captureVideo(@NonNull Uri videoUri, int maxSize, int startSec, int count, int fps) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         List<Bitmap> bitmapArrayList = new ArrayList<>();
 
