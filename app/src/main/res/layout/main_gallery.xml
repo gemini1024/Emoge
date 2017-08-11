@@ -12,7 +12,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/main_bt_add_frame"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabSelectedTextColor="@android:color/white" />
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextColor="@color/colorGrayLabel" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/main_bt_add_frame"

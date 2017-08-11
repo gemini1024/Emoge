@@ -13,5 +13,6 @@
     <color name="colorWarning">#FFC000</color>
     <color name="colorCancel">#E60012</color>
     <color name="colorGallery">#111111</color>
+    <color name="colorGrayLabel">#9E9E9E</color>
     <color name="colorFrameCover">#50000000</color>
 </resources>

@@ -61,8 +61,10 @@ public class FrameAddTask extends AsyncTask<Intent, Void, Boolean> {
         dialog.dismissWithAnimation();
         if(aBoolean) {
             framesView.scrollToPosition(adapter.getItemCount()-1);
-        } else if(requestCode == FrameAdder.INTENT_GET_IMAGE) {
+        } else if(adapter.getMaxItemSize() != adapter.getItemCount()) {
             SweetDialogs.showErrorDialog(activity, R.string.err_add_file_title, R.string.err_add_file_content);
+        } else if(requestCode == FrameAdder.INTENT_GET_IMAGE) {
+            SweetDialogs.showErrorDialog(activity, R.string.err_add_file_title, R.string.err_add_frame_content);
         } else {
             SweetDialogs.showErrorDialog(activity, R.string.err_add_frames_title, R.string.err_add_frames_content);
         }

@@ -6,6 +6,7 @@ package com.emoge.app.emoge.ui.history;
 
 public interface HistoryAccessible {
     void addHistory();
+    boolean rollbackOneStep();
     void rollbackPosition(int position);
     void rollbackOrigin();
     void clearHistory();

@@ -92,6 +92,17 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
         }
     }
 
+    // 한 단계씩 되돌리기. ( 원본인경우 false )
+    @Override
+    public boolean rollbackOneStep() {
+        if(lastRefIndex < histories.size()-1) {
+            rollbackPosition(lastRefIndex+1);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private boolean isDefaultHistory(History history) {
         return history.getAppliedFilter() == null
                 && history.getModifiedBrightness() == Correcter.DEFAULT_BRIGHTNESS
@@ -145,6 +156,7 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
     @Override
     public void clearHistory() {
         histories.clear();
+        lastRefIndex = 0;
         if(!originalFrames.isEmpty()) {
             for(Frame frame : originalFrames) {
                 if(frame.getBitmap() != null) {

@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 보정 첫 선택창. ( Frame Delay 선택 창 )
     private TabLayout.Tab mMainTab;
-    private Correcter mCorrecter;
+    private TabLayout.OnTabSelectedListener mTabSelectedListener;
 
     // Preview
     private int mPreviewIndex;
@@ -149,14 +149,15 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mHandler = new Handler();
-        mCorrecter = new Correcter(this);
+        Correcter correcter = new Correcter(this);
+        mTabSelectedListener = correcter;
         FrameAdder frameAdder = new FrameAdder(this);
 
         addGallery();
-        addPalette(mCorrecter);
-        setFrameList(frameAdder, mCorrecter);
+        addPalette(correcter);
+        setFrameList(frameAdder, correcter);
         setHistory();
-        enableButtons(frameAdder, mCorrecter);
+        enableButtons(frameAdder, correcter);
     }
 
     private void addGallery() {
@@ -205,9 +206,21 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager stackLayoutManager = new LinearLayoutManager(this);
         stackLayoutManager.setStackFromEnd(true);
         mHistoryView.setLayoutManager(stackLayoutManager);
+        findViewById(R.id.main_bt_history).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleHistory((TextView) v);
+            }
+        });
+        findViewById(R.id.main_bt_history_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rollbackOneStep();
+            }
+        });
     }
 
-    private void enableButtons(FrameAdder frameAdder, final Correcter correcter) {
+    private void enableButtons(FrameAdder frameAdder, Correcter correcter) {
         ImageButton backButton = (ImageButton) findViewById(R.id.toolbar_back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,20 +236,43 @@ public class MainActivity extends AppCompatActivity {
                     SweetDialogs.showErrorDialog(MainActivity.this,
                             R.string.err_no_image_title, R.string.err_no_image_content);
                 } else if(mGalleryWindow.getVisibility() == View.VISIBLE) {
-                    mMainTab.select();
-                    correcter.onTabSelected(mMainTab);
-                    exitViews(mGalleryWindow);
-                    enterViews(mPaletteWindow);
-                    mNextButton.setVisibility(View.GONE);
-                    mSaveButton.setVisibility(View.VISIBLE);
-                    mHistoryAdapter.clearHistory();
-                    mHistoryAdapter.setOriginalFrames();
+                    showCorrectWindow();
                 }
             }
         });
         MenuButtons.buildAddButton(this,mAddMenu, frameAdder);
         MenuButtons.buildSelectButton(this,mCorrectMenu, correcter);
     }
+
+    private void toggleHistory(TextView toggleButton) {
+        if(mHistoryView.getVisibility() == View.GONE) {
+            enterViews(mHistoryView);
+            toggleButton.setText(R.string.hide);
+        } else {
+            exitViews(mHistoryView);
+            toggleButton.setText(R.string.history);
+        }
+    }
+
+    private void rollbackOneStep() {
+        if(!mHistoryAdapter.rollbackOneStep()) {
+            SweetDialogs.showErrorDialog(this,
+                    R.string.err_history_rollback_title, R.string.err_history_rollback_content);
+        }
+
+    }
+
+    private void showCorrectWindow() {
+        mMainTab.select();
+        mTabSelectedListener.onTabSelected(mMainTab);
+        exitViews(mGalleryWindow);
+        enterViews(mPaletteWindow);
+        mNextButton.setVisibility(View.GONE);
+        mSaveButton.setVisibility(View.VISIBLE);
+        mHistoryAdapter.clearHistory();
+        mHistoryAdapter.setOriginalFrames();
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -286,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public synchronized void onPaletteEvent(Filter filter) {
         mMainTab.select();
-        mCorrecter.onTabSelected(mMainTab);
+        mTabSelectedListener.onTabSelected(mMainTab);
         mHandler.removeCallbacks(mTask);
         mFrameAdapter.setFilter(filter);
         mHistoryAdapter.addHistory();

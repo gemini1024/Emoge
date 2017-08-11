@@ -19,4 +19,5 @@
     <dimen name="text_padding_width">2dp</dimen>
     <dimen name="text_caption_size">10sp</dimen>
     <dimen name="history_width">52dp</dimen>
+    <dimen name="history_toggle_button">48dp</dimen>
 </resources>
