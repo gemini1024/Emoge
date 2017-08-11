@@ -9,9 +9,9 @@
     <color name="colorPaletteLabel">#111111</color>
     <color name="colorBoomDim">#AA000000</color>
     <color name="colorProgress">@color/colorAccent</color>
-    <color name="colorConfirm">#A5DC86</color>
+    <color name="colorConfirm">#009684</color>
     <color name="colorWarning">#FFC000</color>
     <color name="colorCancel">#E60012</color>
     <color name="colorGallery">#111111</color>
-    <color name="colorFrameCover">#33000000</color>
+    <color name="colorFrameCover">#50000000</color>
 </resources>

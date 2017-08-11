@@ -3,6 +3,7 @@ package com.emoge.app.emoge.ui.frame;
 import android.graphics.Point;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.emoge.app.emoge.R;
 import com.makeramen.dragsortadapter.DragSortAdapter;
@@ -21,6 +22,8 @@ class FrameViewHolder extends DragSortAdapter.ViewHolder implements
 
     @BindView(R.id.frame_item_image)
     ImageView image;
+    @BindView(R.id.frame_item_number)
+    TextView number;
 
     FrameViewHolder(DragSortAdapter<?> dragSortAdapter, View itemView) {
         super(dragSortAdapter, itemView);

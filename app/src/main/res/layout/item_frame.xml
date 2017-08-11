@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@android:color/black"
+    android:padding="@dimen/border_width">
 
     <com.emoge.app.emoge.ui.view.SquareImageView
         android:id="@+id/frame_item_image"
@@ -11,10 +12,19 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <TextView
+        android:id="@+id/frame_item_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:background="@color/colorFrameCover"
-        android:visibility="gone" />
+        android:includeFontPadding="false"
+        android:paddingBottom="@dimen/text_padding_height"
+        android:paddingEnd="@dimen/text_padding_width"
+        android:paddingStart="@dimen/text_padding_width"
+        android:paddingTop="@dimen/text_padding_height"
+        android:textColor="@android:color/primary_text_dark"
+        android:textSize="@dimen/text_caption_size" />
 
-</LinearLayout>
+</RelativeLayout>

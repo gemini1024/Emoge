@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/unit_dimen"
         android:layout_marginStart="@dimen/unit_dimen"
+        app:dsb_indicatorColor="@color/colorAccent"
         app:dsb_indicatorElevation="0dp"
         app:dsb_progressColor="@color/colorProgress"
         app:layout_constraintBottom_toBottomOf="parent"

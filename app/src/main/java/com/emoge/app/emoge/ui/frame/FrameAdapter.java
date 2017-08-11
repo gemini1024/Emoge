@@ -56,6 +56,7 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
     @Override
     public boolean move(int fromPosition, int toPosition) {
         frames.add(toPosition, frames.remove(fromPosition));
+        notifyDataSetChanged();
         return true;
     }
 
@@ -75,6 +76,7 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
         holder.image.postInvalidate();
         setDialog(holder.image, frame.getId());
         holder.image.setOnLongClickListener(holder);
+        holder.number.setText(String.valueOf(position+1));
     }
 
     @Override

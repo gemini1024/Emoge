@@ -75,4 +75,5 @@
     <string name="next">다음</string>
     <string name="remove_favorite">담아가기 해제 되었습니다.</string>
     <string name="add_favorite">움짤을 담았습니다</string>
+    <string name="video_capture_label">비디오 캡쳐 설정</string>
 </resources>

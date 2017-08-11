@@ -52,7 +52,7 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
     public void onBindViewHolder(final GalleryViewHolder holder, int position) {
         final File file = files.get(position);
 
-        Glide.with(fragment).load(file).apply(placeholderOption).into(holder.image);
+        Glide.with(fragment).asBitmap().load(file).apply(placeholderOption).into(holder.image);
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +63,10 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
                 }
             }
         });
+        if(ImageFormatChecker.GIF_FORMAT == format) {
+            holder.type.setText("GIF");
+            holder.type.setVisibility(View.VISIBLE);
+        }
     }
 
     // 해당 포맷(format)만 추가 함.

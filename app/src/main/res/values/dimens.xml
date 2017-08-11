@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="border_width">1dp</dimen>
     <dimen name="tiny_dimen">2dp</dimen>
     <dimen name="small_dimen">4dp</dimen>
     <dimen name="half_unit_dimen">8dp</dimen>
@@ -13,5 +14,8 @@
     <dimen name="icon_size">40dp</dimen>
     <dimen name="card_radius">8dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="text_padding_height">-8dp</dimen>
+    <dimen name="text_padding_width">2dp</dimen>
+    <dimen name="text_caption_size">10sp</dimen>
     <dimen name="history_width">52dp</dimen>
 </resources>
