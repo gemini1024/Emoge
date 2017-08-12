@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -41,7 +42,6 @@ import com.emoge.app.emoge.ui.view.MenuButtons;
 import com.emoge.app.emoge.utils.GifSaveTask;
 import com.emoge.app.emoge.utils.dialog.EditorDialog;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
-import com.github.chrisbanes.photoview.PhotoView;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.zomato.photofilters.imageprocessors.Filter;
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_save)        ImageButton mSaveButton;            // (Toolbar)
     @BindView(R.id.main_bt_correction)  BoomMenuButton mCorrectMenu;        // 보정 필터 메뉴
     @BindView(R.id.main_history)        RecyclerView mHistoryView;          // 보정 History List
-    @BindView(R.id.main_preview)        PhotoView mPreview;                 // 보정 결과 미리보기
+    @BindView(R.id.main_preview)        ImageView mPreview;                 // 보정 결과 미리보기
     @BindView(R.id.main_fps_text)       TextView mFpsTextView;              // Frame Delay 확인
     @BindView(R.id.main_palette_window) ConstraintLayout mPaletteWindow;    // 보정 선택창 포함된 layout
 
