@@ -88,4 +88,10 @@
     <string name="history">history</string>
     <string name="hide">숨기기</string>
     <string name="back">back</string>
+    <string name="navigation_open">이동화면 열림</string>
+    <string name="navigation_close">이동화면 닫힘</string>
+    <string name="best_image">이 시각 최고의 움짤</string>
+    <string name="navigation_server">서버로 이동</string>
+    <string name="navigation_making_gif">움짤 생성</string>
+    <string name="navigation_license">license</string>
 </resources>

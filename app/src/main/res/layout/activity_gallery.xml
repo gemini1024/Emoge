@@ -1,103 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:fragment="com.emoge.app.emoge.ui.gallery.GalleryActivity">
+    android:orientation="vertical">
 
-    <include layout="@layout/toolbar_main" />
+    <!--Gallery 용 Toolbar( drawer 로 인한 밀림현상 해결 )-->
+    <include layout="@layout/toolbar_gallery" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.38" />
-
-    <TextView
-        android:id="@+id/gallery_best_label"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/toolbar_height"
-        android:background="@color/colorBoomDim"
-        android:gravity="center"
-        android:padding="@dimen/half_unit_dimen"
-        android:text="이 시각 최고의 움짤"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.daimajia.androidviewhover.BlurLayout
-        android:id="@+id/gallery_hover"
-        android:layout_width="0dp"
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/gallery_drawer"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="@dimen/half_unit_dimen"
-        app:layout_constraintBottom_toBottomOf="@id/guideline"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gallery_best_label">
+        android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/gallery_best"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter" />
-    </com.daimajia.androidviewhover.BlurLayout>
+        <include layout="@layout/gallery_content" />
 
-    <!--Gallery-->
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/gallery_window"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline">
+        <include layout="@layout/navigation" />
 
+    </android.support.v4.widget.DrawerLayout>
 
-        <TextView
-            android:id="@+id/gallery_title"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/toolbar_height"
-            android:background="@drawable/toolbar_gallery_bg"
-            android:gravity="center"
-            android:text="My Gallery"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <android.support.v7.widget.ContentFrameLayout
-            android:id="@+id/gallery_container"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/gallery_title">
-
-        </android.support.v7.widget.ContentFrameLayout>
-
-    </android.support.constraint.ConstraintLayout>
-
-    <!--Add Buttons-->
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/gallery_bt_making"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/unit_dimen"
-        android:contentDescription="@string/menu_add_image"
-        android:src="@drawable/ic_add"
-        app:backgroundTint="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

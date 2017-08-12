@@ -7,7 +7,11 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -43,6 +47,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class GalleryActivity extends AppCompatActivity {
     private final String LOG_TAG = GalleryActivity.class.getSimpleName();
 
+    @BindView(R.id.gallery_drawer)  DrawerLayout mNavigationDrawer;
     @BindView(R.id.gallery_best)    ImageView mBestPhoto;
     @BindView(R.id.gallery_window)  ConstraintLayout mGalleryWindow;
 
@@ -57,13 +62,32 @@ public class GalleryActivity extends AppCompatActivity {
         Glide.with(this).load(R.drawable.img_loading).into(mBestPhoto);     // holder
         loadGifImages();
 
+        addNavigation();
         addGalleryFragment();
         enterGallery();
     }
 
+    // Navigation Drawer 추가
+    private void addNavigation() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mNavigationDrawer, (Toolbar)findViewById(R.id.toolbar),
+                R.string.navigation_open, R.string.navigation_close) {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                ConstraintLayout drawerLayout = (ConstraintLayout)findViewById(R.id.navigation_container);
+                ConstraintLayout contentLayout = (ConstraintLayout)findViewById(R.id.gallery_contents);
+                contentLayout.setTranslationX(slideOffset*drawerLayout.getWidth());
+                drawerLayout.bringChildToFront(drawerView);
+                drawerLayout.requestLayout();
+            }
+        };
+        mNavigationDrawer.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
     // Gallery Fragment 불러오기
     private void addGalleryFragment() {
-        findViewById(R.id.toolbar_back).setVisibility(View.GONE);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         mGallery = GalleryFragment.newInstance(MainApplication.defaultDir,
@@ -89,14 +113,6 @@ public class GalleryActivity extends AppCompatActivity {
     public void notifyGallery() {
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().detach(mGallery).attach(mGallery).commit();
-    }
-
-
-    // 움짤 생성하러 가기
-    @OnClick(R.id.gallery_bt_making)
-    void startMakingGif() {
-        overridePendingTransition(0, android.R.anim.fade_in);
-        startActivity(new Intent(this, MainActivity.class));
     }
 
 
@@ -160,19 +176,48 @@ public class GalleryActivity extends AppCompatActivity {
                         .duration(HoverViews.BLUR_DURATION)
                         .playOn(v);
 
-                NetworkStatus.executeWithCheckingNetwork(GalleryActivity.this, new NetworkStatus.RequireIntentTask() {
-                    @Override
-                    public void Task() {
-                        overridePendingTransition(0, android.R.anim.fade_in);
-                        startActivity(new Intent(GalleryActivity.this, ServerActivity.class));
-                    }
-                });
+                connectToServer();
             }
         });
     }
 
-    @Override
-    public void onBackPressed() {
+
+
+    // Navigation -
+    // 서버로
+    @OnClick({R.id.navigation_server_icon, R.id.navigation_server})
+    void connectToServer() {
+        NetworkStatus.executeWithCheckingNetwork(GalleryActivity.this, new NetworkStatus.RequireIntentTask() {
+            @Override
+            public void Task() {
+                overridePendingTransition(0, android.R.anim.fade_in);
+                startActivity(new Intent(GalleryActivity.this, ServerActivity.class));
+            }
+        });
+    }
+
+    // 움짤 생성하러 가기
+    @OnClick({R.id.navigation_making_gif_icon, R.id.navigation_making_gif, R.id.gallery_bt_making})
+    void startMakingGif() {
+        overridePendingTransition(0, android.R.anim.fade_in);
+        startActivity(new Intent(this, MainActivity.class));
+    }
+
+    // License 보기
+    @OnClick({R.id.navigation_license_icon, R.id.navigation_license})
+    void showLicense() {
+        // TODO : 라이선스 화면
+    }
+
+    @OnClick({R.id.navigation_exit_icon, R.id.navigation_exit})
+    void exitApp() {
+        if(mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+            mNavigationDrawer.closeDrawer(GravityCompat.START);
+        }
+        showExitAppDialog();
+    }
+
+    private void showExitAppDialog() {
         SweetDialogs.showExitAppDialog(this).setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -181,5 +226,14 @@ public class GalleryActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+            mNavigationDrawer.closeDrawer(GravityCompat.START);
+        } else {
+            showExitAppDialog();
+        }
     }
 }
