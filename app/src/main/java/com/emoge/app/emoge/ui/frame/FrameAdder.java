@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -26,6 +25,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 /**
  * Created by jh on 17. 7. 26.
@@ -177,13 +178,13 @@ public class FrameAdder implements OnBMClickListener, BitmapLoadable {
 
     @Override @NonNull
     public List<Bitmap> captureVideo(@NonNull Uri videoUri, int maxSize, int startSec, int count, int fps) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        FFmpegMediaMetadataRetriever retriever = new FFmpegMediaMetadataRetriever();
         List<Bitmap> bitmapArrayList = new ArrayList<>();
 
         int addCount = Math.min(count, maxSize);
         retriever.setDataSource(getRealPathFromUri(activity, videoUri));
         for(int i = 0; i < addCount; i++){
-            Bitmap videoFrame = retriever.getFrameAtTime((startSec + i*fps)*1000L, MediaMetadataRetriever.OPTION_NEXT_SYNC);
+            Bitmap videoFrame = retriever.getFrameAtTime((startSec + i*fps)*1000L, FFmpegMediaMetadataRetriever.OPTION_CLOSEST);
             if(videoFrame != null) {
                 bitmapArrayList.add(resizeVideoFrame(videoFrame));
             } else {

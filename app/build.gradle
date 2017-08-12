@@ -42,6 +42,7 @@ dependencies {
     }
     compile 'com.waynejo:androidndkgif:0.3.2'
     compile 'com.github.zomato:androidphotofilters:1.0.1'
+    compile 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.snatik:storage:2.1.0'
@@ -65,8 +66,6 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-annotations:25.3.1'
     compile 'com.android.support:support-compat:25.3.1'
-    compile 'com.github.elevenetc:textsurface:0.9.1'
-    compile 'com.flaviofaria:kenburnsview:1.0.7'
     compile 'com.android.support:support-v4:25.3.1'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     testCompile 'junit:junit:4.12'
