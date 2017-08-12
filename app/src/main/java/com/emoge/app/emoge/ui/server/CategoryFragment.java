@@ -2,6 +2,7 @@ package com.emoge.app.emoge.ui.server;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.model.MyStoreGif;
 import com.emoge.app.emoge.model.StoreGif;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.google.firebase.database.DataSnapshot;
@@ -25,15 +27,19 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by jh on 17. 8. 3.
  * 서버의 카테고리별 View (Firebase 이용)
  */
-public class CategoryFragment extends Fragment {
+public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private final String LOG_TAG = CategoryFragment.class.getSimpleName();
     private static final String ARG_CATEGORY = "category";
 
+    @BindView(R.id.server_gif_list_container)
+    SwipeRefreshLayout mRefresher;
     @BindView(R.id.server_gif_list)
     RecyclerView mGifList;
     @BindView(R.id.server_no_image)
@@ -42,6 +48,7 @@ public class CategoryFragment extends Fragment {
     ProgressBar mProgress;
 
     private StoreGifAdapter mGifAdapter;
+    private Realm realm;
 
 
     public CategoryFragment() {
@@ -55,17 +62,31 @@ public class CategoryFragment extends Fragment {
         return fragment;
     }
 
+    public static CategoryFragment newInstance() {
+        return new CategoryFragment();
+    }
+
+    private boolean isFavoriteCategory() {
+        return getArguments() == null || getArguments().getString(ARG_CATEGORY) == null;
+    }
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_server, container, false);
         ButterKnife.bind(this, view);
+        realm = Realm.getDefaultInstance();
 
         // RecyclerView 설정
-        mGifAdapter = new StoreGifAdapter(this, new ArrayList<StoreGif>());
+        mRefresher.setOnRefreshListener(this);
+        mGifAdapter = new StoreGifAdapter(this, new ArrayList<StoreGif>(), realm);
         mGifList.setHasFixedSize(true);
         mGifList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mGifList.setAdapter(mGifAdapter);
+
+        if(isFavoriteCategory()) {
+            loadFavoriteGifImages();
+        }
 
         return view;
     }
@@ -73,29 +94,50 @@ public class CategoryFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(mGifAdapter != null) {
-            mGifAdapter.closeRealm();
+        if( realm != null ) {
+            realm.close();
         }
     }
 
     // 새로고침
     @Override
+    public void onRefresh() {
+        mRefresher.setRefreshing(false);
+        if(isFavoriteCategory()) {
+            loadFavoriteGifImages();
+        } else {
+            loadServerGifImages();
+        }
+    }
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(mGifAdapter != null) {
             if(isVisibleToUser) {
-                if(!mGifAdapter.isEmpty()) {
-                    mGifAdapter.clear();
-                }
-                loadGifImages();
+                onRefresh();
             } else {
                 mGifAdapter.clear();
             }
         }
     }
 
+
+    // Realm 에서 불러오기
+    private void loadFavoriteGifImages() {
+        RealmResults<MyStoreGif> myStoreGifs = realm.where(MyStoreGif.class).findAll();
+        for(MyStoreGif myStoreGif : myStoreGifs) {
+            mGifAdapter.addItem(new StoreGif(myStoreGif.getTitle(), myStoreGif.getDownloadUrl(), -1));
+        }
+        if(mGifAdapter.isEmpty()) {
+            Glide.with(getContext()).load(R.drawable.img_no_image).into(mNoImage);
+            mNoImage.setVisibility(View.VISIBLE);
+        } else {
+            mNoImage.setVisibility(View.GONE);
+        }
+    }
+
     // 서버연결 ( Firebase )
-    private void loadGifImages() {
+    private void loadServerGifImages() {
         mProgress.setVisibility(View.VISIBLE);
         DatabaseReference database = FirebaseDatabase.getInstance().getReference(
                 getArguments().getString(ARG_CATEGORY, getString(R.string.category_store)));
@@ -127,4 +169,5 @@ public class CategoryFragment extends Fragment {
             }
         });
     }
+
 }

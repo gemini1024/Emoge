@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -29,11 +30,14 @@ class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
 
     private Fragment fragment;
     private LocalImageLoadable adapter;
+    private SwipeRefreshLayout refresher;
     private ImageView noImageView;
 
-    ReadAlbumTask(Fragment fragment, LocalImageLoadable adapter, ImageView noImageView) {
+    ReadAlbumTask(Fragment fragment, LocalImageLoadable adapter,
+                  SwipeRefreshLayout refresher, ImageView noImageView) {
         this.fragment = fragment;
         this.adapter = adapter;
+        this.refresher = refresher;
         this.noImageView = noImageView;
     }
 
@@ -49,6 +53,7 @@ class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean hasLoaded) {
         super.onPostExecute(hasLoaded);
+        refresher.setRefreshing(false);
         if(!hasLoaded || adapter.isEmpty()) {
             Glide.with(fragment.getContext()).load(R.drawable.img_no_image).into(noImageView);
             noImageView.setVisibility(View.VISIBLE);

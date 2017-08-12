@@ -5,11 +5,17 @@
     android:padding="@dimen/half_unit_dimen"
     tools:fragment="com.emoge.app.emoge.ui.server.CategoryFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/server_gif_list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/server_gif_list_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/server_gif_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <ImageView
         android:id="@+id/server_no_image"

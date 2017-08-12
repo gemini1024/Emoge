@@ -37,12 +37,12 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
     private RequestOptions placeholderOption;
     private Realm realm;
 
-    StoreGifAdapter(Fragment fragment, ArrayList<StoreGif> gifs) {
+    StoreGifAdapter(Fragment fragment, ArrayList<StoreGif> gifs, Realm realm) {
         this.fragment = fragment;
         this.gifs = gifs;
         this.placeholderOption = new RequestOptions()
                 .format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_loading);
-        this.realm = Realm.getDefaultInstance();
+        this.realm = realm;
     }
 
     @Override
@@ -156,7 +156,4 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
         return storeGif.getFavorite() == -1;
     }
 
-    public void closeRealm() {
-        realm.close();
-    }
 }

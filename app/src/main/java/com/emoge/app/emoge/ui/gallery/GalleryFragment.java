@@ -2,6 +2,7 @@ package com.emoge.app.emoge.ui.gallery;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
@@ -19,7 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GalleryFragment extends Fragment {
+public class GalleryFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private final String LOG_TAG = GalleryFragment.class.getSimpleName();
 
     private static final String ARG_DIR_PATH    = "dir_path";
@@ -27,6 +28,8 @@ public class GalleryFragment extends Fragment {
     private String mDirPath;        // Nullable. (움짤 생성 화면에서 null)
     private int mImageType;         // 포함시킬 파일 Format (ImageFormatChecker)
 
+    @BindView(R.id.gallery_container)
+    SwipeRefreshLayout mRefresher;
     @BindView(R.id.gallery)
     RecyclerView mGallery;
     @BindView(R.id.gallery_no_image)
@@ -61,8 +64,8 @@ public class GalleryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
         ButterKnife.bind(this, view);
 
-
         // RecyclerView 설정
+        mRefresher.setOnRefreshListener(this);
         List<String> fileFormat = mImageType == ImageFormatChecker.IMAGE_TYPE ?
                 ImageFormatChecker.IMAGE_FORMAT : ImageFormatChecker.GIF_FORMAT;
         mGalleryAdapter = new GalleryAdapter(this, fileFormat, new ArrayList<File>(), TextUtils.isEmpty(mDirPath));
@@ -76,8 +79,12 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mGalleryAdapter.clear();
-        new ReadAlbumTask(this, mGalleryAdapter, mNoImage).execute(mDirPath);
+        onRefresh();
     }
 
+    @Override
+    public void onRefresh() {
+        mGalleryAdapter.clear();
+        new ReadAlbumTask(this, mGalleryAdapter, mRefresher, mNoImage).execute(mDirPath);
+    }
 }
