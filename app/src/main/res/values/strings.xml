@@ -94,4 +94,6 @@
     <string name="navigation_server">서버로 이동</string>
     <string name="navigation_making_gif">움짤 생성</string>
     <string name="navigation_license">license</string>
+    <string name="remove_file">파일이 삭제되었습니다.</string>
+    <string name="err_remove_file">파일이 삭제에 실패 했습니다 다시 시도해 주세요.</string>
 </resources>

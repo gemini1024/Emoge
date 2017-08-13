@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -50,7 +51,7 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(final GalleryViewHolder holder, int position) {
+    public void onBindViewHolder(final GalleryViewHolder holder, final int position) {
         final File file = files.get(position);
 
         Glide.with(fragment).asBitmap().load(file).apply(placeholderOption).into(holder.image);
@@ -60,13 +61,30 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
                 if(canSendMsg) {
                     EventBus.getDefault().post(file);
                 } else {
-                    new ImageDialog(fragment.getActivity(), Uri.fromFile(file)).show();
+                    final ImageDialog imageDialog = new ImageDialog(fragment.getActivity(), Uri.fromFile(file));
+                    imageDialog.setRemoveButtonListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            removeFile(position);
+                            imageDialog.dismiss();
+                        }
+                    });
+                    imageDialog.show();
                 }
             }
         });
         if(ImageFormatChecker.GIF_FORMAT == format) {
             holder.type.setText("GIF");
             holder.type.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void removeFile(int position) {
+        if(files.get(position).delete()) {
+            removeItem(position);
+            Toast.makeText(fragment.getContext(), R.string.remove_file, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(fragment.getContext(), R.string.err_remove_file, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -91,6 +109,12 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
             return true;
         }
         return false;
+    }
+
+    private void removeItem(int position) {
+        files.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, files.size()-position);
     }
 
     void clear() {

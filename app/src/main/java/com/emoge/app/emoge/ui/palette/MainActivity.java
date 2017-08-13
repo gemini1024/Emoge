@@ -321,15 +321,17 @@ public class MainActivity extends AppCompatActivity {
     // 필터 적용 ( Message from Correcter )
     @Subscribe(threadMode = ThreadMode.MAIN)
     public synchronized void onPaletteEvent(Filter filter) {
-        mMainTab.select();
-        mTabSelectedListener.onTabSelected(mMainTab);
         mHandler.removeCallbacks(mTask);
+        mHistoryAdapter.addHistory();
+        mFrameAdapter.apply();
         mFrameAdapter.setFilter(filter);
         mHistoryAdapter.addHistory();
         mFrameAdapter.apply();
         mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
         mHandler.postDelayed(mTask, mFrameAdapter.getFps());
         mFrameAdapter.clearPreviousFrames();    // View 에서 띄우는 이미지를 변경했으므로 -> 제거
+        mMainTab.select();
+        mTabSelectedListener.onTabSelected(mMainTab);
     }
 
 
@@ -338,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
     public void receiveFrameStatusMessage(FrameStatusMessage message) {
         if(message.equals(FrameStatusMessage.FULL)) {
         } else if(message.equals(FrameStatusMessage.NOT_FULL)){
-        } else {
+        } else {    // EMPTY
             while(mGalleryWindow.getVisibility() != View.VISIBLE) {
                 MainActivity.this.onBackPressed();
             }

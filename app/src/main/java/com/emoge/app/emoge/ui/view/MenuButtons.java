@@ -53,7 +53,6 @@ public class MenuButtons {
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
                     .normalImageRes(imageIds.getResourceId(i,0))
-                    .imagePadding(IMAGE_PADDING)
                     .normalText(titles[i])
                     .normalColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
                     .highlightedColor(ContextCompat.getColor(context, R.color.colorPrimary))

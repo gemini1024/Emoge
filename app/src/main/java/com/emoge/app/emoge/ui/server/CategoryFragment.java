@@ -125,6 +125,7 @@ public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnR
     // Realm 에서 불러오기
     private void loadFavoriteGifImages() {
         RealmResults<MyStoreGif> myStoreGifs = realm.where(MyStoreGif.class).findAll();
+        mGifAdapter.clear();
         for(MyStoreGif myStoreGif : myStoreGifs) {
             mGifAdapter.addItem(new StoreGif(myStoreGif.getTitle(), myStoreGif.getDownloadUrl(), -1));
         }

@@ -26,11 +26,11 @@
         <item>NightWhisper</item>
     </string-array>
     <array name="correct_image">
-        <item>@drawable/ic_healing</item>
-        <item>@drawable/ic_healing</item>
-        <item>@drawable/ic_healing</item>
-        <item>@drawable/ic_healing</item>
-        <item>@drawable/ic_healing</item>
+        <item>@drawable/img_filter_star_lit</item>
+        <item>@drawable/img_filter_blue_mess</item>
+        <item>@drawable/img_filter_awe_struck_vibe</item>
+        <item>@drawable/img_filter_lime_stutter</item>
+        <item>@drawable/img_filter_night_whisper</item>
     </array>
 
     <!--category-->
