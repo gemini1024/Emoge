@@ -47,4 +47,43 @@
         <item>고화질</item>
         <item>초고화질</item>
     </string-array>
+
+
+    <!--license-->
+    <string-array name="licenses_title">
+        <item>Glide</item>
+        <item>Android NDK GIF</item>
+        <item>AndroidPhotoFilters</item>
+        <item>FFmpegMediaMetadataRetriever</item>
+        <item>ButterKnife</item>
+        <item>EventBus</item>
+        <item>Android Storage</item>
+        <item>Firebase</item>
+        <item>SweetAlertDialog</item>
+        <item>DragSortAdapter</item>
+        <item>AndroidViewHover</item>
+        <item>PhotoView</item>
+        <item>TedPermission</item>
+        <item>BoomMenu</item>
+        <item>Discrete SeekBar</item>
+        <item>FancyShowCaseView</item>
+    </string-array>
+    <string-array name="licenses_content">
+        <item>BSD, part MIT and Apache 2.0. \n https://github.com/bumptech/glide</item>
+        <item>Apache 2.0. \n https://github.com/waynejo/android-ndk-gif</item>
+        <item>Apache 2.0. \n https://github.com/Zomato/AndroidPhotoFilters</item>
+        <item>Apache 2.0. \n https://github.com/wseemann/FFmpegMediaMetadataRetriever</item>
+        <item>Apache 2.0. \n https://github.com/JakeWharton/butterknife</item>
+        <item>Apache 2.0. \n https://github.com/greenrobot/EventBus</item>
+        <item>Apache 2.0. \n https://github.com/snatik/android-storage</item>
+        <item>https://firebase.google.com/</item>
+        <item>MIT \n https://github.com/pedant/sweet-alert-dialog</item>
+        <item>Apache 2.0. \n https://github.com/vinc3m1/DragSortAdapter</item>
+        <item>https://github.com/daimajia/AndroidViewHover</item>
+        <item>Apache 2.0. \n https://github.com/chrisbanes/PhotoView</item>
+        <item>Apache 2.0. \n https://github.com/ParkSangGwon/TedPermission</item>
+        <item>Apache 2.0. \n https://github.com/Nightonke/BoomMenu</item>
+        <item>Apache 2.0. \n https://github.com/AnderWeb/discreteSeekBar</item>
+        <item>Apache 2.0. \n https://github.com/faruktoptas/FancyShowCaseView</item>
+    </string-array>
 </resources>

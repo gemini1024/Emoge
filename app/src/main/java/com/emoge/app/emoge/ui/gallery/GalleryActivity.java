@@ -3,6 +3,7 @@ package com.emoge.app.emoge.ui.gallery;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +28,7 @@ import com.daimajia.androidviewhover.BlurLayout;
 import com.emoge.app.emoge.MainApplication;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.StoreGif;
+import com.emoge.app.emoge.ui.license.LicenseActivity;
 import com.emoge.app.emoge.ui.palette.MainActivity;
 import com.emoge.app.emoge.ui.server.ServerActivity;
 import com.emoge.app.emoge.ui.view.HoverViews;
@@ -43,13 +45,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import me.toptas.fancyshowcase.FancyShowCaseView;
+import me.toptas.fancyshowcase.FocusShape;
 
 public class GalleryActivity extends AppCompatActivity {
     private final String LOG_TAG = GalleryActivity.class.getSimpleName();
 
-    @BindView(R.id.gallery_drawer)  DrawerLayout mNavigationDrawer;
-    @BindView(R.id.gallery_best)    ImageView mBestPhoto;
-    @BindView(R.id.gallery_window)  ConstraintLayout mGalleryWindow;
+    @BindView(R.id.gallery_drawer)
+    DrawerLayout mNavigationDrawer;
+    @BindView(R.id.gallery_best)
+    ImageView mBestPhoto;
+    @BindView(R.id.gallery_window)
+    ConstraintLayout mGalleryWindow;
 
     private StoreGif mBestFavoriteGif;
     private Fragment mGallery;
@@ -65,19 +72,21 @@ public class GalleryActivity extends AppCompatActivity {
         addNavigation();
         addGalleryFragment();
         enterGallery();
+        startShowcase();
     }
+
 
     // Navigation Drawer 추가
     private void addNavigation() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mNavigationDrawer, (Toolbar)findViewById(R.id.toolbar),
+                this, mNavigationDrawer, (Toolbar) findViewById(R.id.toolbar),
                 R.string.navigation_open, R.string.navigation_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                ConstraintLayout drawerLayout = (ConstraintLayout)findViewById(R.id.navigation_container);
-                ConstraintLayout contentLayout = (ConstraintLayout)findViewById(R.id.gallery_contents);
-                contentLayout.setTranslationX(slideOffset*drawerLayout.getWidth());
+                ConstraintLayout drawerLayout = (ConstraintLayout) findViewById(R.id.navigation_container);
+                ConstraintLayout contentLayout = (ConstraintLayout) findViewById(R.id.gallery_contents);
+                contentLayout.setTranslationX(slideOffset * drawerLayout.getWidth());
                 drawerLayout.bringChildToFront(drawerView);
                 drawerLayout.requestLayout();
             }
@@ -109,6 +118,20 @@ public class GalleryActivity extends AppCompatActivity {
         mGalleryWindow.setVisibility(View.GONE);
     }
 
+    private void startShowcase() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                new FancyShowCaseView.Builder(GalleryActivity.this)
+                        .focusOn(findViewById(R.id.gallery_bt_making))
+                        .focusShape(FocusShape.CIRCLE)
+                        .title(getString(R.string.showcase_making_gif))
+                        .build()
+                        .show();
+            }
+        }, 500);
+    }
+
     // 변경 사항 적용
     public void notifyGallery() {
         FragmentManager fm = getSupportFragmentManager();
@@ -123,11 +146,11 @@ public class GalleryActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(LOG_TAG, dataSnapshot.toString());
-                if(dataSnapshot.getValue(StoreGif.class) != null) {
+                if (dataSnapshot.getValue(StoreGif.class) != null) {
                     mBestFavoriteGif = dataSnapshot.getChildren().iterator().next().getValue(StoreGif.class);
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         StoreGif storeGif = childSnapshot.getValue(StoreGif.class);
-                        if( mBestFavoriteGif.getFavorite() < storeGif.getFavorite()) {
+                        if (mBestFavoriteGif.getFavorite() < storeGif.getFavorite()) {
                             mBestFavoriteGif = storeGif;
                         }
                     }
@@ -144,7 +167,7 @@ public class GalleryActivity extends AppCompatActivity {
 
     // Server 에서 인기 있는 움짤 가져와서 보여주기
     private void setBestFavoriteGif() {
-        if(mBestFavoriteGif == null) {
+        if (mBestFavoriteGif == null) {
             return;
         }
         Glide.with(GalleryActivity.this)
@@ -157,7 +180,7 @@ public class GalleryActivity extends AppCompatActivity {
 
     // 인기 있는 움짤 칸을 덮어씌울 Hover View 설정
     private void setHoverByGif(StoreGif storeGif) {
-        HoverViews hover = new HoverViews(this, (BlurLayout)findViewById(R.id.gallery_hover));
+        HoverViews hover = new HoverViews(this, (BlurLayout) findViewById(R.id.gallery_hover));
         hover.buildHoverView();
         hover.setText(storeGif.getTitle());
         hover.setDownloadButton(new View.OnClickListener() {
@@ -180,7 +203,6 @@ public class GalleryActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
     // Navigation -
@@ -206,12 +228,13 @@ public class GalleryActivity extends AppCompatActivity {
     // License 보기
     @OnClick({R.id.navigation_license_icon, R.id.navigation_license})
     void showLicense() {
-        // TODO : 라이선스 화면
+        overridePendingTransition(0, android.R.anim.fade_in);
+        startActivity(new Intent(this, LicenseActivity.class));
     }
 
     @OnClick({R.id.navigation_exit_icon, R.id.navigation_exit})
     void exitApp() {
-        if(mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+        if (mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
             mNavigationDrawer.closeDrawer(GravityCompat.START);
         }
         showExitAppDialog();
@@ -230,7 +253,7 @@ public class GalleryActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+        if (mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
             mNavigationDrawer.closeDrawer(GravityCompat.START);
         } else {
             showExitAppDialog();
