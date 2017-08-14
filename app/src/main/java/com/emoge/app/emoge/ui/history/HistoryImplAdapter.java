@@ -48,10 +48,16 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
         } else {
             holder.itemView.setText(String.valueOf(position));
         }
+        if(lastRefIndex == position) {
+            holder.cursor.setVisibility(View.VISIBLE);
+        } else {
+            holder.cursor.setVisibility(View.GONE);
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 rollbackPosition(position);
+                notifyDataSetChanged();
             }
         });
     }
@@ -85,8 +91,8 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
         if(!isDefaultHistory(history)) {
             removeHistory(lastRefIndex);
             histories.add(correctImplAdapter.getModifiedValues());
-            notifyDataSetChanged();
             lastRefIndex = histories.size()-1;
+            notifyDataSetChanged();
         }
     }
 

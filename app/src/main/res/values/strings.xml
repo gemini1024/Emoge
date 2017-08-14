@@ -54,6 +54,10 @@
     <string name="continue_work">계속</string>
     <string name="cancel">취소</string>
     <string name="remove_file">파일이 삭제되었습니다.</string>
+    <string name="cancel_favorite">해제</string>
+    <string name="cancel_favorite_title">담아가기 해제</string>
+    <string name="cancel_favorite_content">담은 이미지를 저장소에서 제거합니다.\n계속 하시겠습니까?</string>
+    <string name="download_favorite_content">담은 이미지를 다운로드합니다.\n계속 하시겠습니까?</string>
 
     <!--correct-->
     <string name="fps" translatable="false">Fps</string>

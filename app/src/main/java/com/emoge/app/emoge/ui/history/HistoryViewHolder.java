@@ -17,6 +17,8 @@ import butterknife.ButterKnife;
 class HistoryViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.history_item)
     TextView itemView;
+    @BindView(R.id.history_item_cursor)
+    View cursor;
 
     HistoryViewHolder(View itemView) {
         super(itemView);

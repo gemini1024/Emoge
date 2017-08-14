@@ -52,6 +52,24 @@ public class SweetDialogs {
     }
 
     @NonNull
+    public static SweetAlertDialog showWarningDialog(@NonNull Activity activity,
+                                                   int stringTitleRes,
+                                                   int stringContentRes) {
+        SweetAlertDialog errorDialog = new SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(activity.getString(stringTitleRes))
+                .setContentText(activity.getString(stringContentRes))
+                .setCancelText(activity.getString(R.string.cancel))
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.cancel();
+                    }
+                });
+        errorDialog.show();
+        return errorDialog;
+    }
+
+    @NonNull
     public static SweetAlertDialog showExitMakingDialog(@NonNull final Activity activity) {
         SweetAlertDialog exitDialog = new SweetAlertDialog(activity, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText(activity.getString(R.string.stop_making))

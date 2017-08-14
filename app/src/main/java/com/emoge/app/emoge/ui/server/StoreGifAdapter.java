@@ -16,6 +16,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.MyStoreGif;
 import com.emoge.app.emoge.model.StoreGif;
+import com.emoge.app.emoge.utils.GifDownloadTask;
+import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +27,7 @@ import com.google.firebase.database.Transaction;
 
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.realm.Realm;
 
 /**
@@ -91,14 +94,34 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
             holder.card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    removeFavoriteInMyStore(position);
+                    SweetDialogs.showWarningDialog(fragment.getActivity(), R.string.cancel_favorite_title, R.string.cancel_favorite_content)
+                            .setConfirmText(fragment.getString(R.string.cancel_favorite))
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.dismissWithAnimation();
+                                    removeFavoriteInMyStore(position);
+                                }
+                            });
                 }
             });
+
         }
-
-
-//                new GifDownloadTask(fragment.getActivity()).execute(gifs.get(position));
-
+        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                SweetDialogs.showWarningDialog(fragment.getActivity(), R.string.download_gif_title, R.string.download_favorite_content)
+                        .setConfirmText(fragment.getString(R.string.download_gif_title))
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismissWithAnimation();
+                                new GifDownloadTask(fragment.getActivity()).execute(gifs.get(position));
+                            }
+                        });
+                return false;
+            }
+        });
     }
 
 
