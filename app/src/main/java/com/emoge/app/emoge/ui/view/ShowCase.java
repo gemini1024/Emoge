@@ -8,6 +8,7 @@ import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.ui.gallery.GalleryActivity;
 import com.emoge.app.emoge.ui.palette.MainActivity;
 
+import me.toptas.fancyshowcase.DismissListener;
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import me.toptas.fancyshowcase.FocusShape;
@@ -35,11 +36,31 @@ public class ShowCase {
         MainApplication.getSharedPreferences().edit().putInt(PREF_SHOWN_COUNT_NAME, value).apply();
     }
 
+    public static void initShownShowCase() {
+        MainApplication.getSharedPreferences().edit().putInt(PREF_SHOWN_COUNT_NAME, SHOWCASE_NOT_SHOWN).apply();
+    }
+
     private static FancyShowCaseView buildShowCaseView(Activity activity, int viewRes, int titleRes, FocusShape focusShape) {
+        return buildShowCaseView(activity, viewRes, titleRes, focusShape, new DismissListener() {
+            @Override
+            public void onDismiss(String id) {
+
+            }
+
+            @Override
+            public void onSkipped(String id) {
+
+            }
+        });
+    }
+
+    private static FancyShowCaseView buildShowCaseView(Activity activity, int viewRes, int titleRes,
+                                                       FocusShape focusShape, DismissListener dismissListener) {
         return new FancyShowCaseView.Builder(activity)
                 .focusOn(activity.findViewById(viewRes))
                 .focusShape(focusShape)
                 .title(activity.getString(titleRes))
+                .dismissListener(dismissListener)
                 .build();
     }
 
@@ -48,7 +69,18 @@ public class ShowCase {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    buildShowCaseView(activity, R.id.gallery_bt_making, R.string.showcase_making_gif, FocusShape.CIRCLE).show();
+                    buildShowCaseView(activity, R.id.gallery_bt_making, R.string.showcase_making_gif,
+                            FocusShape.CIRCLE, new DismissListener() {
+                                @Override
+                                public void onDismiss(String id) {
+                                    activity.startMakingGif();
+                                }
+
+                                @Override
+                                public void onSkipped(String id) {
+
+                                }
+                            }).show();
                 }
             }, SHOWCASE_DELAY);
             setShownShowCaseCount(SHOWCASE_GALLERY);
@@ -63,7 +95,18 @@ public class ShowCase {
                 public void run() {
                     new FancyShowCaseQueue()
                             .add(buildShowCaseView(activity, R.id.main_frame_list, R.string.showcase_add_frame, FocusShape.ROUNDED_RECTANGLE))
-                            .add(buildShowCaseView(activity, R.id.toolbar_next, R.string.showcase_show_correct, FocusShape.CIRCLE))
+                            .add(buildShowCaseView(activity, R.id.toolbar_next, R.string.showcase_show_correct,
+                                    FocusShape.CIRCLE, new DismissListener() {
+                                        @Override
+                                        public void onDismiss(String id) {
+                                            activity.startCorrectByShowCase();
+                                        }
+
+                                        @Override
+                                        public void onSkipped(String id) {
+
+                                        }
+                                    }))
                             .show();
                 }
             }, SHOWCASE_DELAY);
@@ -80,7 +123,19 @@ public class ShowCase {
                             .add(buildShowCaseView(activity, R.id.main_palette_tab, R.string.showcase_correcting, FocusShape.ROUNDED_RECTANGLE))
                             .add(buildShowCaseView(activity, R.id.main_bt_correction, R.string.showcase_correcting_filter, FocusShape.CIRCLE))
                             .add(buildShowCaseView(activity, R.id.main_bt_history, R.string.showcase_history, FocusShape.CIRCLE))
-                            .add(buildShowCaseView(activity, R.id.toolbar_save, R.string.showcase_save_gif, FocusShape.CIRCLE))
+                            .add(buildShowCaseView(activity, R.id.toolbar_save, R.string.showcase_save_gif,
+                                    FocusShape.CIRCLE, new DismissListener() {
+                                        @Override
+                                        public void onDismiss(String id) {
+                                            activity.onBackPressed();
+                                            activity.onBackPressed();
+                                        }
+
+                                        @Override
+                                        public void onSkipped(String id) {
+
+                                        }
+                                    }))
                             .show();
                 }
             }, SHOWCASE_DELAY);

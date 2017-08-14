@@ -84,9 +84,10 @@
     <!--navigation-->
     <string name="navigation_open">이동화면 열림</string>
     <string name="navigation_close">이동화면 닫힘</string>
-    <string name="navigation_server">서버로 이동</string>
+    <string name="navigation_server">저장소로</string>
     <string name="navigation_making_gif">움짤 생성</string>
     <string name="navigation_license">license</string>
+    <string name="navigation_help">도움말</string>
 
     <!--showcase-->
     <string name="showcase_making_gif">Click해서 움짤을 만들어보세요</string>

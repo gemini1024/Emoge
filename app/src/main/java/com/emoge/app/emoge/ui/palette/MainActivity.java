@@ -280,6 +280,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void startCorrectByShowCase() {
+        showCorrectWindow();
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

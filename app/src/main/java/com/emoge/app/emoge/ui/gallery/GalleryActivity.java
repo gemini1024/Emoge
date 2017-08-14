@@ -171,7 +171,7 @@ public class GalleryActivity extends AppCompatActivity {
 
     // 움짤 생성하러 가기
     @OnClick({R.id.navigation_making_gif_icon, R.id.navigation_making_gif, R.id.gallery_bt_making})
-    void startMakingGif() {
+    public void startMakingGif() {
         overridePendingTransition(0, android.R.anim.fade_in);
         startActivity(new Intent(this, MainActivity.class));
     }
@@ -181,6 +181,16 @@ public class GalleryActivity extends AppCompatActivity {
     void showLicense() {
         overridePendingTransition(0, android.R.anim.fade_in);
         startActivity(new Intent(this, LicenseActivity.class));
+    }
+
+    // 설명서 다시보기
+    @OnClick({R.id.navigation_help_icon, R.id.navigation_help})
+    void showHelp() {
+        if (mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+            mNavigationDrawer.closeDrawer(GravityCompat.START);
+        }
+        ShowCase.initShownShowCase();
+        ShowCase.startShowCase(this);
     }
 
     @OnClick({R.id.navigation_exit_icon, R.id.navigation_exit})
