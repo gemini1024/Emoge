@@ -61,7 +61,6 @@
         <item>Firebase</item>
         <item>SweetAlertDialog</item>
         <item>DragSortAdapter</item>
-        <item>AndroidViewHover</item>
         <item>PhotoView</item>
         <item>TedPermission</item>
         <item>BoomMenu</item>
@@ -79,7 +78,6 @@
         <item>https://firebase.google.com/</item>
         <item>MIT \n https://github.com/pedant/sweet-alert-dialog</item>
         <item>Apache 2.0. \n https://github.com/vinc3m1/DragSortAdapter</item>
-        <item>https://github.com/daimajia/AndroidViewHover</item>
         <item>Apache 2.0. \n https://github.com/chrisbanes/PhotoView</item>
         <item>Apache 2.0. \n https://github.com/ParkSangGwon/TedPermission</item>
         <item>Apache 2.0. \n https://github.com/Nightonke/BoomMenu</item>

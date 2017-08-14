@@ -17,24 +17,19 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.daimajia.androidviewhover.BlurLayout;
 import com.emoge.app.emoge.MainApplication;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.StoreGif;
 import com.emoge.app.emoge.ui.license.LicenseActivity;
 import com.emoge.app.emoge.ui.palette.MainActivity;
 import com.emoge.app.emoge.ui.server.ServerActivity;
-import com.emoge.app.emoge.ui.view.HoverViews;
-import com.emoge.app.emoge.utils.GifDownloadTask;
 import com.emoge.app.emoge.utils.NetworkStatus;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,7 +49,7 @@ public class GalleryActivity extends AppCompatActivity {
     @BindView(R.id.gallery_drawer)
     DrawerLayout mNavigationDrawer;
     @BindView(R.id.gallery_best)
-    ImageView mBestPhoto;
+    PhotoView mBestPhoto;
     @BindView(R.id.gallery_window)
     ConstraintLayout mGalleryWindow;
 
@@ -175,35 +170,7 @@ public class GalleryActivity extends AppCompatActivity {
                 .apply(new RequestOptions().format(DecodeFormat.PREFER_RGB_565)
                         .placeholder(R.drawable.img_loading))
                 .into(mBestPhoto);
-        setHoverByGif(mBestFavoriteGif);
     }
-
-    // 인기 있는 움짤 칸을 덮어씌울 Hover View 설정
-    private void setHoverByGif(StoreGif storeGif) {
-        HoverViews hover = new HoverViews(this, (BlurLayout) findViewById(R.id.gallery_hover));
-        hover.buildHoverView();
-        hover.setText(storeGif.getTitle());
-        hover.setDownloadButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                YoYo.with(Techniques.Tada)
-                        .duration(HoverViews.BLUR_DURATION)
-                        .playOn(v);
-                new GifDownloadTask(GalleryActivity.this).execute(mBestFavoriteGif);
-            }
-        });
-        hover.setMoreButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                YoYo.with(Techniques.Swing)
-                        .duration(HoverViews.BLUR_DURATION)
-                        .playOn(v);
-
-                connectToServer();
-            }
-        });
-    }
-
 
     // Navigation -
     // 서버로

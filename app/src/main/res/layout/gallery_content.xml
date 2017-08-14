@@ -30,23 +30,17 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.daimajia.androidviewhover.BlurLayout
-        android:id="@+id/gallery_hover"
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/gallery_best"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_margin="@dimen/half_unit_dimen"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@id/guideline"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gallery_best_label">
-
-        <ImageView
-            android:id="@+id/gallery_best"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/half_unit_dimen"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter" />
-    </com.daimajia.androidviewhover.BlurLayout>
+        app:layout_constraintTop_toBottomOf="@id/gallery_best_label" />
 
     <!--Gallery-->
     <android.support.constraint.ConstraintLayout
