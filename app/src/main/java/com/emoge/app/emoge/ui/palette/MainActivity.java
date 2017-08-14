@@ -39,6 +39,7 @@ import com.emoge.app.emoge.ui.gallery.GalleryViewPagerAdapter;
 import com.emoge.app.emoge.ui.gallery.ImageFormatChecker;
 import com.emoge.app.emoge.ui.history.HistoryImplAdapter;
 import com.emoge.app.emoge.ui.view.MenuButtons;
+import com.emoge.app.emoge.ui.view.ShowCase;
 import com.emoge.app.emoge.utils.GifSaveTask;
 import com.emoge.app.emoge.utils.dialog.EditorDialog;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
@@ -159,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         setFrameList(frameAdder, correcter);
         setHistory();
         enableButtons(frameAdder, correcter);
+        ShowCase.startShowCase(this);
     }
 
     private void addGallery() {
@@ -272,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
         mSaveButton.setVisibility(View.VISIBLE);
         mHistoryAdapter.clearHistory();
         mHistoryAdapter.setOriginalFrames();
+        ShowCase.startCorrectShowCase(this);
     }
 
 

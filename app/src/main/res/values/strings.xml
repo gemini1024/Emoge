@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Emoge</string>
+    <string name="app_name" translatable="false">모두의 움짤</string>
 
     <!--errors-->
     <string name="err_permission_denied">기능 사용을 위해 권한이 필요합니다</string>
@@ -84,6 +84,15 @@
     <string name="navigation_making_gif">움짤 생성</string>
     <string name="navigation_license">license</string>
 
+    <!--showcase-->
+    <string name="showcase_making_gif">Click해서 움짤을 만들어보세요</string>
+    <string name="showcase_add_frame">이미지를 선택하면\n프레임으로 등록됩니다</string>
+    <string name="showcase_show_correct">모두 추가했으면\n보정을 시작하세요</string>
+    <string name="showcase_correcting">보정을 해보세요!\n(속도/밝기/대비/감마)</string>
+    <string name="showcase_correcting_filter">세부조정이 귀찮다면?\n필터도 있습니다</string>
+    <string name="showcase_history">언제든지\n보정 전으로 돌아갈 수 있어요\n마음껏 보정하세요</string>
+    <string name="showcase_save_gif">완성했다면 저장을 잊지마세요</string>
+
     <!--other-->
     <string name="save">움짤 저장</string>
     <string name="menu_add_image">이미지 추가 메뉴</string>
@@ -98,5 +107,4 @@
     <string name="hide">숨기기</string>
     <string name="back">back</string>
     <string name="best_image">이 시각 최고의 움짤</string>
-    <string name="showcase_making_gif">Click해서 움짤을 만들어보세요</string>
 </resources>

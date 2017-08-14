@@ -3,7 +3,6 @@ package com.emoge.app.emoge.ui.gallery;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +26,7 @@ import com.emoge.app.emoge.model.StoreGif;
 import com.emoge.app.emoge.ui.license.LicenseActivity;
 import com.emoge.app.emoge.ui.palette.MainActivity;
 import com.emoge.app.emoge.ui.server.ServerActivity;
+import com.emoge.app.emoge.ui.view.ShowCase;
 import com.emoge.app.emoge.utils.NetworkStatus;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -40,8 +40,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import me.toptas.fancyshowcase.FancyShowCaseView;
-import me.toptas.fancyshowcase.FocusShape;
 
 public class GalleryActivity extends AppCompatActivity {
     private final String LOG_TAG = GalleryActivity.class.getSimpleName();
@@ -67,7 +65,7 @@ public class GalleryActivity extends AppCompatActivity {
         addNavigation();
         addGalleryFragment();
         enterGallery();
-        startShowcase();
+        ShowCase.startShowCase(this);
     }
 
 
@@ -111,20 +109,6 @@ public class GalleryActivity extends AppCompatActivity {
         final Animation exitAnim = AnimationUtils.loadAnimation(this, R.anim.exit);
         mGalleryWindow.setAnimation(exitAnim);
         mGalleryWindow.setVisibility(View.GONE);
-    }
-
-    private void startShowcase() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                new FancyShowCaseView.Builder(GalleryActivity.this)
-                        .focusOn(findViewById(R.id.gallery_bt_making))
-                        .focusShape(FocusShape.CIRCLE)
-                        .title(getString(R.string.showcase_making_gif))
-                        .build()
-                        .show();
-            }
-        }, 500);
     }
 
     // 변경 사항 적용
