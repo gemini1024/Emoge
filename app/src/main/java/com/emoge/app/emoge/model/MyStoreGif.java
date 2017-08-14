@@ -35,6 +35,10 @@ public class MyStoreGif extends RealmObject {
         this.downloadUrl = storeGif.getDownloadUrl();
     }
 
+    public String getId() {
+        return id;
+    }
+
     public String getTitle() {
         return title;
     }

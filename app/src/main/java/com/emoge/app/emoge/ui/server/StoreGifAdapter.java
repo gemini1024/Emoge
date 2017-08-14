@@ -21,7 +21,12 @@ import com.emoge.app.emoge.model.MyStoreGif;
 import com.emoge.app.emoge.model.StoreGif;
 import com.emoge.app.emoge.ui.view.HoverViews;
 import com.emoge.app.emoge.utils.GifDownloadTask;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
 import java.util.ArrayList;
 
@@ -40,8 +45,9 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
     private RequestOptions placeholderOption;
     private Realm realm;
     private DatabaseReference database;
+    private ArrayList<String> serverItemKeys;
 
-    // 저장소 탭인 경우 database == null
+
     StoreGifAdapter(@NonNull Fragment fragment, @NonNull ArrayList<StoreGif> gifs,
                     @NonNull Realm realm, @Nullable DatabaseReference database) {
         this.fragment = fragment;
@@ -49,7 +55,8 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
         this.placeholderOption = new RequestOptions()
                 .format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_loading);
         this.realm = realm;
-        this.database = database;
+        this.database = database;                   // 저장소 탭인 경우 null
+        this.serverItemKeys = new ArrayList<>();
     }
 
     @Override
@@ -64,20 +71,27 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
 
         Glide.with(fragment).load(Uri.parse(item.getDownloadUrl())).apply(placeholderOption).into(holder.image);
         holder.title.setText(item.getTitle());
-        holder.favorite.setText(String.valueOf(item.getFavorite()));
+        if(item.getFavorite() > -1) {
+            holder.favorite.setText(String.valueOf(item.getFavorite()));
+        } else {
+            holder.favoriteIcon.setVisibility(View.GONE);
+            holder.favorite.setVisibility(View.GONE);
+        }
 
-        setHoverByGif(holder.container, item);
+        setHoverByGif(holder.container, position);
     }
 
+    private boolean inRealm(int position) {
+        return realm.where(MyStoreGif.class).equalTo(MyStoreGif.KEY_FIELD,
+                serverItemKeys.get(position)).findFirst() != null;
+    }
 
     // HoverView 로 설정
-    private void setHoverByGif(BlurLayout blurLayout, final StoreGif storeGif) {
+    private void setHoverByGif(BlurLayout blurLayout, final int position) {
         final HoverViews hover = new HoverViews(fragment.getContext(), blurLayout);
 
-        String url = storeGif.getDownloadUrl();
-        final String id = url.substring( url.lastIndexOf('/')+1, url.length());
         hover.buildHoverView();
-        if( realm.where(MyStoreGif.class).equalTo(MyStoreGif.KEY_FIELD, id).findFirst() != null) {
+        if(database == null || inRealm(position)) {
             hover.setFavoriteSelected(true);
         } else {
             hover.setFavoriteSelected(false);
@@ -89,7 +103,7 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
                 YoYo.with(Techniques.Tada)
                         .duration(550)
                         .playOn(v);
-                new GifDownloadTask(fragment.getActivity()).execute(storeGif);
+                new GifDownloadTask(fragment.getActivity()).execute(gifs.get(position));
             }
         });
         hover.setFavoriteButton(new View.OnClickListener() {
@@ -99,41 +113,72 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
                         .duration(HoverViews.BLUR_DURATION)
                         .playOn(v);
                 hover.dismissHover();
-                applyRealm(hover, id, storeGif);
+                applyRealm(hover, position);
             }
         });
     }
 
     // Realm 접근
-    private void applyRealm(final HoverViews hover, final String id, final StoreGif storeGif) {
-        final MyStoreGif myStoreGif = realm.where(MyStoreGif.class)
-                .equalTo(MyStoreGif.KEY_FIELD, id).findFirst();
-        if(myStoreGif != null) {
+    private void applyRealm(final HoverViews hover, final int position) {
+        if(database == null || inRealm(position)) {
+            // 담아가기 해제
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    myStoreGif.deleteFromRealm();
-                    if( isMyStoreGif(storeGif) ) {
-                        gifs.remove(storeGif);
-                        notifyDataSetChanged();
+                    realm.where(MyStoreGif.class)
+                            .equalTo(MyStoreGif.KEY_FIELD, serverItemKeys.get(position))
+                            .findFirst().deleteFromRealm();
+                    if( isMyStoreGif(gifs.get(position)) ) {
+                        String[] categories = fragment.getResources().getStringArray(R.array.server_category);
+                        for(String category : categories) {
+                            updateFavorite(FirebaseDatabase.getInstance().getReference(category),
+                                    serverItemKeys.get(position), gifs.get(position), -1);
+                        }
+                        removeItem(position);
                         hover.removeHover();
                     } else {
+                        updateFavorite(database, serverItemKeys.get(position), gifs.get(position), -1);
                         hover.setFavoriteSelected(false);
+                        notifyItemChanged(position);
                     }
                     Toast.makeText(fragment.getContext(), R.string.remove_favorite, Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
+            // 담아가기
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    MyStoreGif myStoreGif = realm.createObject(MyStoreGif.class, id);
-                    myStoreGif.setAll(storeGif);
+                    updateFavorite(database, serverItemKeys.get(position), gifs.get(position), 1);
+                    MyStoreGif myStoreGif = realm.createObject(MyStoreGif.class, serverItemKeys.get(position));
+                    myStoreGif.setAll(gifs.get(position));
                     hover.setFavoriteSelected(true);
+                    notifyItemChanged(position);
                     Toast.makeText(fragment.getContext(), R.string.add_favorite, Toast.LENGTH_SHORT).show();
                 }
             });
         }
+    }
+
+    private void updateFavorite(DatabaseReference db, String key, final StoreGif targetGif, int value) {
+        targetGif.setFavorite(targetGif.getFavorite()+value);
+        if(db.child(key) != null)
+        db.child(key).runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                StoreGif serverGif = mutableData.getValue(StoreGif.class);
+                if(serverGif != null) {
+                    serverGif.setAll(targetGif);
+                }
+                mutableData.setValue(serverGif);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+            }
+        });
     }
 
 
@@ -146,13 +191,25 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
 
 
     // 조작
-    void addItem(StoreGif storeGif) {
+    void addItem(String key, StoreGif storeGif) {
+        serverItemKeys.add(key);
         gifs.add(storeGif);
         notifyItemInserted(gifs.size()-1);
     }
 
+    void removeItem(int position) {
+        gifs.remove(gifs.get(position));
+        serverItemKeys.remove(serverItemKeys.get(position));
+        notifyDataSetChanged();
+    }
+
     void clear() {
-        gifs.clear();
+        if(gifs != null) {
+            gifs.clear();
+        }
+        if(serverItemKeys != null) {
+            serverItemKeys.clear();
+        }
         notifyDataSetChanged();
     }
 

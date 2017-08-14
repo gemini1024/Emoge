@@ -22,6 +22,12 @@ public class StoreGif {
         this.favorite = favorite;
     }
 
+    public void setAll(StoreGif storeGif) {
+        this.title = storeGif.getTitle();
+        this.downloadUrl = storeGif.getDownloadUrl();
+        this.favorite = storeGif.getFavorite();
+    }
+
     public String getTitle() {
         return title;
     }

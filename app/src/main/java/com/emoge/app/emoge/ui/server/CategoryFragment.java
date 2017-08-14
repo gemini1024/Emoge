@@ -132,7 +132,8 @@ public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnR
         RealmResults<MyStoreGif> myStoreGifs = mRealm.where(MyStoreGif.class).findAll();
         mGifAdapter.clear();
         for(MyStoreGif myStoreGif : myStoreGifs) {
-            mGifAdapter.addItem(new StoreGif(myStoreGif.getTitle(), myStoreGif.getDownloadUrl(), -1));
+            mGifAdapter.addItem(myStoreGif.getId(),
+                    new StoreGif(myStoreGif.getTitle(), myStoreGif.getDownloadUrl(), -1));
         }
         if(mGifAdapter.isEmpty()) {
             Glide.with(getContext()).load(R.drawable.img_no_image).into(mNoImage);
@@ -154,7 +155,7 @@ public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnR
                 if(dataSnapshot.getValue(StoreGif.class) != null) {
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         StoreGif storeGif = childSnapshot.getValue(StoreGif.class);
-                        mGifAdapter.addItem(storeGif);
+                        mGifAdapter.addItem(childSnapshot.getKey(), storeGif);
                     }
                 }
                 if(mGifAdapter.isEmpty()) {
