@@ -23,6 +23,8 @@ class StoreGifViewHolder extends RecyclerView.ViewHolder {
     ImageView image;
     @BindView(R.id.server_item_title)
     TextView title;
+    @BindView(R.id.server_item_favorite)
+    TextView favorite;
 
     StoreGifViewHolder(View itemView) {
         super(itemView);

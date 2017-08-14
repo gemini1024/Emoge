@@ -74,6 +74,10 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
         Log.i(LOG_TAG, "original frame size : "+originalFrames.size());
     }
 
+    public boolean isEmpty() {
+        return histories == null || histories.size() < 2;
+    }
+
 
     @Override
     public void addHistory() {

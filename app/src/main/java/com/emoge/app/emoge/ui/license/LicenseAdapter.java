@@ -18,7 +18,7 @@ class LicenseAdapter extends RecyclerView.Adapter<LicenseViewHolder> {
 
     private List<License> licenses;
 
-    public LicenseAdapter(List<License> licenses) {
+    LicenseAdapter(List<License> licenses) {
         this.licenses = licenses;
     }
 

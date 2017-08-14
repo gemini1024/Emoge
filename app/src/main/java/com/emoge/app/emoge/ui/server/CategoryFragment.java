@@ -48,7 +48,8 @@ public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnR
     ProgressBar mProgress;
 
     private StoreGifAdapter mGifAdapter;
-    private Realm realm;
+    private Realm mRealm;
+    private DatabaseReference mFirebaseDb;
 
 
     public CategoryFragment() {
@@ -75,11 +76,15 @@ public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnR
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_server, container, false);
         ButterKnife.bind(this, view);
-        realm = Realm.getDefaultInstance();
+        mRealm = Realm.getDefaultInstance();
+        if(!isFavoriteCategory()) {
+            mFirebaseDb = FirebaseDatabase.getInstance().getReference(
+                    getArguments().getString(ARG_CATEGORY, getString(R.string.category_store)));
+        }
 
         // RecyclerView 설정
         mRefresher.setOnRefreshListener(this);
-        mGifAdapter = new StoreGifAdapter(this, new ArrayList<StoreGif>(), realm);
+        mGifAdapter = new StoreGifAdapter(this, new ArrayList<StoreGif>(), mRealm, mFirebaseDb);
         mGifList.setHasFixedSize(true);
         mGifList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mGifList.setAdapter(mGifAdapter);
@@ -94,8 +99,8 @@ public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if( realm != null ) {
-            realm.close();
+        if( mRealm != null ) {
+            mRealm.close();
         }
     }
 
@@ -124,7 +129,7 @@ public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     // Realm 에서 불러오기
     private void loadFavoriteGifImages() {
-        RealmResults<MyStoreGif> myStoreGifs = realm.where(MyStoreGif.class).findAll();
+        RealmResults<MyStoreGif> myStoreGifs = mRealm.where(MyStoreGif.class).findAll();
         mGifAdapter.clear();
         for(MyStoreGif myStoreGif : myStoreGifs) {
             mGifAdapter.addItem(new StoreGif(myStoreGif.getTitle(), myStoreGif.getDownloadUrl(), -1));
@@ -140,9 +145,7 @@ public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnR
     // 서버연결 ( Firebase )
     private void loadServerGifImages() {
         mProgress.setVisibility(View.VISIBLE);
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference(
-                getArguments().getString(ARG_CATEGORY, getString(R.string.category_store)));
-        database.addValueEventListener(new ValueEventListener() {
+        mFirebaseDb.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mProgress.setVisibility(View.GONE);

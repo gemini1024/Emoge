@@ -59,13 +59,6 @@ public class SweetDialogs {
                 .setCancelText(activity.getString(R.string.cancel))
                 .setConfirmText(activity.getString(R.string.stop_making))
                 .showCancelButton(true)
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        sweetAlertDialog.dismissWithAnimation();
-                        activity.finish();
-                    }
-                })
                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {

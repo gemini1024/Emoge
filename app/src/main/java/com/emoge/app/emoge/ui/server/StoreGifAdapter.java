@@ -1,6 +1,8 @@
 package com.emoge.app.emoge.ui.server;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import com.emoge.app.emoge.model.MyStoreGif;
 import com.emoge.app.emoge.model.StoreGif;
 import com.emoge.app.emoge.ui.view.HoverViews;
 import com.emoge.app.emoge.utils.GifDownloadTask;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
@@ -36,13 +39,17 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
     private ArrayList<StoreGif> gifs;
     private RequestOptions placeholderOption;
     private Realm realm;
+    private DatabaseReference database;
 
-    StoreGifAdapter(Fragment fragment, ArrayList<StoreGif> gifs, Realm realm) {
+    // 저장소 탭인 경우 database == null
+    StoreGifAdapter(@NonNull Fragment fragment, @NonNull ArrayList<StoreGif> gifs,
+                    @NonNull Realm realm, @Nullable DatabaseReference database) {
         this.fragment = fragment;
         this.gifs = gifs;
         this.placeholderOption = new RequestOptions()
                 .format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_loading);
         this.realm = realm;
+        this.database = database;
     }
 
     @Override
@@ -57,6 +64,7 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
 
         Glide.with(fragment).load(Uri.parse(item.getDownloadUrl())).apply(placeholderOption).into(holder.image);
         holder.title.setText(item.getTitle());
+        holder.favorite.setText(String.valueOf(item.getFavorite()));
 
         setHoverByGif(holder.container, item);
     }

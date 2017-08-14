@@ -55,6 +55,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 /**
@@ -445,24 +446,37 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void exitMakingView() {
+        mHistoryAdapter.rollbackOrigin();
+        EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_APPLY, 0));
+        mHistoryAdapter.clearHistory();
+        exitViews(mPaletteWindow);
+        enterViews(mGalleryWindow);
+        mSaveButton.setVisibility(View.GONE);
+        mNextButton.setVisibility(View.VISIBLE);
+    }
+
 
     // 실수로 나가기 방지
     @Override
     public void onBackPressed() {
         if(mGalleryWindow.getVisibility() == View.VISIBLE) {
             // 이미지 추가 중인 경우
-            if(!mFrameAdapter.isEmpty()) {
-                SweetDialogs.showExitMakingDialog(this);
-            } else {
-                super.onBackPressed();
-            }
+            super.onBackPressed();
         } else {
             // 보정 중인 경우
-            EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_APPLY, 0));
-            exitViews(mPaletteWindow);
-            enterViews(mGalleryWindow);
-            mSaveButton.setVisibility(View.GONE);
-            mNextButton.setVisibility(View.VISIBLE);
+            if(mHistoryAdapter.isEmpty()) {
+                exitMakingView();
+            } else {
+                SweetDialogs.showExitMakingDialog(this)
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismissWithAnimation();
+                                exitMakingView();
+                            }
+                        }).show();
+            }
         }
     }
 }
