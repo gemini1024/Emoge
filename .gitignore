@@ -69,3 +69,6 @@ reports
 */cmake_install.cmake
 .DS_Store
 
+### Firebase Crash ###
+captures
+

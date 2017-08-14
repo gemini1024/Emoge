@@ -43,6 +43,7 @@ import com.emoge.app.emoge.ui.view.ShowCase;
 import com.emoge.app.emoge.utils.GifSaveTask;
 import com.emoge.app.emoge.utils.dialog.EditorDialog;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
+import com.google.firebase.crash.FirebaseCrash;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.zomato.photofilters.imageprocessors.Filter;
 
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        FirebaseCrash.log(LOG_TAG);
 
         mHandler = new Handler();
         Correcter correcter = new Correcter(this);
