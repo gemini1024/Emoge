@@ -10,7 +10,6 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     repositories {
         maven { url "https://jitpack.io" }
@@ -22,16 +21,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    externalNativeBuild {
-        ndkBuild {
-            path 'src/main/jni/Android.mk'
-        }
-    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':openCVLibrary320')
     compile('jp.mixi:AndroidDeviceCompatibility:2.0.0') {
         exclude module: 'support-v4'
         exclude module: 'appcompat-v7'

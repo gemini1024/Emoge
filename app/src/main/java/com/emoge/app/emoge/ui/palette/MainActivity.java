@@ -29,7 +29,7 @@ import com.emoge.app.emoge.model.FrameStatusMessage;
 import com.emoge.app.emoge.model.GifMakingInfo;
 import com.emoge.app.emoge.model.History;
 import com.emoge.app.emoge.model.PaletteMessage;
-import com.emoge.app.emoge.ui.VideoActivity;
+import com.emoge.app.emoge.ui.frame.VideoActivity;
 import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
 import com.emoge.app.emoge.ui.correction.Correcter;
 import com.emoge.app.emoge.ui.frame.FrameAddTask;

@@ -1,4 +1,4 @@
-package com.emoge.app.emoge.ui;
+package com.emoge.app.emoge.ui.frame;
 
 import android.app.Activity;
 import android.content.Intent;

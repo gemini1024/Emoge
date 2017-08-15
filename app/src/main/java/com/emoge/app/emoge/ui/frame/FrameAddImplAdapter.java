@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.emoge.app.emoge.model.Frame;
-import com.emoge.app.emoge.ui.VideoActivity;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

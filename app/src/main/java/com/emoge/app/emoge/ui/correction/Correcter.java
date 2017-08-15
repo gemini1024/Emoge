@@ -62,8 +62,7 @@ public class Correcter
 
     // NDK Libraries
     static {
-        System.loadLibrary("opencv_java3");
-        System.loadLibrary("native-lib");
+//        System.loadLibrary("native-lib");
         System.loadLibrary("NativeImageProcessor");
     }
 
