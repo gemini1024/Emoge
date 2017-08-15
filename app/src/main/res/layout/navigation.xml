@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_container"
     android:layout_width="@dimen/navigation_width"
     android:layout_height="match_parent"
@@ -11,10 +10,7 @@
     android:divider="@android:color/transparent"
     android:dividerHeight="0dp"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/unit_dimen"
-    android:paddingEnd="@dimen/unit_dimen"
-    android:paddingStart="@dimen/unit_dimen"
-    android:paddingTop="@dimen/toolbar_height">
+    android:padding="@dimen/unit_dimen">
 
 
     <android.support.constraint.Guideline
@@ -22,9 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.25"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="0dp" />
+        app:layout_constraintGuide_percent="0.25"/>
 
     <ImageView
         android:id="@+id/navigation_server_icon"

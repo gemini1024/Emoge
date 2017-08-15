@@ -1,6 +1,5 @@
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/gallery_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
@@ -9,7 +8,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/gallery"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:overScrollMode="never"/>
 
     <ImageView
         android:id="@+id/gallery_no_image"
@@ -20,4 +20,4 @@
         android:adjustViewBounds="true"
         android:visibility="gone"/>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>
