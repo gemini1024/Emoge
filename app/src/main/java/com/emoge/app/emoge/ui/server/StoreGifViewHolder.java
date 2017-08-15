@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.emoge.app.emoge.R;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,6 +20,8 @@ import butterknife.ButterKnife;
 class StoreGifViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.server_item_card)
     CardView card;
+    @BindView(R.id.server_item_image_loading)
+    AVLoadingIndicatorView loading;
     @BindView(R.id.server_item_image)
     ImageView image;
     @BindView(R.id.server_item_title)

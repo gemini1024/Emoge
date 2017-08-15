@@ -1,6 +1,8 @@
 package com.emoge.app.emoge.ui.gallery;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,9 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.request.RequestOptions;
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.utils.GlideAvRequester;
 import com.emoge.app.emoge.utils.dialog.ImageDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,7 +33,6 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
     private Fragment fragment;                  // 호출한 Fragment (GalleryFragment)
     private ArrayList<File> files;              // File 리스트
     private List<String> format;                // 포함시킬 파일 Format (ImageFormatChecker)
-    private RequestOptions placeholderOption;   // PlaceHolder 적용 위함
     private boolean canSendMsg;                 // EventBus Message 발생 여부 (보정화면에서 true)
 
     GalleryAdapter(Fragment fragment, List<String> format, ArrayList<File> files, boolean canSendMsg) {
@@ -40,8 +40,6 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
         this.format = format;
         this.files = files;
         this.canSendMsg = canSendMsg;
-        this.placeholderOption = new RequestOptions()
-                .format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_loading);
     }
 
     @Override
@@ -54,7 +52,9 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
     public void onBindViewHolder(final GalleryViewHolder holder, final int position) {
         final File file = files.get(position);
 
-        Glide.with(fragment).asBitmap().load(file).apply(placeholderOption).into(holder.image);
+        holder.loading.show();
+        Glide.with(fragment).asBitmap().load(file)
+                .listener(new GlideAvRequester<Bitmap>(holder.loading)).into(holder.image);
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +74,7 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
             }
         });
         if(ImageFormatChecker.GIF_FORMAT == format) {
-            holder.type.setText("GIF");
+            holder.type.setText(R.string.frame_gif_label);
             holder.type.setVisibility(View.VISIBLE);
         }
     }
@@ -103,7 +103,7 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
     }
 
     @Override
-    public boolean addItemWithoutNotify(File file) {
+    public boolean addItemWithoutNotify(@NonNull File file) {
         if(ImageFormatChecker.inFormat(file, format)) {
             files.add(file);
             return true;

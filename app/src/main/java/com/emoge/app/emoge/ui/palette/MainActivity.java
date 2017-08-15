@@ -23,7 +23,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.FrameStatusMessage;
@@ -106,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
                     if(mFrameAdapter.getItemCount() > 0) {
                         mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
                         mPreviewIndex = (mPreviewIndex + 1) % mFrameAdapter.getItemCount();
-                    } else {
-                        Glide.with(getBaseContext()).load(R.drawable.img_no_image).into(mPreview);
                     }
                 }
             });
@@ -167,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addGallery() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.main_gallery_container);
-        viewPager.setAdapter(new GalleryViewPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new GalleryViewPagerAdapter(this));
         TabLayout tabLayout = (TabLayout) findViewById(R.id.main_gallery_tab);
         tabLayout.setupWithViewPager(viewPager);
         new Handler().postDelayed(new Runnable() {

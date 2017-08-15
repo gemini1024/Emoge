@@ -1,5 +1,6 @@
 package com.emoge.app.emoge.ui.server;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,12 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.request.RequestOptions;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.MyStoreGif;
 import com.emoge.app.emoge.model.StoreGif;
 import com.emoge.app.emoge.utils.GifDownloadTask;
+import com.emoge.app.emoge.utils.GlideAvRequester;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,7 +40,6 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
 
     private Fragment fragment;
     private ArrayList<StoreGif> gifs;
-    private RequestOptions placeholderOption;
     private Realm realm;
     private DatabaseReference database;
     private ArrayList<String> serverItemKeys;
@@ -50,8 +49,6 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
                     @NonNull Realm realm, @Nullable DatabaseReference database) {
         this.fragment = fragment;
         this.gifs = gifs;
-        this.placeholderOption = new RequestOptions()
-                .format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_loading);
         this.realm = realm;
         this.database = database;                   // 저장소 탭인 경우 null
         this.serverItemKeys = new ArrayList<>();
@@ -67,7 +64,9 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
     public void onBindViewHolder(final StoreGifViewHolder holder, final int position) {
         final StoreGif item = gifs.get(position);
 
-        Glide.with(fragment).load(Uri.parse(item.getDownloadUrl())).apply(placeholderOption).into(holder.image);
+        holder.loading.show();
+        Glide.with(fragment).load(Uri.parse(item.getDownloadUrl()))
+                .listener(new GlideAvRequester<Drawable>(holder.loading)).into(holder.image);
         holder.title.setText(item.getTitle());
         if(item.getFavorite() > -1) {
             if(inRealm(position)) {                     // 서버 favorite o

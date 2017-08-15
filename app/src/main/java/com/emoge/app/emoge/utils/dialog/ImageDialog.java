@@ -2,16 +2,17 @@ package com.emoge.app.emoge.utils.dialog;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.request.RequestOptions;
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.utils.GlideAvRequester;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.wang.avi.AVLoadingIndicatorView;
 
 /**
  * Created by jh on 17. 8. 4.
@@ -36,10 +37,12 @@ public class ImageDialog extends CustomDialog {
 
     public ImageDialog(Activity activity, Uri uri) {
         this(activity);
+        AVLoadingIndicatorView loadingIndicatorView = (AVLoadingIndicatorView)findViewById(R.id.dialog_image_loading);
         PhotoView image = (PhotoView)findViewById(R.id.dialog_image);
-        RequestOptions requestOptions = new RequestOptions();
-        requestOptions.format(DecodeFormat.PREFER_RGB_565).placeholder(R.drawable.img_loading);
-        Glide.with(activity).load(uri).apply(requestOptions).into(image);
+        loadingIndicatorView.setVisibility(View.VISIBLE);
+        loadingIndicatorView.show();
+        Glide.with(activity).load(uri).
+                listener(new GlideAvRequester<Drawable>(loadingIndicatorView)).into(image);
     }
 
     public ImageDialog setRemoveButtonListener(View.OnClickListener listener) {

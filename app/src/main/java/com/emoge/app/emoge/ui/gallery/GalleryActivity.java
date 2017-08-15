@@ -1,6 +1,7 @@
 package com.emoge.app.emoge.ui.gallery;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -16,10 +17,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.request.RequestOptions;
 import com.emoge.app.emoge.MainApplication;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.StoreGif;
@@ -27,14 +27,16 @@ import com.emoge.app.emoge.ui.license.LicenseActivity;
 import com.emoge.app.emoge.ui.palette.MainActivity;
 import com.emoge.app.emoge.ui.server.ServerActivity;
 import com.emoge.app.emoge.ui.view.ShowCase;
+import com.emoge.app.emoge.utils.GifDownloadTask;
+import com.emoge.app.emoge.utils.GlideAvRequester;
 import com.emoge.app.emoge.utils.NetworkStatus;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
-import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +49,9 @@ public class GalleryActivity extends AppCompatActivity {
     @BindView(R.id.gallery_drawer)
     DrawerLayout mNavigationDrawer;
     @BindView(R.id.gallery_best)
-    PhotoView mBestPhoto;
+    ImageView mBestPhoto;
+    @BindView(R.id.gallery_best_loading)
+    AVLoadingIndicatorView mBestPhotoLoading;
     @BindView(R.id.gallery_window)
     ConstraintLayout mGalleryWindow;
 
@@ -59,7 +63,6 @@ public class GalleryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         ButterKnife.bind(this);
-        Glide.with(this).load(R.drawable.img_loading).into(mBestPhoto);     // holder
         loadGifImages();
 
         addNavigation();
@@ -120,7 +123,8 @@ public class GalleryActivity extends AppCompatActivity {
 
     // Server 에서 가장 인기있는 움짤 가져오기
     void loadGifImages() {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("유머");
+        DatabaseReference database = FirebaseDatabase.getInstance()
+                .getReference(getResources().getStringArray(R.array.server_category)[0]);
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -139,7 +143,7 @@ public class GalleryActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e(LOG_TAG, "서버 연결 실패");
+                Log.e(LOG_TAG, getString(R.string.err_loading_image_title));
             }
         });
     }
@@ -149,11 +153,25 @@ public class GalleryActivity extends AppCompatActivity {
         if (mBestFavoriteGif == null) {
             return;
         }
+        mBestPhotoLoading.show();
         Glide.with(GalleryActivity.this)
-                .load(Uri.parse(mBestFavoriteGif.downloadUrl))
-                .apply(new RequestOptions().format(DecodeFormat.PREFER_RGB_565)
-                        .placeholder(R.drawable.img_loading))
+                .load(Uri.parse(mBestFavoriteGif.getDownloadUrl()))
+                .listener(new GlideAvRequester<Drawable>(mBestPhotoLoading))
                 .into(mBestPhoto);
+        mBestPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SweetDialogs.showWarningDialog(GalleryActivity.this, R.string.download_gif_title, R.string.download_favorite_content)
+                        .setConfirmText(getString(R.string.download_gif_title))
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismissWithAnimation();
+                                new GifDownloadTask(GalleryActivity.this).execute(mBestFavoriteGif);
+                            }
+                        });
+            }
+        });
     }
 
     // Navigation -

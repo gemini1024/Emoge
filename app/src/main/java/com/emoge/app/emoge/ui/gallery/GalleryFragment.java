@@ -25,6 +25,8 @@ public class GalleryFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     private static final String ARG_DIR_PATH    = "dir_path";
     private static final String ARG_TYPE        = "image_type";
+    private static final int GALLERY_WIDTH_NUM  = 4;
+
     private String mDirPath;        // Nullable. (움짤 생성 화면에서 null)
     private int mImageType;         // 포함시킬 파일 Format (ImageFormatChecker)
 
@@ -70,7 +72,7 @@ public class GalleryFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 ImageFormatChecker.IMAGE_FORMAT : ImageFormatChecker.GIF_FORMAT;
         mGalleryAdapter = new GalleryAdapter(this, fileFormat, new ArrayList<File>(), TextUtils.isEmpty(mDirPath));
         mGallery.setHasFixedSize(true);
-        mGallery.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
+        mGallery.setLayoutManager(new StaggeredGridLayoutManager(GALLERY_WIDTH_NUM, StaggeredGridLayoutManager.VERTICAL));
         mGallery.setAdapter(mGalleryAdapter);
 
         return view;

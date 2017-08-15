@@ -65,6 +65,7 @@
         <item>TedPermission</item>
         <item>BoomMenu</item>
         <item>Discrete SeekBar</item>
+        <item>AVLoadingIndicatorView</item>
         <item>FancyShowCaseView</item>
     </string-array>
     <string-array name="licenses_content">
@@ -82,6 +83,7 @@
         <item>Apache 2.0. \n https://github.com/ParkSangGwon/TedPermission</item>
         <item>Apache 2.0. \n https://github.com/Nightonke/BoomMenu</item>
         <item>Apache 2.0. \n https://github.com/AnderWeb/discreteSeekBar</item>
+        <item>Apache 2.0. \n https://github.com/81813780/AVLoadingIndicatorView</item>
         <item>Apache 2.0. \n https://github.com/faruktoptas/FancyShowCaseView</item>
     </string-array>
 </resources>
