@@ -15,7 +15,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -29,17 +28,18 @@ import com.emoge.app.emoge.model.FrameStatusMessage;
 import com.emoge.app.emoge.model.GifMakingInfo;
 import com.emoge.app.emoge.model.History;
 import com.emoge.app.emoge.model.PaletteMessage;
-import com.emoge.app.emoge.ui.frame.VideoActivity;
 import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
 import com.emoge.app.emoge.ui.correction.Correcter;
 import com.emoge.app.emoge.ui.frame.FrameAddTask;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
+import com.emoge.app.emoge.ui.frame.VideoActivity;
 import com.emoge.app.emoge.ui.gallery.GalleryViewPagerAdapter;
 import com.emoge.app.emoge.ui.gallery.ImageFormatChecker;
 import com.emoge.app.emoge.ui.history.HistoryImplAdapter;
 import com.emoge.app.emoge.ui.view.MenuButtons;
 import com.emoge.app.emoge.ui.view.ShowCase;
 import com.emoge.app.emoge.utils.GifSaveTask;
+import com.emoge.app.emoge.utils.Logger;
 import com.emoge.app.emoge.utils.dialog.EditorDialog;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.google.firebase.crash.FirebaseCrash;
@@ -409,7 +409,7 @@ public class MainActivity extends AppCompatActivity {
                 new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, requestCode).execute(data);
             } else {
                 // show error or do nothing
-                Log.e(LOG_TAG, getString(R.string.err_intent_return_null));
+                Logger.e(LOG_TAG, getString(R.string.err_intent_return_null));
             }
         }
     }

@@ -6,13 +6,13 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.utils.Logger;
 import com.emoge.app.emoge.utils.SeekBarNumberTransformers;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 
@@ -62,7 +62,7 @@ public class VideoActivity extends AppCompatActivity {
         mVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
-                Log.e(LOG_TAG, getString(R.string.err_not_found_video_title));
+                Logger.e(LOG_TAG, getString(R.string.err_not_found_video_title));
                 SweetDialogs.showErrorDialog(VideoActivity.this,
                         R.string.err_not_found_video_title, R.string.err_not_found_video_text);
                 finish();
@@ -72,7 +72,7 @@ public class VideoActivity extends AppCompatActivity {
 
         if( getIntent() != null && getIntent().getData() != null ) {
             videoUri = getIntent().getData();
-            Log.i(LOG_TAG, videoUri.toString());
+            Logger.i(LOG_TAG, videoUri.toString());
             mVideoView.setVideoURI(videoUri);
             mVideoView.setMediaController(new MediaController(mVideoView.getContext()));
             mVideoView.start();
@@ -82,7 +82,7 @@ public class VideoActivity extends AppCompatActivity {
             mFpsBar.setMax(20);
             mFpsBar.setProgress(5);
         } else {
-            Log.e(LOG_TAG, getString(R.string.err_not_found_video_title));
+            Logger.e(LOG_TAG, getString(R.string.err_not_found_video_title));
             SweetDialogs.showErrorDialog(this,
                     R.string.err_not_found_video_title, R.string.err_not_found_video_text);
             finish();

@@ -2,7 +2,6 @@ package com.emoge.app.emoge.ui.history;
 
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.History;
 import com.emoge.app.emoge.ui.correction.Correctable;
 import com.emoge.app.emoge.ui.correction.Correcter;
+import com.emoge.app.emoge.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
             originalFrames.add(new Frame(frame.getId(),
                     frame.getBitmap().copy(Bitmap.Config.ARGB_8888, true)));
         }
-        Log.i(LOG_TAG, "original frame size : "+originalFrames.size());
+        Logger.i(LOG_TAG, "original frame size : "+originalFrames.size());
     }
 
     public boolean isEmpty() {
@@ -129,7 +129,7 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
                 correctImplAdapter.apply();
             }
         }
-        Log.i(LOG_TAG, "rollback : "+position);
+        Logger.i(LOG_TAG, "rollback : "+position);
         lastRefIndex = position;
     }
 
@@ -146,7 +146,7 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
             correctImplAdapter.addItem(new Frame(frame.getId(),
                     frame.getBitmap().copy(Bitmap.Config.ARGB_8888, true)));
         }
-        Log.i(LOG_TAG, "rollback all");
+        Logger.i(LOG_TAG, "rollback all");
         lastRefIndex = histories.size()-1;
     }
 

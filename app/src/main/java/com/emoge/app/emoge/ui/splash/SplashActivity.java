@@ -6,10 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.ui.gallery.GalleryActivity;
+import com.emoge.app.emoge.utils.Logger;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -52,7 +52,7 @@ public class SplashActivity extends AppCompatActivity implements PermissionListe
 
     @Override
     public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-        Log.e(LOG_TAG, getString(R.string.err_permission_denied));
+        Logger.e(LOG_TAG, getString(R.string.err_permission_denied));
         finish();
     }
 

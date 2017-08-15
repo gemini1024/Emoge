@@ -13,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -29,6 +28,7 @@ import com.emoge.app.emoge.ui.server.ServerActivity;
 import com.emoge.app.emoge.ui.view.ShowCase;
 import com.emoge.app.emoge.utils.GifDownloadTask;
 import com.emoge.app.emoge.utils.GlideAvRequester;
+import com.emoge.app.emoge.utils.Logger;
 import com.emoge.app.emoge.utils.NetworkStatus;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.google.firebase.database.DataSnapshot;
@@ -128,7 +128,7 @@ public class GalleryActivity extends AppCompatActivity {
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i(LOG_TAG, dataSnapshot.toString());
+                Logger.d(LOG_TAG, dataSnapshot.toString());
                 if (dataSnapshot.getValue(StoreGif.class) != null) {
                     mBestFavoriteGif = dataSnapshot.getChildren().iterator().next().getValue(StoreGif.class);
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
@@ -143,7 +143,7 @@ public class GalleryActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e(LOG_TAG, getString(R.string.err_loading_image_title));
+                Logger.e(LOG_TAG, databaseError);
             }
         });
     }
@@ -237,5 +237,17 @@ public class GalleryActivity extends AppCompatActivity {
         } else {
             showExitAppDialog();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Glide.get(GalleryActivity.this).clearMemory();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Glide.get(GalleryActivity.this).clearDiskCache();
+            }
+        }).start();
     }
 }

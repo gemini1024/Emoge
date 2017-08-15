@@ -2,12 +2,12 @@ package com.emoge.app.emoge.ui.correction;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.History;
-import com.emoge.app.emoge.ui.frame.FrameAddImplAdapter;
 import com.emoge.app.emoge.ui.frame.BitmapLoadable;
+import com.emoge.app.emoge.ui.frame.FrameAddImplAdapter;
+import com.emoge.app.emoge.utils.Logger;
 import com.zomato.photofilters.imageprocessors.Filter;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, stageFrames.size());
             } else {
-                Log.e(LOG_TAG, "잘못된 frame list 접근");
+                Logger.e(LOG_TAG, "잘못된 frame list 접근");
             }
         }
     }
@@ -70,7 +70,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
                 return stageFrames.get(position);
             }
         } else {
-            Log.e(LOG_TAG, "잘못된 frame list 접근");
+            Logger.e(LOG_TAG, "잘못된 frame list 접근");
             return new Frame(0, null);
         }
     }
@@ -161,7 +161,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
             stageFrames = new ArrayList<>();
             setDefaultValues();
             notifyDataSetChanged();
-            Log.i(LOG_TAG, "apply");
+            Logger.i(LOG_TAG, "apply");
         }
     }
 

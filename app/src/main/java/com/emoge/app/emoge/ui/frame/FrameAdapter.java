@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.FrameStatusMessage;
+import com.emoge.app.emoge.utils.Logger;
 import com.emoge.app.emoge.utils.dialog.ImageDialog;
 import com.makeramen.dragsortadapter.DragSortAdapter;
 
@@ -200,7 +200,7 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
         if(inRange(position)) {
             return frames.get(position);
         } else {
-            Log.e(LOG_TAG, "잘못된 frame list 접근");
+            Logger.e(LOG_TAG, "잘못된 frame list 접근");
             return new Frame(0, null);
         }
     }
@@ -231,7 +231,7 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
             notifyItemRangeChanged(position, frames.size()-position);
             sendFrameStatusMessage();
         } else {
-            Log.e(LOG_TAG, "잘못된 frame list 접근");
+            Logger.e(LOG_TAG, "잘못된 frame list 접근");
         }
     }
 

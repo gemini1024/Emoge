@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.utils.Logger;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -57,7 +57,7 @@ public class FrameAddTask extends AsyncTask<Intent, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
-        Log.i(LOG_TAG, String.valueOf(aBoolean));
+        Logger.i(LOG_TAG, String.valueOf(aBoolean));
         dialog.dismissWithAnimation();
         if(aBoolean) {
             framesView.scrollToPosition(adapter.getItemCount()-1);

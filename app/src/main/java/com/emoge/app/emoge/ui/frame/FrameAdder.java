@@ -11,12 +11,12 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.encoder.GifDecoder;
 import com.emoge.app.emoge.model.PaletteMessage;
 import com.emoge.app.emoge.ui.correction.Correcter;
+import com.emoge.app.emoge.utils.Logger;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -188,7 +188,7 @@ public class FrameAdder implements OnBMClickListener, BitmapLoadable {
             if(videoFrame != null) {
                 bitmapArrayList.add(resizeVideoFrame(videoFrame));
             } else {
-                Log.e(LOG_TAG, "not found video frame : " + i);
+                Logger.e(LOG_TAG, "not found video frame : " + i);
             }
         }
         retriever.release();

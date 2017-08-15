@@ -70,7 +70,7 @@ class GifMaker {
 
             for(Frame frame : images) {
                 encoder.encodeFrame(frame.getBitmap(), frameDelay);
-                Log.i(LOG_TAG, "added frame");
+                Logger.i(LOG_TAG, "added frame");
             }
             return file;
         } catch (FileNotFoundException e) {
@@ -78,7 +78,7 @@ class GifMaker {
             return null;
         } finally {
             encoder.close();
-            Log.d(LOG_TAG, "encoder finish");
+            Logger.d(LOG_TAG, "encoder finish");
         }
     }
 
@@ -93,7 +93,7 @@ class GifMaker {
             outputStream.write(gifBos.toByteArray());
             return file;
         } catch (IOException e) {
-            Log.d(LOG_TAG, e.getClass().getName(), e);
+            Logger.e(LOG_TAG, e);
             return null;
         }
     }
@@ -108,11 +108,11 @@ class GifMaker {
 
         for (Frame frame : images) {
             encoder.addFrame(frame.getBitmap());
-            Log.i(LOG_TAG, "added frame");
+            Logger.i(LOG_TAG, "added frame");
         }
 
         encoder.finish();
-        Log.d(LOG_TAG, "encoder finish");
+        Logger.d(LOG_TAG, "encoder finish");
 
         return bos;
     }

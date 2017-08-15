@@ -6,9 +6,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.emoge.app.emoge.model.Frame;
+import com.emoge.app.emoge.utils.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -51,7 +51,7 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
                 notifyItemRangeInserted(firstAddPosition, clipData.getItemCount());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, e.getClass().getName(), e);
+            Logger.e(LOG_TAG, e);
         }
         return resultBool;
     }
@@ -70,7 +70,7 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
                 notifyItemRangeInserted(firstAddPosition, bitmaps.size());
             }
         } catch (FileNotFoundException e) {
-            Log.e(LOG_TAG, e.getClass().getName(), e);
+            Logger.e(LOG_TAG, e);
         }
         return resultBool;
     }

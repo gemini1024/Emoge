@@ -2,7 +2,6 @@ package com.emoge.app.emoge.utils;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
@@ -58,7 +57,7 @@ public class GifDownloadTask extends AsyncTask<StoreGif, Void, File> {
             inputStream.close();
             return file;
         } catch (IOException e) {
-            Log.e(LOG_TAG, e.getClass().getSimpleName(), e);
+            Logger.e(LOG_TAG, e);
             return null;
         }
     }

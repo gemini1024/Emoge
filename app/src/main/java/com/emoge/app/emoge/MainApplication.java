@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Environment;
 
+import com.bumptech.glide.Glide;
+
 import io.realm.Realm;
 
 /**
@@ -26,5 +28,17 @@ public class MainApplication extends Application {
 
     public static SharedPreferences getSharedPreferences() {
         return sharedPreferences;
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        Glide.with(this).onLowMemory();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        Glide.with(this).onTrimMemory(level);
     }
 }

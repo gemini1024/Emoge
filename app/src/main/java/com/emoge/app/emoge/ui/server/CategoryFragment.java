@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.MyStoreGif;
 import com.emoge.app.emoge.model.StoreGif;
+import com.emoge.app.emoge.utils.Logger;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -150,7 +150,7 @@ public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mProgress.setVisibility(View.GONE);
-                Log.i(LOG_TAG, dataSnapshot.toString());
+                Logger.i(LOG_TAG, dataSnapshot);
                 mGifAdapter.clear();
                 if(dataSnapshot.getValue(StoreGif.class) != null) {
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {

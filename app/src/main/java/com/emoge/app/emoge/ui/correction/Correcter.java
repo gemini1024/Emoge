@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
@@ -84,7 +83,6 @@ public class Correcter
         fragmentTransaction.replace(R.id.main_palette_container,
                 PaletteFragment.newInstance(index, getDefaultValueByType(index)));
         fragmentTransaction.commit();
-        Log.d(LOG_TAG, "tab "+index);
     }
 
     @Override
