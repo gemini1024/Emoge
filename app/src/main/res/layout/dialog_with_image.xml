@@ -2,53 +2,70 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dialog_container"
-    android:layout_width="@dimen/dialog_width"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/dialog_image_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/no_image_size">
+    <LinearLayout
+        android:id="@+id/dialog_image_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
 
-        <com.github.chrisbanes.photoview.PhotoView
-            android:id="@+id/dialog_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <ImageButton
+            android:id="@+id/dialog_bt_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:gravity="center" />
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/back_button"
+            android:padding="@dimen/half_unit_dimen"
+            android:src="@drawable/ic_back_arrow_white" />
 
-        <com.wang.avi.AVLoadingIndicatorView
-            android:id="@+id/dialog_image_loading"
-            style="@style/AVLoadingIndicatorView.Small"
+        <TextView
+            android:id="@+id/dialog_image_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            app:indicatorColor="@android:color/black"
-            app:indicatorName="BallPulseIndicator" />
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="@dimen/half_unit_dimen"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@android:color/white"
+            android:transitionName="@string/splash_image" />
 
-    </FrameLayout>
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/dialog_bt_remove"
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/dialog_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_above="@+id/dialog_bt_container"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/dialog_image_bar"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter" />
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/dialog_image_loading"
+        style="@style/AVLoadingIndicatorView.Small"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_below="@id/dialog_image_container"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
-        android:drawableStart="@drawable/ic_remove"
-        android:gravity="center"
-        android:scaleType="fitCenter"
-        android:text="@string/remove"
-        android:textColor="@color/colorWarning"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:indicatorColor="@android:color/white"
+        app:indicatorName="BallPulseIndicator" />
 
     <LinearLayout
         android:id="@+id/dialog_share_container"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dialog_bt_remove"
+        android:layout_above="@+id/dialog_bt_container"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="@dimen/half_unit_dimen"
@@ -63,7 +80,8 @@
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_upload" />
+            android:src="@drawable/ic_upload"
+            android:visibility="gone"/>
 
         <ImageButton
             android:id="@+id/dialog_share_kakao"
@@ -85,8 +103,7 @@
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/img_google_drive"
-            android:visibility="gone" />
+            android:src="@drawable/img_google_drive" />
 
         <ImageButton
             android:id="@+id/dialog_share_facebook"
@@ -97,8 +114,7 @@
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/img_facebook"
-            android:visibility="gone" />
+            android:src="@drawable/img_facebook" />
 
         <ImageButton
             android:id="@+id/dialog_share_others"
@@ -109,8 +125,36 @@
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_share"
-            android:visibility="gone" />
+            android:src="@drawable/ic_share" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/dialog_bt_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/dialog_bt_share"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:scaleType="fitCenter"
+            android:text="@string/share"
+            android:textColor="@color/colorWarning" />
+
+        <Button
+            android:id="@+id/dialog_bt_remove"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:scaleType="fitCenter"
+            android:text="@string/remove"
+            android:textColor="@color/colorWarning" />
+
+    </LinearLayout>
 </RelativeLayout>

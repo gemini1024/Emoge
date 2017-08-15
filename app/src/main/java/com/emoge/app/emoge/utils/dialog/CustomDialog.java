@@ -21,8 +21,16 @@ abstract class CustomDialog implements DialogInterface {
     private Dialog dialog;
     private View innerLayout;
 
-    protected CustomDialog(Activity activity, int layoutRes) {
-        builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialog);
+    CustomDialog(Activity activity, int layoutRes) {
+        this(activity, layoutRes, false);
+    }
+
+    CustomDialog(Activity activity, int layoutRes, boolean isFill) {
+        if(isFill) {
+            builder = new AlertDialog.Builder(activity, R.style.WindowFillDialog);
+        } else {
+            builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialog);
+        }
         innerLayout = activity.getLayoutInflater().inflate(layoutRes, null);
     }
 

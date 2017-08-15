@@ -12,7 +12,7 @@ import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.FrameStatusMessage;
 import com.emoge.app.emoge.utils.Logger;
-import com.emoge.app.emoge.utils.dialog.ImageDialog;
+import com.emoge.app.emoge.utils.dialog.FrameDialog;
 import com.makeramen.dragsortadapter.DragSortAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -103,7 +103,7 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final ImageDialog imageDialog = new ImageDialog(activity,
+                    final FrameDialog imageDialog = new FrameDialog(activity,
                             frames.get(getPositionForId(id)).getBitmap());
                     imageDialog.setRemoveButtonListener(new View.OnClickListener() {
                         @Override

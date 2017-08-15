@@ -28,16 +28,16 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  * GIF 이미지 공유
  */
 
-class GifSharer {
+public class GifSharer {
 
     private Activity activity;
     private SweetAlertDialog loadingDialog;
 
-    GifSharer(Activity activity) {
+    public GifSharer(Activity activity) {
         this.activity = activity;
     }
 
-    void shareOtherApps(final Uri sharingGifFile) {
+    public void shareOtherApps(final Uri sharingGifFile) {
         NetworkStatus.executeWithCheckingNetwork(activity, new NetworkStatus.RequireIntentTask() {
             @Override
             public void Task() {
@@ -49,7 +49,7 @@ class GifSharer {
         });
     }
 
-    void shareOtherApps(final Uri sharingGifFile, final String destPackage) {
+    public void shareOtherApps(final Uri sharingGifFile, final String destPackage) {
         NetworkStatus.executeWithCheckingNetwork(activity, new NetworkStatus.RequireIntentTask() {
             @Override
             public void Task() {

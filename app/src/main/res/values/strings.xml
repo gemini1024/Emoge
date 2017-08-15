@@ -53,7 +53,9 @@
     <string name="warning_mobile_network">데이터 네트워크를 사용 중 입니다\n계속 하시겠습니까?</string>
     <string name="continue_work">계속</string>
     <string name="cancel">취소</string>
-    <string name="remove_file">파일이 삭제되었습니다.</string>
+    <string name="remove_file">파일 삭제</string>
+    <string name="remove_file_content">파일을 삭제합니다.\n계속 하시겠습니까?</string>
+    <string name="remove_file_result">파일이 삭제되었습니다.</string>
     <string name="cancel_favorite">해제</string>
     <string name="cancel_favorite_title">담아가기 해제</string>
     <string name="cancel_favorite_content">담은 이미지를 저장소에서 제거합니다.\n계속 하시겠습니까?</string>
@@ -115,4 +117,5 @@
     <string name="frame_gif_label">GIF</string>
     <string name="add_from_image">이미지에서 추가</string>
     <string name="add_from_gif">움짤에서 추가</string>
+    <string name="share">공유하기</string>
 </resources>

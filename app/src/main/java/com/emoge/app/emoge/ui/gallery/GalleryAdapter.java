@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
@@ -61,15 +60,7 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
                 if(canSendMsg) {
                     EventBus.getDefault().post(file);
                 } else {
-                    final ImageDialog imageDialog = new ImageDialog(fragment.getActivity(), Uri.fromFile(file));
-                    imageDialog.setRemoveButtonListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            removeFile(position);
-                            imageDialog.dismiss();
-                        }
-                    });
-                    imageDialog.show();
+                    showImageDialog(position);
                 }
             }
         });
@@ -79,13 +70,15 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
         }
     }
 
-    private void removeFile(int position) {
-        if(files.get(position).delete()) {
-            removeItem(position);
-            Toast.makeText(fragment.getContext(), R.string.remove_file, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(fragment.getContext(), R.string.err_remove_file, Toast.LENGTH_SHORT).show();
-        }
+    private void showImageDialog(final int position) {
+        final ImageDialog imageDialog = new ImageDialog(fragment.getActivity(), Uri.fromFile(files.get(position)));
+        imageDialog.setRemoveFileCallBack(new ImageDialog.RemoveFileCallBack() {
+            @Override
+            public void Task() {
+                removeItem(position);
+            }
+        });
+        imageDialog.show();
     }
 
     @Override

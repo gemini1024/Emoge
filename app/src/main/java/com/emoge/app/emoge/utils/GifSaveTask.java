@@ -72,7 +72,7 @@ public class GifSaveTask extends AsyncTask<GifMakingInfo, Integer, File> {
         }
     }
 
-    private void showResultImageDialog(@NonNull File file) {
+    private void showResultImageDialog(@NonNull final File file) {
         final Uri fileUri = Uri.fromFile(file);
         final GifSharer gifSharer = new GifSharer(activity);
         final ImageDialog imageDialog = new ImageDialog(activity, fileUri);
@@ -82,26 +82,6 @@ public class GifSaveTask extends AsyncTask<GifMakingInfo, Integer, File> {
                 gifSharer.shareServer(info.getCategory(), info.getTitle(), fileUri);
                 imageDialog.dismiss();
             }
-        }).setShareKakaoButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gifSharer.shareOtherApps(fileUri, activity.getString(R.string.app_package_kakao));
-            }
-        }).setShareGoogleDriveButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gifSharer.shareOtherApps(fileUri, activity.getString(R.string.app_package_google_drive));
-            }
-        }).setShareFacebookButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gifSharer.shareOtherApps(fileUri, activity.getString(R.string.app_package_facebook));
-            }
-        }).setShareOtherAppButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gifSharer.shareOtherApps(fileUri);
-            }
-        }).show();
+        }).showShareButton().show();
     }
 }

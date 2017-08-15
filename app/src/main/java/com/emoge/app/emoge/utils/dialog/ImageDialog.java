@@ -1,18 +1,25 @@
 package com.emoge.app.emoge.utils.dialog;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.utils.GifSharer;
 import com.emoge.app.emoge.utils.GlideAvRequester;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import java.io.File;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by jh on 17. 8. 4.
@@ -22,33 +29,121 @@ import com.wang.avi.AVLoadingIndicatorView;
 public class ImageDialog extends CustomDialog {
     private static final String LOG_TAG = ImageDialog.class.getSimpleName();
 
+    private Activity activity;
+    private Uri fileUri;
     private View shareLayout;
+    private RemoveFileCallBack removeFileCallBack;
 
-    private ImageDialog(Activity activity) {
-        super(activity, R.layout.dialog_with_image);
+    public interface RemoveFileCallBack {
+        void Task();
+    }
+
+    public ImageDialog(Activity activity, Uri fileUri) {
+        super(activity, R.layout.dialog_with_image, true);
+        this.activity = activity;
+        this.fileUri = fileUri;
         shareLayout = findViewById(R.id.dialog_share_container);
+        initImage();
+        initButtons();
     }
 
-    public ImageDialog(Activity activity, Bitmap bitmap) {
-        this(activity);
-        PhotoView image = (PhotoView)findViewById(R.id.dialog_image);
-        image.setImageBitmap(bitmap);
-    }
-
-    public ImageDialog(Activity activity, Uri uri) {
-        this(activity);
+    private void initImage() {
+        ((TextView)findViewById(R.id.dialog_image_title)).setText(fileUri.getLastPathSegment());
         AVLoadingIndicatorView loadingIndicatorView = (AVLoadingIndicatorView)findViewById(R.id.dialog_image_loading);
         PhotoView image = (PhotoView)findViewById(R.id.dialog_image);
-        loadingIndicatorView.setVisibility(View.VISIBLE);
         loadingIndicatorView.show();
-        Glide.with(activity).load(uri).
+        Glide.with(activity).load(fileUri).
                 listener(new GlideAvRequester<Drawable>(loadingIndicatorView)).into(image);
     }
 
-    public ImageDialog setRemoveButtonListener(View.OnClickListener listener) {
-        Button removeButton = (Button)findViewById(R.id.dialog_bt_remove);
-        removeButton.setOnClickListener(listener);
-        removeButton.setVisibility(View.VISIBLE);
+    private void initButtons() {
+        findViewById(R.id.dialog_bt_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+        findViewById(R.id.dialog_bt_share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if( shareLayout.getVisibility() == View.GONE ) {
+                    showShareButton();
+                } else {
+                    hideShareButton();
+                }
+            }
+        });
+        findViewById(R.id.dialog_bt_remove).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SweetDialogs.showWarningDialog(activity,
+                        R.string.remove_file, R.string.remove_file_content)
+                        .setConfirmText(activity.getString(R.string.remove_file))
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismissWithAnimation();
+                                removeFile();
+                            }
+                        });
+            }
+        });
+    }
+
+    public void setRemoveFileCallBack(RemoveFileCallBack removeFileCallBack) {
+        this.removeFileCallBack = removeFileCallBack;
+    }
+
+    private void removeFile() {
+        File file = new File(fileUri.getPath());
+        if(file.exists() && file.delete()) {
+            if(removeFileCallBack != null) {
+                removeFileCallBack.Task();
+            }
+            dismiss();
+            Toast.makeText(activity, R.string.remove_file_result, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(activity, R.string.err_remove_file, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    public ImageDialog showShareButton() {
+        final GifSharer gifSharer = new GifSharer(activity);
+        Animation exitAnim = AnimationUtils.loadAnimation(activity, R.anim.enter);
+        shareLayout.setAnimation(exitAnim);
+        shareLayout.setVisibility(View.VISIBLE);
+        findViewById(R.id.dialog_share_kakao).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new GifSharer(activity).shareOtherApps(fileUri, activity.getString(R.string.app_package_kakao));
+            }
+        });
+        findViewById(R.id.dialog_share_gdrive).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gifSharer.shareOtherApps(fileUri, activity.getString(R.string.app_package_google_drive));
+            }
+        });
+        findViewById(R.id.dialog_share_facebook).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gifSharer.shareOtherApps(fileUri, activity.getString(R.string.app_package_facebook));
+            }
+        });
+        findViewById(R.id.dialog_share_others).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gifSharer.shareOtherApps(fileUri);
+            }
+        });
+        return this;
+    }
+
+    private ImageDialog hideShareButton() {
+        Animation exitAnim = AnimationUtils.loadAnimation(activity, R.anim.exit);
+        shareLayout.setAnimation(exitAnim);
+        shareLayout.setVisibility(View.GONE);
         return this;
     }
 
@@ -57,38 +152,6 @@ public class ImageDialog extends CustomDialog {
         ImageButton shareServerButton = (ImageButton)findViewById(R.id.dialog_share_server);
         shareServerButton.setOnClickListener(listener);
         shareServerButton.setVisibility(View.VISIBLE);
-        return this;
-    }
-
-    public ImageDialog setShareKakaoButton(View.OnClickListener listener) {
-        shareLayout.setVisibility(View.VISIBLE);
-        ImageButton shareOtherAppButton = (ImageButton)findViewById(R.id.dialog_share_kakao);
-        shareOtherAppButton.setOnClickListener(listener);
-        shareOtherAppButton.setVisibility(View.VISIBLE);
-        return this;
-    }
-
-    public ImageDialog setShareGoogleDriveButton(View.OnClickListener listener) {
-        shareLayout.setVisibility(View.VISIBLE);
-        ImageButton shareOtherAppButton = (ImageButton)findViewById(R.id.dialog_share_gdrive);
-        shareOtherAppButton.setOnClickListener(listener);
-        shareOtherAppButton.setVisibility(View.VISIBLE);
-        return this;
-    }
-
-    public ImageDialog setShareFacebookButton(View.OnClickListener listener) {
-        shareLayout.setVisibility(View.VISIBLE);
-        ImageButton shareOtherAppButton = (ImageButton)findViewById(R.id.dialog_share_facebook);
-        shareOtherAppButton.setOnClickListener(listener);
-        shareOtherAppButton.setVisibility(View.VISIBLE);
-        return this;
-    }
-
-    public ImageDialog setShareOtherAppButton(View.OnClickListener listener) {
-        shareLayout.setVisibility(View.VISIBLE);
-        ImageButton shareOtherAppButton = (ImageButton)findViewById(R.id.dialog_share_others);
-        shareOtherAppButton.setOnClickListener(listener);
-        shareOtherAppButton.setVisibility(View.VISIBLE);
         return this;
     }
 }
