@@ -107,6 +107,13 @@ public class ImageDialog extends CustomDialog {
         }
     }
 
+    public ImageDialog setHomeButtonListener(View.OnClickListener listener) {
+        ImageButton homeButton = (ImageButton)findViewById(R.id.dialog_bt_home);
+        homeButton.setOnClickListener(listener);
+        homeButton.setVisibility(View.VISIBLE);
+        return this;
+    }
+
 
     public ImageDialog showShareButton() {
         final GifSharer gifSharer = new GifSharer(activity);

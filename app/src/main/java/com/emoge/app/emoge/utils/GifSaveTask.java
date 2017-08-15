@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.Frame;
 import com.emoge.app.emoge.model.GifMakingInfo;
+import com.emoge.app.emoge.ui.palette.MainActivity;
 import com.emoge.app.emoge.utils.dialog.ImageDialog;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 
@@ -76,7 +77,16 @@ public class GifSaveTask extends AsyncTask<GifMakingInfo, Integer, File> {
         final Uri fileUri = Uri.fromFile(file);
         final GifSharer gifSharer = new GifSharer(activity);
         final ImageDialog imageDialog = new ImageDialog(activity, fileUri);
-        imageDialog.setShareServerButton(new View.OnClickListener() {
+        imageDialog.setHomeButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(activity instanceof MainActivity) {
+                    ((MainActivity)activity).exitMakingView();
+                    activity.finish();
+                    imageDialog.dismiss();
+                }
+            }
+        }).setShareServerButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 gifSharer.shareServer(info.getCategory(), info.getTitle(), fileUri);

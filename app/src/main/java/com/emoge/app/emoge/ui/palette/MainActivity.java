@@ -57,6 +57,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import me.toptas.fancyshowcase.FancyShowCaseView;
+
+import static com.emoge.app.emoge.R.string.hide;
 
 
 /**
@@ -249,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
     private void toggleHistory(TextView toggleButton) {
         if(mHistoryView.getVisibility() == View.GONE) {
             enterViews(mHistoryView);
-            toggleButton.setText(R.string.hide);
+            toggleButton.setText(hide);
         } else {
             exitViews(mHistoryView);
             toggleButton.setText(R.string.history);
@@ -453,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void exitMakingView() {
+    public void exitMakingView() {
         mHistoryAdapter.rollbackOrigin();
         EventBus.getDefault().post(new PaletteMessage(Correcter.CORRECT_APPLY, 0));
         mHistoryAdapter.clearHistory();
@@ -474,6 +477,9 @@ public class MainActivity extends AppCompatActivity {
             // 보정 중인 경우
             if(mHistoryAdapter.isEmpty()) {
                 exitMakingView();
+                if(FancyShowCaseView.isVisible(this)) {
+                    super.onBackPressed();
+                }
             } else {
                 SweetDialogs.showExitMakingDialog(this)
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {

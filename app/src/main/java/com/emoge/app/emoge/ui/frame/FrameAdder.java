@@ -186,7 +186,8 @@ public class FrameAdder implements OnBMClickListener, BitmapLoadable {
         for(int i = 0; i < addCount; i++){
             Bitmap videoFrame = retriever.getFrameAtTime((startSec + i*fps)*1000L, FFmpegMediaMetadataRetriever.OPTION_CLOSEST);
             if(videoFrame != null) {
-                bitmapArrayList.add(resizeVideoFrame(videoFrame));
+                bitmapArrayList.add(resizeVideoFrame(videoFrame,
+                        (int)(MAX_WIDTH*1.5f), (int)(MAX_HEIGHT*1.5f)));
             } else {
                 Logger.e(LOG_TAG, "not found video frame : " + i);
             }
@@ -198,19 +199,19 @@ public class FrameAdder implements OnBMClickListener, BitmapLoadable {
     }
 
     @NonNull
-    private Bitmap resizeVideoFrame(@NonNull Bitmap source) {
+    private Bitmap resizeVideoFrame(@NonNull Bitmap source, int maxWidth, int maxHeight) {
         int width = source.getWidth();
         int height = source.getHeight();
 
-        if(width > MAX_WIDTH || height > MAX_HEIGHT) {
+        if(width > maxWidth || height > maxHeight) {
             if(width > height) {
-                float rate = MAX_WIDTH / (float) width;
+                float rate = maxWidth / (float) width;
                 height = (int) (height * rate);
-                width = MAX_WIDTH;
+                width = maxWidth;
             } else {
-                float rate = MAX_HEIGHT / (float) height;
+                float rate = maxHeight / (float) height;
                 width = (int) (width * rate);
-                height = MAX_HEIGHT;
+                height = maxHeight;
             }
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(source, width, height, true);
             source.recycle();

@@ -26,8 +26,10 @@
 
         <TextView
             android:id="@+id/dialog_image_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:background="@android:color/transparent"
             android:contentDescription="@string/app_name"
             android:ellipsize="end"
@@ -36,6 +38,17 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@android:color/white"
             android:transitionName="@string/splash_image" />
+
+        <ImageButton
+            android:id="@+id/dialog_bt_home"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/back_button"
+            android:padding="@dimen/half_unit_dimen"
+            android:src="@drawable/ic_home"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -81,7 +94,7 @@
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_upload"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <ImageButton
             android:id="@+id/dialog_share_kakao"

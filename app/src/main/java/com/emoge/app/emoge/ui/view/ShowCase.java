@@ -127,8 +127,8 @@ public class ShowCase {
                                     FocusShape.CIRCLE, new DismissListener() {
                                         @Override
                                         public void onDismiss(String id) {
-                                            activity.onBackPressed();
-                                            activity.onBackPressed();
+                                            activity.exitMakingView();
+                                            activity.finish();
                                         }
 
                                         @Override
