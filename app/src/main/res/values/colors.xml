@@ -3,16 +3,16 @@
     <color name="colorPrimary">@android:color/white</color>
     <color name="colorPrimaryDark">@android:color/black</color>
     <color name="colorPrimaryDarkSecond">@android:color/white</color>
-    <color name="colorAccent">#FFC000</color>
+    <color name="colorAccent">#FFC107</color>
     <color name="colorBackground">#545657</color>
-    <color name="colorPalette">@color/colorPrimary</color>
-    <color name="colorPaletteLabel">#111111</color>
+    <color name="colorPalette">#FAFAFA</color>
+    <color name="colorPaletteLabel">@color/colorPrimaryDark</color>
     <color name="colorBoomDim">#AA000000</color>
     <color name="colorProgress">@color/colorAccent</color>
-    <color name="colorConfirm">#009684</color>
-    <color name="colorWarning">#FFC000</color>
-    <color name="colorCancel">#E60012</color>
-    <color name="colorGallery">#111111</color>
+    <color name="colorConfirm">@color/colorPrimaryDark</color>
+    <color name="colorWarning">#FFA726</color>
+    <color name="colorCancel">#212121</color>
+    <color name="colorGallery">@color/colorPrimaryDark</color>
     <color name="colorGrayLabel">#9E9E9E</color>
     <color name="colorFrameCover">#50000000</color>
 </resources>
