@@ -17,7 +17,8 @@ import butterknife.ButterKnife;
  * 서버에 저장된 이미지들을 위한 ViewHolder
  */
 
-class StoreGifViewHolder extends RecyclerView.ViewHolder {
+class StoreGifViewHolder extends RecyclerView.ViewHolder
+        implements View.OnClickListener, View.OnLongClickListener {
     @BindView(R.id.server_item_card)
     CardView card;
     @BindView(R.id.server_item_image_loading)
@@ -31,8 +32,35 @@ class StoreGifViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.server_item_favorite)
     TextView favorite;
 
+    private FavoritesAccessible favoritesAccessible;
+
     StoreGifViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this,itemView);
+        itemView.setOnClickListener(this);
+        itemView.setOnLongClickListener(this);
+    }
+
+    void setFavoritesAccessible(FavoritesAccessible favoritesAccessible) {
+        this.favoritesAccessible = favoritesAccessible;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(favoritesAccessible.isServerCategory()) {
+            if(favoritesAccessible.hasFavorites(getAdapterPosition())) {
+                favoritesAccessible.addFavorite(getAdapterPosition());
+            } else {
+                favoritesAccessible.removeFavorite(getAdapterPosition());
+            }
+        } else {
+            favoritesAccessible.removeFavoriteWithDialog(getAdapterPosition());
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        favoritesAccessible.downloadImage(getAdapterPosition());
+        return false;
     }
 }

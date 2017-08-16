@@ -35,7 +35,7 @@ import io.realm.Realm;
  * 서버에 저장된 이미지들 불러오기 위한 Adapter
  */
 
-class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
+class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> implements FavoritesAccessible {
     private final String LOG_TAG = StoreGifAdapter.class.getSimpleName();
 
     private Fragment fragment;
@@ -57,7 +57,9 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
     @Override
     public StoreGifViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_server_img, parent, false);
-        return new StoreGifViewHolder(view);
+        StoreGifViewHolder viewHolder = new StoreGifViewHolder(view);
+        viewHolder.setFavoritesAccessible(this);
+        return viewHolder;
     }
 
     @Override
@@ -68,63 +70,18 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
         Glide.with(fragment).load(Uri.parse(item.getDownloadUrl()))
                 .listener(new GlideAvRequester<Drawable>(holder.loading)).into(holder.image);
         holder.title.setText(item.getTitle());
-        if(item.getFavorite() > -1) {
-            if(inRealm(position)) {                     // 서버 favorite o
-                holder.favoriteIcon.setSelected(true);
-                holder.card.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        addFavorite(position);
-                    }
-                });
-            } else {                                    // 서버 favorite x
-                holder.favoriteIcon.setSelected(false);
-                holder.card.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        removeFavorite(position);
-                    }
-                });
-            }
+        if(isServerCategory()) {
+            holder.favoriteIcon.setSelected(hasFavorites(position));
             holder.favorite.setText(String.valueOf(item.getFavorite()));
-        } else {                                        // 저장소
+        } else {
             holder.favoriteIcon.setSelected(true);
             holder.favorite.setVisibility(View.INVISIBLE);
-            holder.card.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SweetDialogs.showWarningDialog(fragment.getActivity(), R.string.cancel_favorite_title, R.string.cancel_favorite_content)
-                            .setConfirmText(fragment.getString(R.string.cancel_favorite))
-                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                    sweetAlertDialog.dismissWithAnimation();
-                                    removeFavoriteInMyStore(position);
-                                }
-                            });
-                }
-            });
-
         }
-        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                SweetDialogs.showWarningDialog(fragment.getActivity(), R.string.download_gif_title, R.string.download_favorite_content)
-                        .setConfirmText(fragment.getString(R.string.download_gif_title))
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                sweetAlertDialog.dismissWithAnimation();
-                                new GifDownloadTask(fragment.getActivity()).execute(gifs.get(position));
-                            }
-                        });
-                return false;
-            }
-        });
     }
 
 
-    private void addFavorite(final int position) {
+    @Override
+    public void addFavorite(final int position) {
         updateFavorite(database, serverItemKeys.get(position), -1);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -138,7 +95,8 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
         });
     }
 
-    private void removeFavorite(final int position) {
+    @Override
+    public void removeFavorite(final int position) {
         updateFavorite(database, serverItemKeys.get(position), 1);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -149,6 +107,32 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
                 Toast.makeText(fragment.getContext(), R.string.add_favorite, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void removeFavoriteWithDialog(final int position) {
+        SweetDialogs.showWarningDialog(fragment.getActivity(), R.string.cancel_favorite_title, R.string.cancel_favorite_content)
+                .setConfirmText(fragment.getString(R.string.cancel_favorite))
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismissWithAnimation();
+                        removeFavoriteInMyStore(position);
+                    }
+                });
+    }
+
+    @Override
+    public void downloadImage(final int position) {
+        SweetDialogs.showWarningDialog(fragment.getActivity(), R.string.download_gif_title, R.string.download_favorite_content)
+                .setConfirmText(fragment.getString(R.string.download_gif_title))
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismissWithAnimation();
+                        new GifDownloadTask(fragment.getActivity()).execute(gifs.get(position));
+                    }
+                });
     }
 
     private void removeFavoriteInMyStore(final int position) {
@@ -170,8 +154,13 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> {
     }
 
 
+    @Override
+    public boolean isServerCategory() {
+        return database != null;
+    }
 
-    private boolean inRealm(int position) {
+    @Override
+    public boolean hasFavorites(int position) {
         return realm.where(MyStoreGif.class).equalTo(MyStoreGif.KEY_FIELD,
                 serverItemKeys.get(position)).findFirst() != null;
     }
