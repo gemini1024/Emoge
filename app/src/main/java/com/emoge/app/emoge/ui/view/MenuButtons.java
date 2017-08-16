@@ -12,6 +12,7 @@ import com.emoge.app.emoge.ui.frame.FrameAdder;
 import com.nightonke.boommenu.BoomButtons.HamButton;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.Util;
 
 /**
  * Created by jh on 17. 8. 1.
@@ -52,9 +53,14 @@ public class MenuButtons {
 
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
+                    .isRound(false)
+                    .buttonRadius(Util.dp2px(40))
+                    .textTopMargin(Util.dp2px(0))
+                    .imageRect(new Rect(Util.dp2px(0),Util.dp2px(0),Util.dp2px(80),Util.dp2px(80)))
+                    .shadowEffect(false)
                     .normalImageRes(imageIds.getResourceId(i,0))
                     .normalText(titles[i])
-                    .normalColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                    .normalColor(ContextCompat.getColor(context, android.R.color.transparent))
                     .highlightedColor(ContextCompat.getColor(context, R.color.colorPrimary))
                     .listener(correcter);
             bmb.addBuilder(builder);
