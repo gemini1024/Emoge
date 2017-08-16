@@ -25,13 +25,22 @@ class FrameViewHolder extends DragSortAdapter.ViewHolder implements
     @BindView(R.id.frame_item_number)
     TextView number;
 
+    private OnFrameClickListener frameClickListener;
+
     FrameViewHolder(DragSortAdapter<?> dragSortAdapter, View itemView) {
         super(dragSortAdapter, itemView);
         ButterKnife.bind(this, itemView);
+        itemView.setOnClickListener(this);
+        itemView.setOnLongClickListener(this);
+    }
+
+    void setFrameClickListener(OnFrameClickListener frameClickListener) {
+        this.frameClickListener = frameClickListener;
     }
 
     @Override
     public void onClick(View v) {
+        frameClickListener.onFrameClick(getItemId());
     }
 
     @Override

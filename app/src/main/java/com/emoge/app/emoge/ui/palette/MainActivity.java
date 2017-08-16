@@ -476,6 +476,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // 보정 중인 경우
             if(mHistoryAdapter.isEmpty()) {
+                if(mFrameAdapter.isEmpty()) {       // 이미지 임의로 지워서 비운 경우 History 제거
+                    mHistoryAdapter.clearHistory();
+                }
                 exitMakingView();
                 if(FancyShowCaseView.isVisible(this)) {
                     super.onBackPressed();

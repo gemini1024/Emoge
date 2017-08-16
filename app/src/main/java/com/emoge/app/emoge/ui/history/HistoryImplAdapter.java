@@ -38,28 +38,15 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
     @Override
     public HistoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_history, parent, false);
-        return new HistoryViewHolder(view);
+        HistoryViewHolder viewHolder = new HistoryViewHolder(view);
+        viewHolder.setHistoryAccessible(this);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(HistoryViewHolder holder, final int position) {
-        if(position == 0) {
-            holder.itemView.setText("원본");
-        } else {
-            holder.itemView.setText(String.valueOf(position));
-        }
-        if(lastRefIndex == position) {
-            holder.cursor.setVisibility(View.VISIBLE);
-        } else {
-            holder.cursor.setVisibility(View.GONE);
-        }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rollbackPosition(position);
-                notifyDataSetChanged();
-            }
-        });
+        holder.itemView.setText(position == 0? "원본" : String.valueOf(position));
+        holder.cursor.setVisibility(lastRefIndex == position? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -98,7 +85,7 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
 
     // 한 단계씩 되돌리기. ( 원본인경우 false )
     @Override
-    public boolean rollbackOneStep() {
+    public synchronized boolean rollbackOneStep() {
         if(lastRefIndex > 0) {
             rollbackPosition(lastRefIndex-1);
             return true;
@@ -115,7 +102,7 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
     }
 
     @Override
-    public void rollbackPosition(int position) {
+    public synchronized void rollbackPosition(int position) {
         rollbackOrigin();
         for(int i=1; i<=position; i++) {
             History history = histories.get(i);
@@ -131,6 +118,7 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
         }
         Logger.i(LOG_TAG, "rollback : "+position);
         lastRefIndex = position;
+        notifyDataSetChanged();
     }
 
     private void correct(int type, int value) {

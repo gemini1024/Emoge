@@ -26,7 +26,7 @@ import java.util.List;
  */
 
 class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
-        implements LocalImageLoadable {
+        implements LocalImageLoadable, OnGalleryClickListener {
     private final String LOG_TAG = GalleryAdapter.class.getSimpleName();
 
     private Fragment fragment;                  // 호출한 Fragment (GalleryFragment)
@@ -44,7 +44,9 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
     @Override
     public GalleryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_gallery, parent, false);
-        return new GalleryViewHolder(view);
+        GalleryViewHolder viewHolder = new GalleryViewHolder(view);
+        viewHolder.setOnGalleryClickListener(this);
+        return viewHolder;
     }
 
     @Override
@@ -54,19 +56,19 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
         holder.loading.show();
         Glide.with(fragment).asBitmap().load(file)
                 .listener(new GlideAvRequester<Bitmap>(holder.loading)).into(holder.image);
-        holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(canSendMsg) {
-                    EventBus.getDefault().post(file);
-                } else {
-                    showImageDialog(position);
-                }
-            }
-        });
         if(ImageFormatChecker.GIF_FORMAT == format) {
             holder.type.setText(R.string.frame_gif_label);
             holder.type.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    @Override
+    public void onItemClickListener(int position) {
+        if(canSendMsg) {
+            EventBus.getDefault().post(files.get(position));
+        } else {
+            showImageDialog(position);
         }
     }
 

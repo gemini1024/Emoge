@@ -26,7 +26,7 @@ import java.util.List;
  * Draggable RecyclerView Adapter
  */
 
-public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
+public class FrameAdapter extends DragSortAdapter<FrameViewHolder> implements OnFrameClickListener {
     private static final String LOG_TAG = FrameAdapter.class.getSimpleName();
 
     private static final int MAX_ITEM_SIZE = 10;
@@ -62,9 +62,10 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
 
     @Override
     public FrameViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.item_frame, parent, false);
-        return new FrameViewHolder(this, view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_frame, parent, false);
+        FrameViewHolder frameViewHolder = new FrameViewHolder(this, view);
+        frameViewHolder.setFrameClickListener(this);
+        return frameViewHolder;
     }
 
     @Override
@@ -74,8 +75,6 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
         holder.image.setImageBitmap(frame.getBitmap());
         holder.image.setVisibility(getDraggingId() == frame.getId() ? View.INVISIBLE : View.VISIBLE);
         holder.image.postInvalidate();
-        setDialog(holder.image, frame.getId());
-        holder.image.setOnLongClickListener(holder);
         holder.number.setText(String.valueOf(position+1));
     }
 
@@ -98,22 +97,18 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
         this.activity = activity;
     }
 
-    private void setDialog(View view, final long id) {
+    @Override
+    public void onFrameClick(final long frameId) {
         if(activity != null) {
-            view.setOnClickListener(new View.OnClickListener() {
+            final FrameDialog imageDialog = new FrameDialog(activity,
+                    getItem(getPositionForId(frameId)).getBitmap());
+            imageDialog.setRemoveButtonListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final FrameDialog imageDialog = new FrameDialog(activity,
-                            frames.get(getPositionForId(id)).getBitmap());
-                    imageDialog.setRemoveButtonListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            removeItem(id);
-                            imageDialog.dismiss();
-                        }
-                    }).show();
+                    removeItem(frameId);
+                    imageDialog.dismiss();
                 }
-            });
+            }).show();
         }
     }
 
@@ -262,4 +257,5 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> {
             EventBus.getDefault().post(FrameStatusMessage.NOT_FULL);
         }
     }
+
 }

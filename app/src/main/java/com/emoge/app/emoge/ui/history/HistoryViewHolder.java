@@ -14,14 +14,26 @@ import butterknife.ButterKnife;
  * Correction History View Holder
  */
 
-class HistoryViewHolder extends RecyclerView.ViewHolder {
+class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @BindView(R.id.history_item)
     TextView itemView;
     @BindView(R.id.history_item_cursor)
     View cursor;
 
+    private HistoryAccessible historyAccessible;
+
     HistoryViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        itemView.setOnClickListener(this);
+    }
+
+    void setHistoryAccessible(HistoryAccessible historyAccessible) {
+        this.historyAccessible = historyAccessible;
+    }
+
+    @Override
+    public void onClick(View v) {
+        historyAccessible.rollbackPosition(getAdapterPosition());
     }
 }
