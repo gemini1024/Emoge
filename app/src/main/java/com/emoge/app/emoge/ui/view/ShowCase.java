@@ -2,6 +2,7 @@ package com.emoge.app.emoge.ui.view;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.support.v4.content.res.ResourcesCompat;
 
 import com.emoge.app.emoge.MainApplication;
 import com.emoge.app.emoge.R;
@@ -40,6 +41,10 @@ public class ShowCase {
         MainApplication.getSharedPreferences().edit().putInt(PREF_SHOWN_COUNT_NAME, SHOWCASE_NOT_SHOWN).apply();
     }
 
+    public static void finishShownShowCase() {
+        MainApplication.getSharedPreferences().edit().putInt(PREF_SHOWN_COUNT_NAME, SHOWCASE_CORRECT).apply();
+    }
+
     private static FancyShowCaseView buildShowCaseView(Activity activity, int viewRes, int titleRes, FocusShape focusShape) {
         return buildShowCaseView(activity, viewRes, titleRes, focusShape, new DismissListener() {
             @Override
@@ -59,6 +64,7 @@ public class ShowCase {
         return new FancyShowCaseView.Builder(activity)
                 .focusOn(activity.findViewById(viewRes))
                 .focusShape(focusShape)
+                .backgroundColor(ResourcesCompat.getColor(activity.getResources(), R.color.colorShowCase, null))
                 .title(activity.getString(titleRes))
                 .dismissListener(dismissListener)
                 .build();

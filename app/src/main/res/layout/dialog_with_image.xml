@@ -145,29 +145,32 @@
         android:id="@+id/dialog_bt_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimaryDark">
 
-        <Button
+        <ImageButton
             android:id="@+id/dialog_bt_share"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:gravity="center"
-            android:scaleType="fitCenter"
-            android:text="@string/share"
-            android:textColor="@color/colorWarning" />
+            android:padding="@dimen/unit_dimen"
+            android:src="@drawable/ic_share" />
 
-        <Button
+        <ImageButton
             android:id="@+id/dialog_bt_remove"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:gravity="center"
-            android:scaleType="fitCenter"
-            android:text="@string/remove"
-            android:textColor="@color/colorWarning" />
+            android:padding="@dimen/unit_dimen"
+            android:src="@drawable/ic_remove" />
 
     </LinearLayout>
 </RelativeLayout>

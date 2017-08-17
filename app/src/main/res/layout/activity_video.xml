@@ -105,6 +105,7 @@
             android:id="@+id/video_fps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:dsb_indicatorColor="@color/colorAccent"
             app:dsb_indicatorElevation="0dp"
             app:dsb_max="2000"
             app:dsb_min="100"
@@ -115,15 +116,15 @@
 
 
     <!--confirm button-->
-    <android.support.v7.widget.AppCompatButton
+    <ImageButton
         android:id="@+id/video_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/colorPalette"
-        android:text="@string/capture"
-        android:textAppearance="@android:style/TextAppearance.Holo.Small"
-        android:textColor="@color/colorConfirm"
-        app:dsb_indicatorColor="@color/colorAccent"
+        android:adjustViewBounds="true"
+        android:background="@color/colorAccent"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_capture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/guideline_capture"
         app:layout_constraintRight_toRightOf="parent"

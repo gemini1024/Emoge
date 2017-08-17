@@ -48,7 +48,7 @@
         android:layout_marginEnd="@dimen/unit_dimen"
         android:background="@android:color/transparent"
         android:text="@string/reverse"
-        android:textAppearance="@android:style/TextAppearance.Holo.Small"
+        android:textAppearance="@android:style/TextAppearance.Material.Caption"
         android:textColor="@android:color/primary_text_light"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

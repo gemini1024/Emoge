@@ -35,13 +35,14 @@
         android:id="@+id/gallery_best"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/unit_dimen"
         android:layout_marginBottom="@dimen/unit_dimen"
+        android:layout_marginTop="@dimen/unit_dimen"
+        android:overScrollMode="never"
+        app:dsv_orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@id/guideline"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gallery_best_label"
-        app:dsv_orientation="horizontal"/>
+        app:layout_constraintTop_toBottomOf="@id/gallery_best_label" />
 
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/gallery_best_loading"
@@ -75,7 +76,7 @@
             android:background="@drawable/toolbar_gallery_bg"
             android:elevation="@dimen/cardview_default_elevation"
             android:gravity="center"
-            android:text="My Gallery"
+            android:text="@string/my_gallery"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@android:color/white"
             android:textStyle="bold"

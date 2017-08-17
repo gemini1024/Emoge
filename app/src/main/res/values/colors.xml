@@ -4,8 +4,10 @@
     <color name="colorPrimaryDark">@android:color/black</color>
     <color name="colorPrimaryDarkSecond">@android:color/white</color>
     <color name="colorAccent">#FFC107</color>
+    <color name="colorAccentAlpha">#50FFC107</color>
     <color name="colorBackground">#757575</color>
-    <color name="colorPalette">#FAFAFA</color>
+    <color name="colorFrameBackground">#30000000</color>
+    <color name="colorPalette">#E0E0E0</color>
     <color name="colorPaletteLabel">@color/colorPrimaryDark</color>
     <color name="colorBoomDim">#AA000000</color>
     <color name="colorProgress">@color/colorAccent</color>
@@ -15,4 +17,26 @@
     <color name="colorGallery">@color/colorPrimaryDark</color>
     <color name="colorGrayLabel">#9E9E9E</color>
     <color name="colorFrameCover">#50000000</color>
+    <color name="colorShowCase">#CD000000</color>
+
+    <!--sweet dialog-->
+    <color name="blue_btn_bg_color">@color/colorAccent</color>
+    <color name="blue_btn_bg_pressed_color">#FFB300</color>
+    <color name="button_text_color">#FFFFFF</color>
+    <color name="error_stroke_color">#FF8f00</color>
+    <color name="float_transparent">#00000000</color>
+    <color name="gray_btn_bg_color">#D0D0D0</color>
+    <color name="gray_btn_bg_pressed_color">#B6B6B6</color>
+    <color name="material_blue_grey_80">#ff37474f</color>
+    <color name="material_blue_grey_90">#ff263238</color>
+    <color name="material_blue_grey_95">#ff21272b</color>
+    <color name="material_deep_teal_20">#ff80cbc4</color>
+    <color name="material_deep_teal_50">#ff009688</color>
+    <color name="red_btn_bg_color">#ff8f00</color>
+    <color name="red_btn_bg_pressed_color">#ffa000</color>
+    <color name="success_stroke_color">#A5DC86</color>
+    <color name="sweet_dialog_bg_color">#FFFFFF</color>
+    <color name="text_color">@color/colorPrimaryDark</color>
+    <color name="trans_success_stroke_color">#33A5DC86</color>
+    <color name="warning_stroke_color">#F8BB86</color>
 </resources>

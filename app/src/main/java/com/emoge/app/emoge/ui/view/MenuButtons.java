@@ -54,9 +54,9 @@ public class MenuButtons {
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
                     .isRound(false)
-                    .buttonRadius(Util.dp2px(40))
+                    .buttonRadius(Util.dp2px(48))
                     .textTopMargin(Util.dp2px(0))
-                    .imageRect(new Rect(Util.dp2px(0),Util.dp2px(0),Util.dp2px(80),Util.dp2px(80)))
+                    .imageRect(new Rect(Util.dp2px(0),Util.dp2px(0),Util.dp2px(96),Util.dp2px(96)))
                     .shadowEffect(false)
                     .normalImageRes(imageIds.getResourceId(i,0))
                     .normalText(titles[i])

@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 공통
     @BindView(R.id.main_frame_list)     RecyclerView mFrameRecyclerView;    // Frame List
+    @BindView(R.id.main_frame_list_error) View mFrameErrorView;             // Frame Error View
 
     // 추가 화면
     @BindView(R.id.toolbar_next)        ImageButton mNextButton;            // (Toolbar)
@@ -374,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, requestCode)
+        new FrameAddTask(this, mFrameRecyclerView, mFrameErrorView, mFrameAdapter, requestCode)
                 .execute(new Intent().setData(Uri.fromFile(file)));
     }
 
@@ -411,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
                     startVideoActivity(data);
                     return;
                 }
-                new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, requestCode).execute(data);
+                new FrameAddTask(this, mFrameRecyclerView, mFrameErrorView, mFrameAdapter, requestCode).execute(data);
             } else {
                 // show error or do nothing
                 Logger.e(LOG_TAG, getString(R.string.err_intent_return_null));
@@ -474,6 +475,9 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if(mGalleryWindow.getVisibility() == View.VISIBLE) {
             // 이미지 추가 중인 경우
+            if(FancyShowCaseView.isVisible(this)) {
+                ShowCase.finishShownShowCase();
+            }
             super.onBackPressed();
         } else {
             // 보정 중인 경우
