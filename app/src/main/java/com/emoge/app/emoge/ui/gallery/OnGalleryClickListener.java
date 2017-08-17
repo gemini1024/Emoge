@@ -5,6 +5,6 @@ package com.emoge.app.emoge.ui.gallery;
  * Gallery Image 클릭 시 Listener
  */
 
-interface OnGalleryClickListener {
+public interface OnGalleryClickListener {
     void onItemClickListener(int position);
 }

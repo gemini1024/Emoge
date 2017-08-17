@@ -1,8 +1,6 @@
 package com.emoge.app.emoge.ui.gallery;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -16,18 +14,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.emoge.app.emoge.MainApplication;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.model.StoreGif;
+import com.emoge.app.emoge.ui.gallery.best.ServerImageScrollAdapter;
 import com.emoge.app.emoge.ui.license.LicenseActivity;
 import com.emoge.app.emoge.ui.palette.MainActivity;
 import com.emoge.app.emoge.ui.server.ServerActivity;
 import com.emoge.app.emoge.ui.view.ShowCase;
-import com.emoge.app.emoge.utils.GifDownloadTask;
-import com.emoge.app.emoge.utils.GlideAvRequester;
 import com.emoge.app.emoge.utils.Logger;
 import com.emoge.app.emoge.utils.NetworkStatus;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
@@ -37,6 +33,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wang.avi.AVLoadingIndicatorView;
+import com.yarolegovich.discretescrollview.DiscreteScrollView;
+import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,16 +49,18 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class GalleryActivity extends AppCompatActivity {
     private final String LOG_TAG = GalleryActivity.class.getSimpleName();
 
+    private static final int BEST_PHOTO_NUM = 5;
+
     @BindView(R.id.gallery_drawer)
     DrawerLayout mNavigationDrawer;
     @BindView(R.id.gallery_best)
-    ImageView mBestPhoto;
+    DiscreteScrollView mBestPhoto;
     @BindView(R.id.gallery_best_loading)
-    AVLoadingIndicatorView mBestPhotoLoading;
+    AVLoadingIndicatorView mBestLoading;
     @BindView(R.id.gallery_window)
     ConstraintLayout mGalleryWindow;
 
-    private StoreGif mBestFavoriteGif;
+    private List<StoreGif> mBestFavoriteGifs;
     private Fragment mGallery;
 
     @Override
@@ -63,6 +68,7 @@ public class GalleryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         ButterKnife.bind(this);
+        mBestFavoriteGifs = new ArrayList<>();
         loadGifImages();
 
         addNavigation();
@@ -123,22 +129,30 @@ public class GalleryActivity extends AppCompatActivity {
 
     // Server 에서 가장 인기있는 움짤 가져오기
     void loadGifImages() {
-        DatabaseReference database = FirebaseDatabase.getInstance()
-                .getReference(getResources().getStringArray(R.array.server_category)[0]);
-        database.addValueEventListener(new ValueEventListener() {
+        String[] categories = getResources().getStringArray(R.array.server_category);
+        for(String category : categories) {
+            loadGifsByCategory(FirebaseDatabase.getInstance().getReference(category));
+        }
+    }
+
+    private void loadGifsByCategory(DatabaseReference categoryDb) {
+        categoryDb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Logger.d(LOG_TAG, dataSnapshot.toString());
                 if (dataSnapshot.getValue(StoreGif.class) != null) {
-                    mBestFavoriteGif = dataSnapshot.getChildren().iterator().next().getValue(StoreGif.class);
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                        StoreGif storeGif = childSnapshot.getValue(StoreGif.class);
-                        if (mBestFavoriteGif.getFavorite() < storeGif.getFavorite()) {
-                            mBestFavoriteGif = storeGif;
-                        }
+                        mBestFavoriteGifs.add(childSnapshot.getValue(StoreGif.class));
                     }
-                    setBestFavoriteGif();
                 }
+                Collections.sort(mBestFavoriteGifs, new Comparator<StoreGif>() {
+                    @Override
+                    public int compare(StoreGif o1, StoreGif o2) {
+                        return Integer.compare(o2.getFavorite(), o1.getFavorite());
+                    }
+                });
+                mBestFavoriteGifs.subList(Math.min(5, mBestFavoriteGifs.size()), mBestFavoriteGifs.size()).clear();
+                setBestFavoriteGif();
             }
 
             @Override
@@ -150,28 +164,14 @@ public class GalleryActivity extends AppCompatActivity {
 
     // Server 에서 인기 있는 움짤 가져와서 보여주기
     private void setBestFavoriteGif() {
-        if (mBestFavoriteGif == null) {
+        if (mBestFavoriteGifs.isEmpty()) {
             return;
         }
-        mBestPhotoLoading.show();
-        Glide.with(GalleryActivity.this)
-                .load(Uri.parse(mBestFavoriteGif.getDownloadUrl()))
-                .listener(new GlideAvRequester<Drawable>(mBestPhotoLoading))
-                .into(mBestPhoto);
-        mBestPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SweetDialogs.showWarningDialog(GalleryActivity.this, R.string.download_gif_title, R.string.download_favorite_content)
-                        .setConfirmText(getString(R.string.download_gif_title))
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                sweetAlertDialog.dismissWithAnimation();
-                                new GifDownloadTask(GalleryActivity.this).execute(mBestFavoriteGif);
-                            }
-                        });
-            }
-        });
+        mBestLoading.hide();
+        mBestPhoto.setAdapter(new ServerImageScrollAdapter(this, mBestFavoriteGifs));
+        mBestPhoto.setItemTransformer(new ScaleTransformer.Builder()
+                .setMinScale(0.8f)
+                .build());
     }
 
     // Navigation -
