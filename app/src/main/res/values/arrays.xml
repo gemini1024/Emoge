@@ -49,6 +49,15 @@
     </string-array>
 
 
+    <!--rack color (best image)-->
+    <array name="rank_color">
+        <item>#C2185B</item>
+        <item>#EC407A</item>
+        <item>#F06292</item>
+        <item>#FFA000</item>
+        <item>@color/colorAccent</item>
+    </array>
+
     <!--license-->
     <string-array name="licenses_title">
         <item>Glide</item>
@@ -62,6 +71,7 @@
         <item>SweetAlertDialog</item>
         <item>DragSortAdapter</item>
         <item>PhotoView</item>
+        <item>LabelView</item>
         <item>TedPermission</item>
         <item>BoomMenu</item>
         <item>Discrete SeekBar</item>
@@ -81,6 +91,7 @@
         <item>MIT \n https://github.com/pedant/sweet-alert-dialog</item>
         <item>Apache 2.0. \n https://github.com/vinc3m1/DragSortAdapter</item>
         <item>Apache 2.0. \n https://github.com/chrisbanes/PhotoView</item>
+        <item>Apache 2.0. \n https://github.com/linger1216/labelview</item>
         <item>Apache 2.0. \n https://github.com/ParkSangGwon/TedPermission</item>
         <item>Apache 2.0. \n https://github.com/Nightonke/BoomMenu</item>
         <item>Apache 2.0. \n https://github.com/AnderWeb/discreteSeekBar</item>

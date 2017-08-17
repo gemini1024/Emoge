@@ -1,8 +1,10 @@
 package com.emoge.app.emoge.ui.gallery.best;
 
 import android.app.Activity;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,10 +35,21 @@ public class ServerImageScrollAdapter extends RecyclerView.Adapter<ServerImageVi
 
     private Activity activity;
     private List<StoreGif> storeGifs;
+    private int[] rankColors;
 
     public ServerImageScrollAdapter(Activity activity, List<StoreGif> storeGifs) {
         this.activity = activity;
         this.storeGifs = storeGifs;
+        getRankColors();
+    }
+
+    private void getRankColors() {
+        TypedArray ta = activity.getResources().obtainTypedArray(R.array.rank_color);
+        rankColors = new int[ta.length()];
+        for(int i=0; i<ta.length(); i++) {
+            rankColors[i] = ta.getColor(i, 0);
+        }
+        ta.recycle();
     }
 
     @Override
@@ -62,7 +75,10 @@ public class ServerImageScrollAdapter extends RecyclerView.Adapter<ServerImageVi
     @Override
     public void onBindViewHolder(ServerImageViewHolder holder, int position) {
         if(position < storeGifs.size()) {
-            holder.rank.setText(String.format("%d위 : %s", position+1, storeGifs.get(position).getTitle()));
+            if(position < rankColors.length) {
+                holder.image.setLabelText(String.format(activity.getString(R.string.rank_number), position+1));
+                holder.image.setLabelBackgroundColor(rankColors[position]);
+            }
             holder.loading.show();
             Glide.with(activity)
                     .load(Uri.parse(storeGifs.get(position).getDownloadUrl()))
@@ -70,11 +86,15 @@ public class ServerImageScrollAdapter extends RecyclerView.Adapter<ServerImageVi
                     .listener(new GlideAvRequester<Drawable>(holder.loading))
                     .into(holder.image);
         } else {    // Footer
-            holder.rank.setVisibility(View.GONE);
+            holder.image.setLabelText(activity.getString(R.string.rank_out));
+            holder.image.setLabelBackgroundColor(ResourcesCompat
+                    .getColor(activity.getResources(), R.color.colorPrimaryDark, null));
+            holder.image.setBackgroundColor(ResourcesCompat
+                    .getColor(activity.getResources(), R.color.colorPrimary, null));
             holder.loading.hide();
             Glide.with(activity)
                     .load("")
-                    .apply(RequestOptions.placeholderOf(R.drawable.ic_more))
+                    .apply(RequestOptions.placeholderOf(R.drawable.ic_more_bk))
                     .into(holder.image);
         }
     }

@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.38" />
+        app:layout_constraintGuide_percent="0.48" />
 
     <!--Best Gif Image-->
     <TextView
@@ -35,7 +35,8 @@
         android:id="@+id/gallery_best"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="@dimen/half_unit_dimen"
+        android:layout_marginTop="@dimen/unit_dimen"
+        android:layout_marginBottom="@dimen/unit_dimen"
         app:layout_constraintBottom_toBottomOf="@id/guideline"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

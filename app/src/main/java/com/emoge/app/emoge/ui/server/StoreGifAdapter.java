@@ -195,10 +195,22 @@ class StoreGifAdapter extends RecyclerView.Adapter<StoreGifViewHolder> implement
 
 
     // 조작
-    void addItem(String key, StoreGif storeGif) {
-        serverItemKeys.add(key);
-        gifs.add(storeGif);
-        notifyItemInserted(gifs.size()-1);
+    void addItem(String key, StoreGif addedGif) {
+        boolean added = false;
+        for(int i=0; i<gifs.size(); i++) {
+            if(gifs.get(i).getFavorite() < addedGif.getFavorite()) {
+                serverItemKeys.add(i, key);
+                gifs.add(i, addedGif);
+                notifyItemInserted(i);
+                added = true;
+                break;
+            }
+        }
+        if(!added) {
+            serverItemKeys.add(key);
+            gifs.add(addedGif);
+            notifyItemInserted(gifs.size()-1);
+        }
     }
 
     private void removeItem(int position) {
