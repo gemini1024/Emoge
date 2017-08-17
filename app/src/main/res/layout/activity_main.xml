@@ -30,35 +30,9 @@
 
 
     <!--Correcter-->
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/main_palette_window"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline1">
-
-        <include layout="@layout/main_correcter" />
-
-    </android.support.constraint.ConstraintLayout>
+    <include layout="@layout/main_correcter" />
 
     <!--Gallery-->
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/main_gallery_window"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/toolbar_gallery_bg"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline1">
-
-        <include layout="@layout/main_gallery" />
-
-    </android.support.constraint.ConstraintLayout>
-
+    <include layout="@layout/main_gallery" />
 
 </android.support.constraint.ConstraintLayout>

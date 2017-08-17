@@ -242,11 +242,11 @@ public class GalleryActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Glide.get(GalleryActivity.this).clearMemory();
+        Glide.get(getApplicationContext()).clearMemory();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Glide.get(GalleryActivity.this).clearDiskCache();
+                Glide.get(getApplicationContext()).clearDiskCache();
             }
         }).start();
     }

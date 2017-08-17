@@ -1,52 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:id="@+id/main_gallery_window"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:orientation="vertical"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/guideline1">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/main_gallery_tab"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/toolbar_gallery_bg"
+        android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/main_bt_add_frame"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tabSelectedTextColor="@android:color/white"
-        app:tabTextColor="@color/colorGrayLabel" />
-
-    <com.nightonke.boommenu.BoomMenuButton
-        android:id="@+id/main_bt_add_frame"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_margin="@dimen/half_unit_dimen"
-        app:bmb_backgroundEffect="false"
-        app:bmb_buttonEnum="ham"
-        app:bmb_buttonPlaceEnum="buttonPlace_ham_3"
-        app:bmb_buttonRadius="@dimen/boombutton_size"
-        app:bmb_dimColor="@color/colorBoomDim"
-        app:bmb_dotRadius="0dp"
-        app:bmb_normalColor="@color/colorPaletteLabel"
-        app:bmb_piecePlaceEnum="piecePlace_ham_3"
-        app:layout_constraintBottom_toBottomOf="@id/main_gallery_tab"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/main_gallery_tab">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:layout_width="@dimen/boombutton_image_size"
-            android:layout_height="@dimen/boombutton_image_size"
-            android:layout_gravity="center"
-            android:background="@color/colorPaletteLabel"
-            android:contentDescription="@string/menu_add_image"
-            android:src="@drawable/ic_more" />
-    </com.nightonke.boommenu.BoomMenuButton>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/main_gallery_tab"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:tabSelectedTextColor="@android:color/white"
+            app:tabTextColor="@color/colorGrayLabel" />
+
+        <com.nightonke.boommenu.BoomMenuButton
+            android:id="@+id/main_bt_add_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/half_unit_dimen"
+            app:bmb_backgroundEffect="false"
+            app:bmb_buttonEnum="ham"
+            app:bmb_buttonPlaceEnum="buttonPlace_ham_3"
+            app:bmb_buttonRadius="@dimen/boombutton_size"
+            app:bmb_dimColor="@color/colorBoomDim"
+            app:bmb_dotRadius="0dp"
+            app:bmb_normalColor="@color/colorPaletteLabel"
+            app:bmb_piecePlaceEnum="piecePlace_ham_3">
+
+            <ImageView
+                android:layout_width="@dimen/boombutton_image_size"
+                android:layout_height="@dimen/boombutton_image_size"
+                android:layout_gravity="center"
+                android:background="@color/colorPaletteLabel"
+                android:contentDescription="@string/menu_add_image"
+                android:src="@drawable/ic_more" />
+        </com.nightonke.boommenu.BoomMenuButton>
+
+    </LinearLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/main_gallery_container"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_gallery_tab" />
-</android.support.constraint.ConstraintLayout>
+        android:layout_weight="1" />
+</LinearLayout>

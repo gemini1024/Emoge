@@ -20,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.emoge.app.emoge.R;
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     // 추가 화면
     @BindView(R.id.toolbar_next)        ImageButton mNextButton;            // (Toolbar)
     @BindView(R.id.main_bt_add_frame)   BoomMenuButton mAddMenu;            // 외부 앱으로 추가 메뉴
-    @BindView(R.id.main_gallery_window) ConstraintLayout mGalleryWindow;    // Gallery 포함된 layout
+    @BindView(R.id.main_gallery_window) LinearLayout mGalleryWindow;        // Gallery 포함된 layout
     @BindView(R.id.main_gallery_container)
     ViewPager mGallery;
 
@@ -352,6 +353,7 @@ public class MainActivity extends AppCompatActivity {
         if(message.equals(FrameStatusMessage.FULL)) {
         } else if(message.equals(FrameStatusMessage.NOT_FULL)){
         } else {    // EMPTY
+            mHistoryAdapter.clearHistory();
             while(mGalleryWindow.getVisibility() != View.VISIBLE) {
                 MainActivity.this.onBackPressed();
             }
@@ -476,9 +478,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // 보정 중인 경우
             if(mHistoryAdapter.isEmpty()) {
-                if(mFrameAdapter.isEmpty()) {       // 이미지 임의로 지워서 비운 경우 History 제거
-                    mHistoryAdapter.clearHistory();
-                }
                 exitMakingView();
                 if(FancyShowCaseView.isVisible(this)) {
                     super.onBackPressed();

@@ -1,7 +1,6 @@
 package com.emoge.app.emoge.utils.dialog;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.view.animation.Animation;
@@ -11,6 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestOptions;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.utils.GifSharer;
 import com.emoge.app.emoge.utils.GlideAvRequester;
@@ -49,11 +51,14 @@ public class ImageDialog extends CustomDialog {
 
     private void initImage() {
         ((TextView)findViewById(R.id.dialog_image_title)).setText(fileUri.getLastPathSegment());
-        AVLoadingIndicatorView loadingIndicatorView = (AVLoadingIndicatorView)findViewById(R.id.dialog_image_loading);
+        final AVLoadingIndicatorView loadingIndicatorView = (AVLoadingIndicatorView)findViewById(R.id.dialog_image_loading);
         PhotoView image = (PhotoView)findViewById(R.id.dialog_image);
         loadingIndicatorView.show();
-        Glide.with(activity).load(fileUri).
-                listener(new GlideAvRequester<Drawable>(loadingIndicatorView)).into(image);
+        Glide.with(activity).asGif()
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE).skipMemoryCache(true))
+                .load(fileUri)
+                .listener(new GlideAvRequester<GifDrawable>(loadingIndicatorView))
+                .into(image);
     }
 
     private void initButtons() {
