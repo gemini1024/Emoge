@@ -64,19 +64,19 @@ public class FrameAdder implements OnBMClickListener, BitmapLoadable {
                 intent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {"image/jpeg", "image/png"});
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                activity.overridePendingTransition(0, android.R.anim.fade_in);
                 activity.startActivityForResult(Intent.createChooser(intent,activity.getString(R.string.select_image)), INTENT_GET_IMAGE);
+                activity.overridePendingTransition(0, android.R.anim.fade_in);
                 break;
             case INTENT_GET_GIF :
                 intent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {"image/gif"});
-                activity.overridePendingTransition(0, android.R.anim.fade_in);
                 activity.startActivityForResult(Intent.createChooser(intent,activity.getString(R.string.select_image)), INTENT_GET_GIF);
+                activity.overridePendingTransition(0, android.R.anim.fade_in);
                 break;
             case INTENT_GET_VIDEO :
                 intent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                activity.overridePendingTransition(0, android.R.anim.fade_in);
                 activity.startActivityForResult(Intent.createChooser(intent,activity.getString(R.string.select_video)), INTENT_GET_VIDEO);
+                activity.overridePendingTransition(0, android.R.anim.fade_in);
                 break;
         }
 

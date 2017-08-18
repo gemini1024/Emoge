@@ -79,7 +79,7 @@ public class Correcter
         int index = tab.getPosition();
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.enter, R.anim.exit);
+        fragmentTransaction.setCustomAnimations(R.anim.popup_enter, R.anim.popup_exit, R.anim.popup_enter, R.anim.popup_exit);
         fragmentTransaction.replace(R.id.main_palette_container,
                 PaletteFragment.newInstance(index, getDefaultValueByType(index)));
         fragmentTransaction.commit();

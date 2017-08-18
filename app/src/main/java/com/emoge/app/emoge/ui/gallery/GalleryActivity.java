@@ -114,13 +114,13 @@ public class GalleryActivity extends AppCompatActivity {
 
     // GalleryWindow Animation
     private void enterGallery() {
-        final Animation enterAnim = AnimationUtils.loadAnimation(this, R.anim.enter);
+        final Animation enterAnim = AnimationUtils.loadAnimation(this, R.anim.popup_enter);
         mGalleryWindow.setAnimation(enterAnim);
         mGalleryWindow.setVisibility(View.VISIBLE);
     }
 
     private void exitGallery() {
-        final Animation exitAnim = AnimationUtils.loadAnimation(this, R.anim.exit);
+        final Animation exitAnim = AnimationUtils.loadAnimation(this, R.anim.popup_exit);
         mGalleryWindow.setAnimation(exitAnim);
         mGalleryWindow.setVisibility(View.GONE);
     }
@@ -186,8 +186,8 @@ public class GalleryActivity extends AppCompatActivity {
         NetworkStatus.executeWithCheckingNetwork(GalleryActivity.this, new NetworkStatus.RequireIntentTask() {
             @Override
             public void Task() {
-                overridePendingTransition(0, android.R.anim.fade_in);
                 startActivity(new Intent(GalleryActivity.this, ServerActivity.class));
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
             }
         });
     }
@@ -195,15 +195,15 @@ public class GalleryActivity extends AppCompatActivity {
     // 움짤 생성하러 가기
     @OnClick({R.id.navigation_making_gif_icon, R.id.navigation_making_gif, R.id.gallery_bt_making})
     public void startMakingGif() {
-        overridePendingTransition(0, android.R.anim.fade_in);
         startActivity(new Intent(this, MainActivity.class));
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
     }
 
     // License 보기
     @OnClick({R.id.navigation_license_icon, R.id.navigation_license})
     void showLicense() {
-        overridePendingTransition(0, android.R.anim.fade_in);
         startActivity(new Intent(this, LicenseActivity.class));
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
     }
 
     // 설명서 다시보기

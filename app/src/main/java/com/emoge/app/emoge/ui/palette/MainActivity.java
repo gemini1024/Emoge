@@ -133,13 +133,13 @@ public class MainActivity extends AppCompatActivity {
 
     // Gallery/Palette Animation
     private void enterViews(View view) {
-        final Animation enterAnim = AnimationUtils.loadAnimation(this, R.anim.enter);
+        final Animation enterAnim = AnimationUtils.loadAnimation(this, R.anim.popup_enter);
         view.setAnimation(enterAnim);
         view.setVisibility(View.VISIBLE);
     }
 
     private void exitViews(View view) {
-        final Animation exitAnim = AnimationUtils.loadAnimation(this, R.anim.exit);
+        final Animation exitAnim = AnimationUtils.loadAnimation(this, R.anim.popup_exit);
         view.setAnimation(exitAnim);
         view.setVisibility(View.GONE);
     }
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
     private void addPalette(Correcter correcter) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.enter, R.anim.exit);
+        fragmentTransaction.setCustomAnimations(R.anim.popup_enter, R.anim.popup_exit, R.anim.popup_enter, R.anim.popup_exit);
         fragmentTransaction.add(R.id.main_palette_container,
                 PaletteFragment.newInstance(Correcter.MOD_FRAME_DELAY, correcter.getCurrentDelay()));
         fragmentTransaction.commit();
@@ -479,12 +479,14 @@ public class MainActivity extends AppCompatActivity {
                 ShowCase.finishShownShowCase();
             }
             super.onBackPressed();
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
         } else {
             // 보정 중인 경우
             if(mHistoryAdapter.isEmpty()) {
                 exitMakingView();
                 if(FancyShowCaseView.isVisible(this)) {
                     super.onBackPressed();
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
                 }
             } else {
                 SweetDialogs.showExitMakingDialog(this)

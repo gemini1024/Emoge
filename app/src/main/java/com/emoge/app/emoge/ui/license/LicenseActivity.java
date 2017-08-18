@@ -30,7 +30,7 @@ public class LicenseActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
 
@@ -45,5 +45,11 @@ public class LicenseActivity extends AppCompatActivity {
         mLicenseView.setHasFixedSize(true);
         mLicenseView.setLayoutManager(new LinearLayoutManager(this));
         mLicenseView.setAdapter(mLicenseAdapter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 }

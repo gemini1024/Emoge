@@ -122,7 +122,7 @@ public class ImageDialog extends CustomDialog {
 
     public ImageDialog showShareButton() {
         final GifSharer gifSharer = new GifSharer(activity);
-        Animation exitAnim = AnimationUtils.loadAnimation(activity, R.anim.enter);
+        Animation exitAnim = AnimationUtils.loadAnimation(activity, R.anim.popup_enter);
         shareLayout.setAnimation(exitAnim);
         shareLayout.setVisibility(View.VISIBLE);
         findViewById(R.id.dialog_share_kakao).setOnClickListener(new View.OnClickListener() {
@@ -153,7 +153,7 @@ public class ImageDialog extends CustomDialog {
     }
 
     private ImageDialog hideShareButton() {
-        Animation exitAnim = AnimationUtils.loadAnimation(activity, R.anim.exit);
+        Animation exitAnim = AnimationUtils.loadAnimation(activity, R.anim.popup_exit);
         shareLayout.setAnimation(exitAnim);
         shareLayout.setVisibility(View.GONE);
         return this;
