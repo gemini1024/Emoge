@@ -69,7 +69,12 @@ public class GalleryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gallery);
         ButterKnife.bind(this);
         mBestFavoriteGifs = new ArrayList<>();
-        loadGifImages();
+        NetworkStatus.executeWithCheckingNetwork(GalleryActivity.this, new NetworkStatus.RequireIntentTask() {
+            @Override
+            public void Task() {
+                loadGifImages();
+            }
+        });
 
         addNavigation();
         addGalleryFragment();
