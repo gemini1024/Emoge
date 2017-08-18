@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPalette"
     android:orientation="horizontal"
     tools:fragment="com.emoge.app.emoge.ui.palette.PaletteFragment">
 
@@ -11,8 +10,8 @@
         android:id="@+id/palette_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPaletteLabel"
-        android:paddingBottom="@dimen/half_unit_dimen"
+        android:layout_marginEnd="@dimen/unit_dimen"
+        android:layout_marginStart="@dimen/unit_dimen"
         android:paddingEnd="@dimen/unit_dimen"
         android:paddingStart="@dimen/unit_dimen"
         android:paddingTop="@dimen/half_unit_dimen"
@@ -37,23 +36,20 @@
         app:layout_constraintRight_toLeftOf="@+id/palette_button"
         app:layout_constraintTop_toBottomOf="@id/palette_label" />
 
-    <android.support.v7.widget.AppCompatButton
+    <ImageButton
         android:id="@+id/palette_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
-        android:layout_margin="@dimen/half_unit_dimen"
         android:layout_marginEnd="@dimen/unit_dimen"
-        android:background="@android:color/transparent"
-        android:text="@string/reverse"
-        android:textAppearance="@android:style/TextAppearance.Material.Caption"
-        android:textColor="@android:color/primary_text_dark"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/reverse"
+        android:src="@drawable/ic_reverse"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/palette_label" />
-
 
 </android.support.constraint.ConstraintLayout>

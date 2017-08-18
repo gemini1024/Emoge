@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.emoge.app.emoge.R;
@@ -35,7 +35,7 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
 
     @BindView(R.id.palette_label)   TextView mLabel;
     @BindView(R.id.palette_seek)    DiscreteSeekBar mSeekBar;
-    @BindView(R.id.palette_button)  Button mReverseButton;
+    @BindView(R.id.palette_button)  ImageButton mReverseButton;
 
 
     public PaletteFragment() {
