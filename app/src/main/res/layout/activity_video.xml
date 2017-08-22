@@ -10,37 +10,11 @@
     <include layout="@layout/toolbar_main" />
 
     <!--MediaController 위치-->
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/toolbar_height"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <VideoView
-            android:id="@+id/video_video"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center" />
-
-    </FrameLayout>
-
-    <!--Guidelines-->
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.72" />
-
-
-    <!--capture count seek bar-->
     <TextView
         android:id="@+id/video_capture_window"
         android:layout_width="0dp"
         android:layout_height="@dimen/toolbar_height"
+        android:layout_marginTop="@dimen/toolbar_height"
         android:background="@drawable/toolbar_gallery_bg"
         android:gravity="center"
         android:text="@string/video_capture_label"
@@ -49,8 +23,29 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <com.halilibo.bettervideoplayer.BetterVideoPlayer
+        android:id="@+id/video_video"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorBackground"
+        app:bvp_autoPlay="true"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/video_capture_window" />
+
+    <!--Guidelines-->
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+
+    <!--capture count seek bar-->
     <android.support.constraint.Guideline
         android:id="@+id/guideline_capture"
         android:layout_width="wrap_content"
@@ -67,13 +62,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/guideline_capture"
-        app:layout_constraintTop_toBottomOf="@id/video_capture_window">
+        app:layout_constraintTop_toBottomOf="@id/guideline">
 
         <TextView
             android:id="@+id/video_count_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/half_unit_dimen"
+            android:layout_marginStart="@dimen/unit_dimen"
             android:text="@string/count"
             android:textAppearance="@android:style/TextAppearance.Holo.Small"
             android:textColor="@android:color/primary_text_dark" />
@@ -95,7 +90,7 @@
             android:id="@+id/video_fps_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/half_unit_dimen"
+            android:layout_marginStart="@dimen/unit_dimen"
             android:text="@string/frame_delay"
             android:textAppearance="@android:style/TextAppearance.Holo.Small"
             android:textColor="@android:color/primary_text_dark" />
@@ -127,6 +122,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/guideline_capture"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/video_capture_window" />
+        app:layout_constraintTop_toBottomOf="@id/guideline" />
 
 </android.support.constraint.ConstraintLayout>

@@ -116,6 +116,7 @@
     <string name="frame_gif_label">GIF</string>
     <string name="add_from_image">이미지에서 추가</string>
     <string name="add_from_gif">움짤에서 추가</string>
+    <string name="add_from_video">비디오에서 추가</string>
     <string name="share">공유하기</string>
     <string name="rank_number" translatable="false">%d 위</string>
     <string name="rank_out">순위 외</string>

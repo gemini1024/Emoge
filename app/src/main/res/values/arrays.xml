@@ -64,6 +64,7 @@
         <item>Android NDK GIF</item>
         <item>AndroidPhotoFilters</item>
         <item>FFmpegMediaMetadataRetriever</item>
+        <item>BetterVideoPlayer</item>
         <item>ButterKnife</item>
         <item>EventBus</item>
         <item>Android Storage</item>
@@ -84,6 +85,7 @@
         <item>Apache 2.0. \n https://github.com/waynejo/android-ndk-gif</item>
         <item>Apache 2.0. \n https://github.com/Zomato/AndroidPhotoFilters</item>
         <item>Apache 2.0. \n https://github.com/wseemann/FFmpegMediaMetadataRetriever</item>
+        <item>Apache 2.0. \n https://github.com/halilozercan/bettervideoplayer</item>
         <item>Apache 2.0. \n https://github.com/JakeWharton/butterknife</item>
         <item>Apache 2.0. \n https://github.com/greenrobot/EventBus</item>
         <item>Apache 2.0. \n https://github.com/snatik/android-storage</item>
