@@ -22,7 +22,10 @@ import com.nightonke.boommenu.Util;
 public class MenuButtons {
     private static final String LOG_TAG = MenuButtons.class.getSimpleName();
 
-    private static final Rect IMAGE_PADDING     = new Rect(24,24,24,24);
+    private static final int BUTTON_BIG_RADIUS  = 48;
+    private static final Rect IMAGE_PADDING     = new Rect(Util.dp2px(24),Util.dp2px(24),Util.dp2px(24),Util.dp2px(24));
+    private static final Rect IMAGE_BIG_SIZE
+            = new Rect(Util.dp2px(0),Util.dp2px(0),Util.dp2px(BUTTON_BIG_RADIUS*2),Util.dp2px(BUTTON_BIG_RADIUS*2));
 
     public static void buildAddButton(@NonNull final Context context,
                                @NonNull final BoomMenuButton bmb,
@@ -54,9 +57,9 @@ public class MenuButtons {
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
                     .isRound(false)
-                    .buttonRadius(Util.dp2px(48))
+                    .buttonRadius(Util.dp2px(BUTTON_BIG_RADIUS))
                     .textTopMargin(Util.dp2px(0))
-                    .imageRect(new Rect(Util.dp2px(0),Util.dp2px(0),Util.dp2px(96),Util.dp2px(96)))
+                    .imageRect(IMAGE_BIG_SIZE)
                     .shadowEffect(false)
                     .normalImageRes(imageIds.getResourceId(i,0))
                     .normalText(titles[i])

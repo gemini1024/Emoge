@@ -19,17 +19,21 @@
 
     <!--ImageCorrectionButton-->
     <string-array name="correct_title">
-        <item>StarLit</item>
-        <item>BlueMess</item>
+        <item>E-plus</item>
+        <item>E-minor</item>
         <item>AweStruckVibe</item>
+        <item>StarLit</item>
         <item>LimeStutter</item>
+        <item>BlueMess</item>
         <item>NightWhisper</item>
     </string-array>
     <array name="correct_image">
-        <item>@drawable/img_filter_star_lit</item>
-        <item>@drawable/img_filter_blue_mess</item>
+        <item>@drawable/img_filter_e_plus</item>
+        <item>@drawable/img_filter_e_minor</item>
         <item>@drawable/img_filter_awe_struck_vibe</item>
+        <item>@drawable/img_filter_star_lit</item>
         <item>@drawable/img_filter_lime_stutter</item>
+        <item>@drawable/img_filter_blue_mess</item>
         <item>@drawable/img_filter_night_whisper</item>
     </array>
 

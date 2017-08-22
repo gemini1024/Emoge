@@ -52,11 +52,13 @@ public class Correcter
 
 
     // 필터
-    public static final int FILTER_STAR     = 0;
-    public static final int FILTER_BLUE     = 1;
+    public static final int FILTER_E_PLUS   = 0;
+    public static final int FILTER_E_MINOR  = 1;
     public static final int FILTER_STUCK    = 2;
-    public static final int FILTER_LIME     = 3;
-    public static final int FILTER_NIGHT    = 4;
+    public static final int FILTER_STAR     = 3;
+    public static final int FILTER_LIME     = 4;
+    public static final int FILTER_BLUE     = 5;
+    public static final int FILTER_NIGHT    = 6;
 
 
     // NDK Libraries
@@ -99,6 +101,12 @@ public class Correcter
     @Override
     public void onBoomButtonClick(int index) {
         switch (index) {
+            case FILTER_E_PLUS :
+                EventBus.getDefault().post(getEasyPlusFilter());
+                break;
+            case FILTER_E_MINOR :
+                EventBus.getDefault().post(getEasyMinorFilter());
+                break;
             case FILTER_STAR :
                 EventBus.getDefault().post(SampleFilters.getStarLitFilter());
                 break;
@@ -111,10 +119,34 @@ public class Correcter
             case FILTER_LIME :
                 EventBus.getDefault().post(SampleFilters.getLimeStutterFilter());
                 break;
-            default :
+            default:
                 EventBus.getDefault().post(SampleFilters.getNightWhisperFilter());
-                break;
         }
+    }
+
+    private Filter getEasyPlusFilter() {
+        Point[] rgbKnots;
+        rgbKnots = new Point[3];
+        rgbKnots[0] = new Point(0, 0);
+        rgbKnots[1] = new Point(150, 170);
+        rgbKnots[2] = new Point(255, 255);
+        Filter filter = new Filter();
+        filter.addSubFilter(new ToneCurveSubfilter(rgbKnots, null, null, null));
+        filter.addSubFilter(new BrightnessSubfilter(5));
+        filter.addSubFilter(new ContrastSubfilter(1.02f));
+        return filter;
+    }
+
+    private Filter getEasyMinorFilter() {
+        Point[] rgbKnots;
+        rgbKnots = new Point[3];
+        rgbKnots[0] = new Point(0, 0);
+        rgbKnots[1] = new Point(170, 150);
+        rgbKnots[2] = new Point(255, 255);
+        Filter filter = new Filter();
+        filter.addSubFilter(new ToneCurveSubfilter(rgbKnots, null, null, null));
+        filter.addSubFilter(new ContrastSubfilter(1.02f));
+        return filter;
     }
 
     // 각 보정 타입 별 기본값
