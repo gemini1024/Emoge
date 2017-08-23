@@ -124,10 +124,10 @@ public class PaletteFragment extends Fragment implements DiscreteSeekBar.OnProgr
 
     private void setSeekBarValues(DiscreteSeekBar.NumericTransformer transformers,
                                   int min, int max, int current) {
-        mSeekBar.setNumericTransformer(transformers);
         mSeekBar.setMin(min);
         mSeekBar.setMax(max);
         mSeekBar.setProgress(current);
+        mSeekBar.setNumericTransformer(transformers);
     }
 
     // (보정) SeekBar 변경

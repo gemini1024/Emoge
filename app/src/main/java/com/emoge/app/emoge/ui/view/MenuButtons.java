@@ -23,7 +23,7 @@ public class MenuButtons {
     private static final String LOG_TAG = MenuButtons.class.getSimpleName();
 
     private static final int BUTTON_BIG_RADIUS  = 48;
-    private static final Rect IMAGE_PADDING     = new Rect(Util.dp2px(24),Util.dp2px(24),Util.dp2px(24),Util.dp2px(24));
+    private static final Rect IMAGE_PADDING     = new Rect(Util.dp2px(8),Util.dp2px(8),Util.dp2px(8),Util.dp2px(8));
     private static final Rect IMAGE_BIG_SIZE
             = new Rect(Util.dp2px(0),Util.dp2px(0),Util.dp2px(BUTTON_BIG_RADIUS*2),Util.dp2px(BUTTON_BIG_RADIUS*2));
 

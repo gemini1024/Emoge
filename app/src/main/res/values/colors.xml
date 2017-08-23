@@ -5,7 +5,7 @@
     <color name="colorPrimaryDarkSecond">@android:color/white</color>
     <color name="colorAccent">#FFC107</color>
     <color name="colorAccentAlpha">#50FFC107</color>
-    <color name="colorBackground">#757575</color>
+    <color name="colorBackground">#BDBDBD</color>
     <color name="colorFrameBackground">#30000000</color>
     <color name="colorPalette">@color/colorPaletteLabel</color>
     <color name="colorPaletteLabel">@color/colorPrimaryDark</color>
