@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
     // 공통
     @BindView(R.id.main_frame_list)     RecyclerView mFrameRecyclerView;    // Frame List
-    @BindView(R.id.main_frame_list_error) View mFrameErrorView;             // Frame Error View
 
     // 추가 화면
     @BindView(R.id.toolbar_next)        ImageButton mNextButton;            // (Toolbar)
@@ -207,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setHistory() {
-        mHistoryAdapter = new HistoryImplAdapter(mFrameAdapter, new ArrayList<History>());
+        mHistoryAdapter = new HistoryImplAdapter(this, mFrameAdapter, new ArrayList<History>());
         mHistoryView.setHasFixedSize(true);
         mHistoryView.setAdapter(mHistoryAdapter);
         LinearLayoutManager reverseLayoutManager = new LinearLayoutManager(this);
@@ -221,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         });
         findViewById(R.id.main_bt_history_back).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public synchronized void onClick(View v) {
                 rollbackOneStep();
             }
         });
@@ -347,13 +346,43 @@ public class MainActivity extends AppCompatActivity {
         mTabSelectedListener.onTabSelected(mMainTab);
     }
 
+    // 필터 적용 ( Message from Correcter )
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public synchronized void onRollbackEvent(History history) {
+        mHandler.removeCallbacks(mTask);
+        if(history.getAppliedFilter() == null) {
+            if(history.getModifiedBrightness() != Correcter.DEFAULT_BRIGHTNESS) {
+                mFrameAdapter.correct(Correcter.CORRECT_BRIGHTNESS, history.getModifiedBrightness());
+            } else if(history.getModifiedContrast() != Correcter.DEFAULT_CONTRAST) {
+                mFrameAdapter.correct(Correcter.CORRECT_CONTRAST, history.getModifiedContrast());
+            } else {
+                mFrameAdapter.correct(Correcter.CORRECT_GAMMA, history.getModifiedGamma());
+            }
+        } else {
+            mFrameAdapter.setFilter(history.getAppliedFilter());
+        }
+        mFrameAdapter.apply();
+        mPreview.setImageBitmap(mFrameAdapter.getItem(mPreviewIndex).getBitmap());
+        mHandler.postDelayed(mTask, mFrameAdapter.getFps());
+        mFrameAdapter.clearPreviousFrames();    // View 에서 띄우는 이미지를 변경했으므로 -> 제거
+    }
+
 
     // FrameAdapter 상태 Event ( Message from FrameAdapter )
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveFrameStatusMessage(FrameStatusMessage message) {
         if(message.equals(FrameStatusMessage.FULL)) {
-        } else if(message.equals(FrameStatusMessage.NOT_FULL)){
-        } else {    // EMPTY
+            final View errorView = findViewById(R.id.main_frame_list_error);
+            errorView.setAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_in));
+            errorView.setVisibility(View.VISIBLE);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    errorView.setAnimation(AnimationUtils.loadAnimation(getBaseContext(), android.R.anim.fade_out));
+                    errorView.setVisibility(View.GONE);
+                }
+            }, 1600);
+        } else if(message.equals(FrameStatusMessage.EMPTY)) {
             mHistoryAdapter.clearHistory();
             while(mGalleryWindow.getVisibility() != View.VISIBLE) {
                 MainActivity.this.onBackPressed();
@@ -375,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        new FrameAddTask(this, mFrameRecyclerView, mFrameErrorView, mFrameAdapter, requestCode)
+        new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, requestCode)
                 .execute(new Intent().setData(Uri.fromFile(file)));
     }
 
@@ -412,7 +441,7 @@ public class MainActivity extends AppCompatActivity {
                     startVideoActivity(data);
                     return;
                 }
-                new FrameAddTask(this, mFrameRecyclerView, mFrameErrorView, mFrameAdapter, requestCode).execute(data);
+                new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, requestCode).execute(data);
             } else {
                 // show error or do nothing
                 Logger.e(LOG_TAG, getString(R.string.err_intent_return_null));

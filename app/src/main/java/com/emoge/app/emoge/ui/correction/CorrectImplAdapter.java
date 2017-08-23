@@ -176,6 +176,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         for (Frame frame : stageFrames) {
             if (frame.getBitmap() != null) {
                 frame.getBitmap().recycle();
+                frame.setBitmap(null);
             }
         }
         stageFrames.clear();
@@ -187,6 +188,7 @@ public class CorrectImplAdapter extends FrameAddImplAdapter implements Correctab
         for (Frame frame : tmpFrames) {
             if (frame.getBitmap() != null) {
                 frame.getBitmap().recycle();
+                frame.setBitmap(null);
             }
         }
         tmpFrames.clear();

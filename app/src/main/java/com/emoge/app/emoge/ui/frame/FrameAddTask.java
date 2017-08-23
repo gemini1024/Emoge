@@ -3,15 +3,15 @@ package com.emoge.app.emoge.ui.frame;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.animation.AnimationUtils;
 
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.model.FrameStatusMessage;
 import com.emoge.app.emoge.utils.Logger;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
+
+import org.greenrobot.eventbus.EventBus;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -23,20 +23,16 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class FrameAddTask extends AsyncTask<Intent, Void, Boolean> {
     private final String LOG_TAG = FrameAddTask.class.getSimpleName();
 
-    private static final int ERROR_DELAY = 1500;
-
     private Activity activity;
     private RecyclerView framesView;
-    private View errorView;
     private FrameAddable adapter;
     private int requestCode;
     private SweetAlertDialog dialog;
 
-    public FrameAddTask(Activity activity, RecyclerView framesView, View errorView,
+    public FrameAddTask(Activity activity, RecyclerView framesView,
                         FrameAddable adapter, int requestCode) {
         this.activity = activity;
         this.framesView = framesView;
-        this.errorView = errorView;
         this.adapter = adapter;
         this.requestCode = requestCode;
     }
@@ -76,15 +72,7 @@ public class FrameAddTask extends AsyncTask<Intent, Void, Boolean> {
             SweetDialogs.showErrorDialog(activity, R.string.err_add_frames_title, R.string.err_add_frames_content);
         }
         if(!aBoolean) {
-            errorView.setAnimation(AnimationUtils.loadAnimation(activity, android.R.anim.fade_in));
-            errorView.setVisibility(View.VISIBLE);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    errorView.setAnimation(AnimationUtils.loadAnimation(activity, android.R.anim.fade_out));
-                    errorView.setVisibility(View.GONE);
-                }
-            }, ERROR_DELAY);
+            EventBus.getDefault().post(FrameStatusMessage.FULL);
         }
     }
 }

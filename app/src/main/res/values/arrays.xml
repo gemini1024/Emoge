@@ -85,24 +85,24 @@
         <item>FancyShowCaseView</item>
     </string-array>
     <string-array name="licenses_content">
-        <item>BSD, part MIT and Apache 2.0. \n https://github.com/bumptech/glide</item>
-        <item>Apache 2.0. \n https://github.com/waynejo/android-ndk-gif</item>
-        <item>Apache 2.0. \n https://github.com/Zomato/AndroidPhotoFilters</item>
-        <item>Apache 2.0. \n https://github.com/wseemann/FFmpegMediaMetadataRetriever</item>
-        <item>Apache 2.0. \n https://github.com/halilozercan/bettervideoplayer</item>
-        <item>Apache 2.0. \n https://github.com/JakeWharton/butterknife</item>
-        <item>Apache 2.0. \n https://github.com/greenrobot/EventBus</item>
-        <item>Apache 2.0. \n https://github.com/snatik/android-storage</item>
+        <item>Sam Judd / BSD, part MIT and Apache 2.0. \n https://github.com/bumptech/glide</item>
+        <item>waynejo / Apache 2.0. \n https://github.com/waynejo/android-ndk-gif</item>
+        <item>Zomato / Apache 2.0. \n https://github.com/Zomato/AndroidPhotoFilters</item>
+        <item>William Seemann / Apache 2.0. \n https://github.com/wseemann/FFmpegMediaMetadataRetriever</item>
+        <item>halilozercan \n https://github.com/halilozercan/bettervideoplayer</item>
+        <item>Jake Wharton / Apache 2.0. \n https://github.com/JakeWharton/butterknife</item>
+        <item>Markus Junginger, greenrobot / Apache 2.0. \n https://github.com/greenrobot/EventBus</item>
+        <item>snatik / Apache 2.0. \n https://github.com/snatik/android-storage</item>
         <item>https://firebase.google.com/</item>
-        <item>MIT \n https://github.com/pedant/sweet-alert-dialog</item>
-        <item>Apache 2.0. \n https://github.com/vinc3m1/DragSortAdapter</item>
-        <item>Apache 2.0. \n https://github.com/chrisbanes/PhotoView</item>
-        <item>Apache 2.0. \n https://github.com/linger1216/labelview</item>
-        <item>Apache 2.0. \n https://github.com/ParkSangGwon/TedPermission</item>
-        <item>Apache 2.0. \n https://github.com/Nightonke/BoomMenu</item>
-        <item>Apache 2.0. \n https://github.com/AnderWeb/discreteSeekBar</item>
-        <item>Apache 2.0. \n https://github.com/yarolegovich/DiscreteScrollView</item>
-        <item>Apache 2.0. \n https://github.com/81813780/AVLoadingIndicatorView</item>
-        <item>Apache 2.0. \n https://github.com/faruktoptas/FancyShowCaseView</item>
+        <item>Pedant / MIT \n https://github.com/pedant/sweet-alert-dialog</item>
+        <item>Vincent Mi / Apache 2.0. \n https://github.com/vinc3m1/DragSortAdapter</item>
+        <item>Chris Banes / Apache 2.0. \n https://github.com/chrisbanes/PhotoView</item>
+        <item>linger1216 / Apache 2.0. \n https://github.com/linger1216/labelview</item>
+        <item>Ted Park / Apache 2.0. \n https://github.com/ParkSangGwon/TedPermission</item>
+        <item>Nightonke / Apache 2.0. \n https://github.com/Nightonke/BoomMenu</item>
+        <item>Gustavo Claramunt (Ander Webbs) / Apache 2.0. \n https://github.com/AnderWeb/discreteSeekBar</item>
+        <item>Yaroslav Shevchuk / Apache 2.0. \n https://github.com/yarolegovich/DiscreteScrollView</item>
+        <item>jack wang / Apache 2.0. \n https://github.com/81813780/AVLoadingIndicatorView</item>
+        <item>Faruk Toptaş / Apache 2.0. \n https://github.com/faruktoptas/FancyShowCaseView</item>
     </string-array>
 </resources>

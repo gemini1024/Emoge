@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/half_unit_dimen"
     tools:fragment="com.emoge.app.emoge.ui.server.CategoryFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout

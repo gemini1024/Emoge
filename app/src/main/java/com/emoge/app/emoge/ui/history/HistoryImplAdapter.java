@@ -1,5 +1,6 @@
 package com.emoge.app.emoge.ui.history;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import com.emoge.app.emoge.ui.correction.Correctable;
 import com.emoge.app.emoge.ui.correction.Correcter;
 import com.emoge.app.emoge.utils.Logger;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,12 +27,14 @@ import java.util.List;
 public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> implements HistoryAccessible {
     private final String LOG_TAG = HistoryImplAdapter.class.getSimpleName();
 
+    private Activity activity;
     private Correctable correctImplAdapter;
     private ArrayList<History> histories;
     private List<Frame> originalFrames;
     private int lastRefIndex;
 
-    public HistoryImplAdapter(Correctable correctImplAdapter, ArrayList<History> histories) {
+    public HistoryImplAdapter(Activity activity, Correctable correctImplAdapter, ArrayList<History> histories) {
+        this.activity = activity;
         this.correctImplAdapter = correctImplAdapter;
         this.histories = histories;
         this.originalFrames = new ArrayList<>();
@@ -45,7 +50,8 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
 
     @Override
     public void onBindViewHolder(HistoryViewHolder holder, final int position) {
-        holder.itemView.setText(position == 0? "원본" : String.valueOf(position));
+        holder.itemView.setText(position == 0?
+                holder.itemView.getContext().getString(R.string.history_origin) : String.valueOf(position));
         holder.cursor.setVisibility(lastRefIndex == position? View.VISIBLE : View.GONE);
     }
 
@@ -105,26 +111,11 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
     public synchronized void rollbackPosition(int position) {
         rollbackOrigin();
         for(int i=1; i<=position; i++) {
-            History history = histories.get(i);
-            if(history.getAppliedFilter() == null) {
-                correct(Correcter.CORRECT_BRIGHTNESS, history.getModifiedBrightness());
-                correct(Correcter.CORRECT_CONTRAST, history.getModifiedContrast());
-                correct(Correcter.CORRECT_GAMMA, history.getModifiedGamma());
-            } else {
-                correctImplAdapter.setFilter(history.getAppliedFilter());
-                correctImplAdapter.clearPreviousFrames();
-                correctImplAdapter.apply();
-            }
+            EventBus.getDefault().post(histories.get(i));
         }
         Logger.i(LOG_TAG, "rollback : "+position);
         lastRefIndex = position;
         notifyDataSetChanged();
-    }
-
-    private void correct(int type, int value) {
-        correctImplAdapter.correct(type, value);
-        correctImplAdapter.clearPreviousFrames();
-        correctImplAdapter.apply();
     }
 
     @Override
@@ -152,6 +143,7 @@ public class HistoryImplAdapter extends RecyclerView.Adapter<HistoryViewHolder> 
             for(Frame frame : originalFrames) {
                 if(frame.getBitmap() != null) {
                     frame.getBitmap().recycle();
+                    frame.setBitmap(null);
                 }
             }
             originalFrames.clear();

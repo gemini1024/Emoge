@@ -33,7 +33,7 @@ class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
     }
 
     @Override
-    public void onClick(View v) {
+    public synchronized void onClick(View v) {
         historyAccessible.rollbackPosition(getAdapterPosition());
     }
 }

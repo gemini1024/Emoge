@@ -239,6 +239,7 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> implements On
             for (Frame frame : frames) {
                 if(frame.getBitmap() != null) {
                     frame.getBitmap().recycle();
+                    frame.setBitmap(null);
                 }
             }
             frames.clear();
@@ -251,7 +252,7 @@ public class FrameAdapter extends DragSortAdapter<FrameViewHolder> implements On
     private void sendFrameStatusMessage() {
         if(frames.isEmpty()) {
             EventBus.getDefault().post(FrameStatusMessage.EMPTY);
-        } else if(MAX_ITEM_SIZE <= frames.size()) {
+        } else if(MAX_ITEM_SIZE < frames.size()) {
             EventBus.getDefault().post(FrameStatusMessage.FULL);
         } else {
             EventBus.getDefault().post(FrameStatusMessage.NOT_FULL);
