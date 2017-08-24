@@ -5,6 +5,5 @@ Boost Camp Project
 * Introduction(+review) page : https://gemini1024.github.io/develop.html
 
 
-![이미지](readme_img/main.png)
-
+![이미지1](readme_img/main.png)![이미지2](readme_img/correction.png)
 
