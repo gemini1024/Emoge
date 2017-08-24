@@ -80,9 +80,9 @@ public class FrameAddImplAdapter extends FrameAdapter implements FrameAddable {
         boolean resultBool = false;
         if(videoData.getData() != null) {
             List<Bitmap> bitmaps = frameAdder.captureVideo(videoData.getData(), maxSize,
-                    videoData.getIntExtra(VideoActivity.INTENT_NAME_START_SEC, 0),
-                    videoData.getIntExtra(VideoActivity.INTENT_NAME_CAPTURE_COUNT, 0),
-                    videoData.getIntExtra(VideoActivity.INTENT_NAME_CAPTURE_DELAY, 100));
+                    videoData.getIntExtra(VideoFragment.INTENT_NAME_START_SEC, 0),
+                    videoData.getIntExtra(VideoFragment.INTENT_NAME_CAPTURE_COUNT, 0),
+                    videoData.getIntExtra(VideoFragment.INTENT_NAME_CAPTURE_DELAY, 100));
             int firstAddPosition = getItemCount();
             for (Bitmap bitmap : bitmaps) {
                 resultBool = addItemWithoutNotify(new Frame(nextId(), bitmap));

@@ -14,14 +14,16 @@ import com.emoge.app.emoge.R;
 public class GalleryViewPagerAdapter extends FragmentPagerAdapter {
     private final String LOG_TAG = GalleryViewPagerAdapter.class.getSimpleName();
 
-    private static final int GALLERY_PAGE_NUM = 2;
+    private static final int GALLERY_PAGE_NUM = 3;
     private String strAddImage;
     private String strAddGif;
+    private String strAddVideo;
 
     public GalleryViewPagerAdapter(AppCompatActivity activity) {
         super(activity.getSupportFragmentManager());
         strAddImage = activity.getString(R.string.add_from_image);
         strAddGif = activity.getString(R.string.add_from_gif);
+        strAddVideo = activity.getString(R.string.add_from_video);
     }
 
     @Override
@@ -38,8 +40,10 @@ public class GalleryViewPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         if(position == ImageFormatChecker.IMAGE_TYPE) {
             return strAddImage;
-        } else {
+        } else if(position == ImageFormatChecker.GIF_TYPE) {
             return strAddGif;
+        } else {
+            return strAddVideo;
         }
     }
 

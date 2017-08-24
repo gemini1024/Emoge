@@ -59,6 +59,9 @@ class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>
         if(ImageFormatChecker.GIF_FORMAT == format) {
             holder.type.setText(R.string.frame_gif_label);
             holder.type.setVisibility(View.VISIBLE);
+        } else if(ImageFormatChecker.VIDEO_FORMAT == format) {
+            holder.type.setText(file.getName());
+            holder.type.setVisibility(View.VISIBLE);
         }
     }
 

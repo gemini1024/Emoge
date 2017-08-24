@@ -86,7 +86,7 @@ public class FrameAdder implements OnBMClickListener, BitmapLoadable {
 
     }
 
-    private String getRealPathFromUri(Context context, Uri selectedUri) {
+    public static String getRealPathFromUri(Context context, Uri selectedUri) {
         String[] columns = { MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media.MIME_TYPE };
 

@@ -45,6 +45,9 @@ public class FrameAddTask extends AsyncTask<Intent, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(@NonNull Intent... params) {
+        if(params[0] == null) {
+            return false;
+        }
         switch (requestCode) {
             case FrameAdder.INTENT_GET_IMAGE:
                 return adapter.addFrameFromImages(params[0]);

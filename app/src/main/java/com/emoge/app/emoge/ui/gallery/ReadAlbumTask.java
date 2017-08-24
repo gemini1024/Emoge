@@ -42,7 +42,7 @@ class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
         if(params[0] != null) {
             return findDirectory(params[0]);
         } else {
-            return findAllDirectory();
+            return findAllDirectory() && findAllVideoDirectory();
         }
     }
 
@@ -93,6 +93,31 @@ class ReadAlbumTask extends AsyncTask<String, Void, Boolean> {
                 } while (imageCursor.moveToNext());
             }
             imageCursor.close();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean findAllVideoDirectory() {
+        String[] projection = { MediaStore.Video.Media.DATA,
+                MediaStore.Video.VideoColumns.DATE_TAKEN };
+        Cursor videoCursor = fragment.getActivity().getContentResolver().query(
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                projection,
+                null,
+                null,
+                MediaStore.Video.VideoColumns.DATE_TAKEN + " DESC");
+
+        if(videoCursor != null) {
+            int dataColumnIndex = videoCursor.getColumnIndex(projection[0]);
+            if(videoCursor.moveToFirst()) {
+                do {
+                    String filePath = videoCursor.getString(dataColumnIndex);
+                    File imageFile = new File(filePath);
+                    adapter.addItemWithoutNotify(imageFile);
+                } while (videoCursor.moveToNext());
+            }
+            videoCursor.close();
             return true;
         }
         return false;

@@ -12,8 +12,10 @@ import java.util.List;
 public class ImageFormatChecker {
     public static final List<String> IMAGE_FORMAT = Arrays.asList(".PNG", ".JPEG", "jpg", ".png", ".jpeg", ".JPG");
     public static final List<String> GIF_FORMAT = Arrays.asList(".GIF", ".gif");
-    public static int IMAGE_TYPE = 0;
-    public static int GIF_TYPE = 1;
+    public static final List<String> VIDEO_FORMAT = Arrays.asList(".MP4", ".mp4");
+    public static final int IMAGE_TYPE = 0;
+    public static final int GIF_TYPE = 1;
+    public static final int VIDEO_TYPE = 2;
 
     public static boolean inFormat(File file, List<String> formats) {
         if (file == null || !file.isFile()) {

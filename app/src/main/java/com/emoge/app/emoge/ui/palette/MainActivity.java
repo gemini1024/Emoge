@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -20,7 +20,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.emoge.app.emoge.R;
@@ -33,14 +32,13 @@ import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
 import com.emoge.app.emoge.ui.correction.Correcter;
 import com.emoge.app.emoge.ui.frame.FrameAddTask;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
-import com.emoge.app.emoge.ui.frame.VideoActivity;
+import com.emoge.app.emoge.ui.frame.VideoFragment;
 import com.emoge.app.emoge.ui.gallery.GalleryViewPagerAdapter;
 import com.emoge.app.emoge.ui.gallery.ImageFormatChecker;
 import com.emoge.app.emoge.ui.history.HistoryImplAdapter;
 import com.emoge.app.emoge.ui.view.MenuButtons;
 import com.emoge.app.emoge.ui.view.ShowCase;
 import com.emoge.app.emoge.utils.GifSaveTask;
-import com.emoge.app.emoge.utils.Logger;
 import com.emoge.app.emoge.utils.dialog.EditorDialog;
 import com.emoge.app.emoge.utils.dialog.SweetDialogs;
 import com.google.firebase.crash.FirebaseCrash;
@@ -60,6 +58,7 @@ import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 
+import static com.emoge.app.emoge.R.id.main_gallery_window;
 import static com.emoge.app.emoge.R.string.hide;
 
 
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     // 추가 화면
     @BindView(R.id.toolbar_next)        ImageButton mNextButton;            // (Toolbar)
     @BindView(R.id.main_bt_add_frame)   BoomMenuButton mAddMenu;            // 외부 앱으로 추가 메뉴
-    @BindView(R.id.main_gallery_window) LinearLayout mGalleryWindow;        // Gallery 포함된 layout
+    @BindView(main_gallery_window) ConstraintLayout mGalleryWindow;    // Gallery 포함된 layout
     @BindView(R.id.main_gallery_container)
     ViewPager mGallery;
 
@@ -271,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
     private void showCorrectWindow() {
         mMainTab.select();
         mTabSelectedListener.onTabSelected(mMainTab);
+        exitVideo();
         exitViews(mGalleryWindow);
         enterViews(mPaletteWindow);
         mNextButton.setVisibility(View.GONE);
@@ -280,6 +280,12 @@ public class MainActivity extends AppCompatActivity {
         ShowCase.startCorrectShowCase(this);
     }
 
+    private void exitVideo() {
+        Fragment videoFragment = getSupportFragmentManager().findFragmentById(R.id.main_gallery_window);
+        if(videoFragment != null && videoFragment instanceof VideoFragment) {
+            getSupportFragmentManager().beginTransaction().remove(videoFragment).commit();
+        }
+    }
 
     public void startCorrectByShowCase() {
         showCorrectWindow();
@@ -393,19 +399,30 @@ public class MainActivity extends AppCompatActivity {
     // Add File ( Message from GalleryAdapter )
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addFileFromGallery(File file) {
-        int requestCode;
         if(ImageFormatChecker.inFormat(file, ImageFormatChecker.IMAGE_FORMAT)) {
-            requestCode = FrameAdder.INTENT_GET_IMAGE;
+            new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, FrameAdder.INTENT_GET_IMAGE)
+                    .execute(new Intent().setData(Uri.fromFile(file)));
         } else if(ImageFormatChecker.inFormat(file, ImageFormatChecker.GIF_FORMAT)) {
-            requestCode = FrameAdder.INTENT_GET_GIF;
+            new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, FrameAdder.INTENT_GET_GIF)
+                    .execute(new Intent().setData(Uri.fromFile(file)));
+        } else if(ImageFormatChecker.inFormat(file, ImageFormatChecker.VIDEO_FORMAT)) {
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            fragmentTransaction.add(main_gallery_window,
+                    VideoFragment.newInstance(Uri.fromFile(file).toString()));
+            fragmentTransaction.commit();
         } else {
             SweetDialogs.showErrorDialog(this,
                     R.string.err_add_file_title, R.string.err_add_file_content);
-            return;
         }
 
-        new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, requestCode)
-                .execute(new Intent().setData(Uri.fromFile(file)));
+    }
+
+    // Add Frame ( Message from VideoFragment )
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void addFrameFromVideoFragment(Intent data) {
+        new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, FrameAdder.INTENT_CAPTURE_VIDEO)
+                .execute(data);
     }
 
     @Override
@@ -421,31 +438,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    // select video
-    private void startVideoActivity(@NonNull Intent videoData) {
-        if(videoData.getData() != null) {
-            Intent videoActivityIntent = new Intent(this, VideoActivity.class);
-            videoActivityIntent.setData(videoData.getData());
-            overridePendingTransition(0, android.R.anim.fade_in);
-            startActivityForResult(videoActivityIntent, FrameAdder.INTENT_CAPTURE_VIDEO);
-        }
-    }
-
-    // startVideoActivity() or FrameAddTask
+    // FrameAddTask
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
-            if( data != null) {
-                if(requestCode == FrameAdder.INTENT_GET_VIDEO) {
-                    startVideoActivity(data);
-                    return;
-                }
-                new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, requestCode).execute(data);
-            } else {
-                // show error or do nothing
-                Logger.e(LOG_TAG, getString(R.string.err_intent_return_null));
+            if(requestCode == FrameAdder.INTENT_GET_VIDEO && data != null && data.getData() != null) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        addFileFromGallery(new File(FrameAdder.getRealPathFromUri(MainActivity.this, data.getData())));
+                    }
+                }, 500);
+                return;
             }
+            new FrameAddTask(this, mFrameRecyclerView, mFrameAdapter, requestCode).execute(data);
         }
     }
 

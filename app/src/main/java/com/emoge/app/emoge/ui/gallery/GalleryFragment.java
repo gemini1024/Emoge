@@ -64,8 +64,14 @@ public class GalleryFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         // RecyclerView 설정
-        List<String> fileFormat = mImageType == ImageFormatChecker.IMAGE_TYPE ?
-                ImageFormatChecker.IMAGE_FORMAT : ImageFormatChecker.GIF_FORMAT;
+        List<String> fileFormat;
+        if(mImageType == ImageFormatChecker.IMAGE_TYPE) {
+            fileFormat = ImageFormatChecker.IMAGE_FORMAT;
+        } else if(mImageType == ImageFormatChecker.GIF_TYPE) {
+            fileFormat = ImageFormatChecker.GIF_FORMAT;
+        } else {
+            fileFormat = ImageFormatChecker.VIDEO_FORMAT;
+        }
         mGalleryAdapter = new GalleryAdapter(this, fileFormat, new ArrayList<File>(), TextUtils.isEmpty(mDirPath));
         mGallery.setHasFixedSize(true);
         mGallery.setLayoutManager(new StaggeredGridLayoutManager(GALLERY_WIDTH_NUM, StaggeredGridLayoutManager.VERTICAL));

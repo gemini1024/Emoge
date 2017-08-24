@@ -29,6 +29,8 @@
         android:layout_alignParentEnd="true"
         android:background="@color/colorFrameCover"
         android:includeFontPadding="false"
+        android:maxLines="1"
+        android:ellipsize="marquee"
         android:paddingBottom="@dimen/text_padding_height"
         android:paddingEnd="@dimen/text_padding_width"
         android:paddingStart="@dimen/text_padding_width"
