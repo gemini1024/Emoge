@@ -61,6 +61,22 @@
     <string name="cancel_favorite_content">담은 이미지를 저장소에서 제거합니다.\n계속 하시겠습니까?</string>
     <string name="download_favorite_content">선택한 이미지를 다운로드합니다.\n계속 하시겠습니까?</string>
 
+    <!--quality-->
+    <string name="quality_super_high">초고화질</string>
+    <string name="quality_high">고화질</string>
+    <string name="quality_medium">중화질</string>
+    <string name="quality_low">저화질</string>
+
+    <!--frame adder-->
+    <string name="add_from_image">이미지에서 추가</string>
+    <string name="add_from_gif">움짤에서 추가</string>
+    <string name="add_from_video">비디오에서 추가</string>
+    <string name="add_from_camera">사진 찍어서 추가</string>
+    <string name="add_from_image_detail">*  외부앱에서 이미지를 추가합니다</string>
+    <string name="add_from_gif_detail">*  외부앱에서 움짤을 추가합니다</string>
+    <string name="add_from_video_detail">*  비디오의 일부를 캡쳐합니다</string>
+    <string name="add_from_camera_detail">*  사진을 찍어 갤러리에 추가합니다</string>
+
     <!--correct-->
     <string name="fps" translatable="false">Fps</string>
     <string name="brightness">밝기</string>
@@ -71,16 +87,23 @@
     <string name="complete">완료</string>
 
     <!--video capture-->
-    <string name="video_capture_label">비디오 캡쳐 설정</string>
-    <string name="frame_delay">프레임 딜레이</string>
+    <string name="video_capture_label">캡쳐 시작지점 설정</string>
+    <string name="frame_delay">프레임 딜레이(ms)</string>
     <string name="count">캡쳐 수</string>
 
-    <!--upload data-->
+    <!--share-->
     <string name="firebase_bucket" translatable="false">gs://emoge-50942.appspot.com</string>
     <string name="firebase_directory" translatable="false">Emoge</string>
     <string name="app_package_kakao" translatable="false">com.kakao.talk</string>
     <string name="app_package_google_drive" translatable="false">com.google.android.apps.docs</string>
     <string name="app_package_facebook" translatable="false">com.facebook.katana</string>
+    <string name="server_image">서버 이미지</string>
+    <string name="server_category_store">저장소</string>
+    <string name="server_category_humor">유머</string>
+    <string name="server_category_healing">힐링</string>
+    <string name="server_category_human">인물</string>
+    <string name="remove_favorite">담아가기 해제 되었습니다.</string>
+    <string name="add_favorite">움짤을 담았습니다</string>
 
     <!--navigation-->
     <string name="navigation_open">이동화면 열림</string>
@@ -103,20 +126,13 @@
     <string name="save">움짤 저장</string>
     <string name="menu_add_image">이미지 추가 메뉴</string>
     <string name="menu_correct_image">보정 메뉴</string>
-    <string name="server_image">서버 이미지</string>
     <string name="back_button">뒤로가기</string>
-    <string name="category_store">저장소</string>
     <string name="next">다음</string>
-    <string name="remove_favorite">담아가기 해제 되었습니다.</string>
-    <string name="add_favorite">움짤을 담았습니다</string>
     <string name="history">history</string>
     <string name="hide">숨기기</string>
     <string name="back">back</string>
     <string name="best_image">이 시각 최고의 움짤</string>
     <string name="frame_gif_label">GIF</string>
-    <string name="add_from_image">이미지에서 추가</string>
-    <string name="add_from_gif">움짤에서 추가</string>
-    <string name="add_from_video">비디오에서 추가</string>
     <string name="share">공유하기</string>
     <string name="rank_number" translatable="false">%d 위</string>
     <string name="rank_out">순위 외</string>

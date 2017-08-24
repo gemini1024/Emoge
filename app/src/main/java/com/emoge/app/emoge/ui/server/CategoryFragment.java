@@ -79,7 +79,7 @@ public class CategoryFragment extends Fragment implements SwipeRefreshLayout.OnR
         mRealm = Realm.getDefaultInstance();
         if(!isFavoriteCategory()) {
             mFirebaseDb = FirebaseDatabase.getInstance().getReference(
-                    getArguments().getString(ARG_CATEGORY, getString(R.string.category_store)));
+                    getArguments().getString(ARG_CATEGORY, getString(R.string.server_category_store)));
         }
 
         // RecyclerView 설정

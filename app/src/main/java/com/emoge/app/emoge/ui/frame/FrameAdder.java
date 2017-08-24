@@ -42,6 +42,7 @@ public class FrameAdder implements OnBMClickListener, BitmapLoadable {
     public static final int INTENT_GET_IMAGE        = 0;
     public static final int INTENT_GET_GIF          = 1;
     public static final int INTENT_GET_VIDEO        = 2;
+    public static final int INTENT_BURST_CAMERA     = 3;
     public static final int INTENT_CAPTURE_VIDEO    = 100;
 
 
@@ -77,6 +78,9 @@ public class FrameAdder implements OnBMClickListener, BitmapLoadable {
                 intent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
                 activity.startActivityForResult(Intent.createChooser(intent,activity.getString(R.string.add_from_video)), INTENT_GET_VIDEO);
                 activity.overridePendingTransition(0, android.R.anim.fade_in);
+                break;
+            case INTENT_BURST_CAMERA :
+                activity.startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE));
                 break;
         }
 

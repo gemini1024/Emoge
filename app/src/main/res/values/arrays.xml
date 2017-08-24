@@ -2,19 +2,22 @@
 <resources>
     <!--FrameAddButton-->
     <string-array name="frame_add_title">
-        <item>이미지 추가</item>
-        <item>다른 움짤 추가</item>
-        <item>비디오 추가</item>
+        <item>@string/add_from_image</item>
+        <item>@string/add_from_gif</item>
+        <item>@string/add_from_video</item>
+        <item>@string/add_from_camera</item>
     </string-array>
     <string-array name="frame_add_sub">
-        <item>이미지를 추가합니다</item>
-        <item>움짤을 불러옵니다</item>
-        <item>비디오를 추가합니다</item>
+        <item>@string/add_from_image_detail</item>
+        <item>@string/add_from_gif_detail</item>
+        <item>@string/add_from_video_detail</item>
+        <item>@string/add_from_camera_detail</item>
     </string-array>
     <array name="frame_add_image">
         <item>@drawable/ic_photo_library</item>
         <item>@drawable/ic_gif</item>
         <item>@drawable/ic_play</item>
+        <item>@drawable/ic_camera</item>
     </array>
 
     <!--ImageCorrectionButton-->
@@ -39,17 +42,17 @@
 
     <!--category-->
     <string-array name="server_category">
-        <item>유머</item>
-        <item>힐링</item>
-        <item>인물</item>
+        <item>@string/server_category_humor</item>
+        <item>@string/server_category_healing</item>
+        <item>@string/server_category_human</item>
     </string-array>
 
     <!--quality-->
     <string-array name="image_quality">
-        <item>저화질</item>
-        <item>중화질</item>
-        <item>고화질</item>
-        <item>초고화질</item>
+        <item>@string/quality_low</item>
+        <item>@string/quality_medium</item>
+        <item>@string/quality_high</item>
+        <item>@string/quality_super_high</item>
     </string-array>
 
 

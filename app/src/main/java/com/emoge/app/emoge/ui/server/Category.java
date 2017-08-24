@@ -15,7 +15,7 @@ class Category {
     private final String[] categoryNames;   // 서버 저장소 이름 (Firebase)
 
     Category(Resources res) {
-        this.storeName = res.getString(R.string.category_store);
+        this.storeName = res.getString(R.string.server_category_store);
         this.categoryNames = res.getStringArray(R.array.server_category);
     }
 

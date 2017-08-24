@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.ui.correction.Correcter;
@@ -40,8 +39,8 @@ public class MenuButtons {
                     .imagePadding(IMAGE_PADDING)
                     .normalText(titles[i])
                     .subNormalText(subTitles[i])
-                    .normalColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-                    .highlightedColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                    .normalColorRes(R.color.colorPrimaryDark)
+                    .highlightedTextColorRes(R.color.colorPrimary)
                     .listener(frameAdder);
             bmb.addBuilder(builder);
         }
@@ -63,8 +62,8 @@ public class MenuButtons {
                     .shadowEffect(false)
                     .normalImageRes(imageIds.getResourceId(i,0))
                     .normalText(titles[i])
-                    .normalColor(ContextCompat.getColor(context, android.R.color.transparent))
-                    .highlightedColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                    .normalColorRes(android.R.color.transparent)
+                    .highlightedTextColorRes(R.color.colorPrimary)
                     .listener(correcter);
             bmb.addBuilder(builder);
         }
