@@ -23,6 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/preview"
         android:padding="@dimen/unit_dimen"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
@@ -137,9 +138,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/main_palette_tab">
-
-        </android.support.v7.widget.ContentFrameLayout>
+            app:layout_constraintTop_toBottomOf="@+id/main_palette_tab" />
 
     </android.support.constraint.ConstraintLayout>
 

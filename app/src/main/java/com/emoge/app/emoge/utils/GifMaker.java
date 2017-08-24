@@ -2,7 +2,6 @@ package com.emoge.app.emoge.utils;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.emoge.app.emoge.MainApplication;
 import com.emoge.app.emoge.encoder.AnimatedGifEncoder;
@@ -24,6 +23,8 @@ import java.util.List;
 
 class GifMaker {
     private static final String LOG_TAG = GifMaker.class.getSimpleName();
+
+    private static final String FILE_NAME_FORMAT = "%s (%d).gif";
 
     private static final int QUALITY_LOW = 0;
     private static final int QUALITY_MEDIUM = 1;
@@ -131,7 +132,7 @@ class GifMaker {
         // 파일 이름 중복 방지
         int cnt = 2;
         while(new File(MainApplication.defaultDir, fileName).exists()) {
-            fileName = String.format("%s (%d).gif", wantedFileName, cnt);
+            fileName = String.format(FILE_NAME_FORMAT, wantedFileName, cnt);
             cnt++;
         }
         return new File(MainApplication.defaultDir, fileName);

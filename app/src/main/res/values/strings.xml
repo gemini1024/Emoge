@@ -68,9 +68,9 @@
     <string name="quality_low">저화질</string>
 
     <!--frame adder-->
-    <string name="add_from_image_label">이미지에서\n추가</string>
-    <string name="add_from_gif_label">움짤에서\n추가</string>
-    <string name="add_from_video_label">비디오에서\n추가</string>
+    <string name="add_from_image_label">사진 추가</string>
+    <string name="add_from_gif_label">움짤 추가</string>
+    <string name="add_from_video_label">영상 추가</string>
     <string name="add_from_image">이미지에서 추가</string>
     <string name="add_from_gif">움짤에서 추가</string>
     <string name="add_from_video">비디오에서 추가</string>
@@ -100,6 +100,10 @@
     <string name="app_package_kakao" translatable="false">com.kakao.talk</string>
     <string name="app_package_google_drive" translatable="false">com.google.android.apps.docs</string>
     <string name="app_package_facebook" translatable="false">com.facebook.katana</string>
+    <string name="share_kakao">카카오톡으로 공유</string>
+    <string name="share_gogle_drive">구글드라이브로 공유</string>
+    <string name="share_facebook">페이스북으로 공유</string>
+    <string name="share_others">다른 앱으로 공유</string>
     <string name="server_image">서버 이미지</string>
     <string name="server_category_store">저장소</string>
     <string name="server_category_humor">유머</string>
@@ -120,8 +124,7 @@
     <string name="showcase_making_gif">Click해서 움짤을 만들어보세요</string>
     <string name="showcase_add_frame">이미지를 선택하면\n프레임으로 등록됩니다</string>
     <string name="showcase_show_correct">모두 추가했으면\n보정을 시작하세요</string>
-    <string name="showcase_correcting">보정을 해보세요!\n(속도/밝기/대비/감마)</string>
-    <string name="showcase_correcting_filter">세부조정이 귀찮다면?\n필터도 있습니다</string>
+    <string name="showcase_correcting">보정을 해보세요!\n(속도/밝기/대비/감마/필터)</string>
     <string name="showcase_history">언제든지\n보정 전으로 돌아갈 수 있어요\n마음껏 보정하세요</string>
     <string name="showcase_save_gif">완성했다면 저장을 잊지마세요</string>
 
@@ -141,7 +144,6 @@
     <string name="rank_out">순위 외</string>
     <string name="my_gallery">My Gallery</string>
     <string name="history_origin">원본</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_image">이미지가 없습니다</string>
+    <string name="preview">미리보기화면</string>
 </resources>

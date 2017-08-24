@@ -126,8 +126,7 @@ public class ShowCase {
                 @Override
                 public void run() {
                     new FancyShowCaseQueue()
-                            .add(buildShowCaseView(activity, R.id.main_palette_tab, R.string.showcase_correcting, FocusShape.CIRCLE))
-                            .add(buildShowCaseView(activity, R.id.main_bt_correction, R.string.showcase_correcting_filter, FocusShape.CIRCLE))
+                            .add(buildShowCaseView(activity, R.id.main_palette_container, R.string.showcase_correcting, FocusShape.CIRCLE))
                             .add(buildShowCaseView(activity, R.id.main_bt_history, R.string.showcase_history, FocusShape.CIRCLE))
                             .add(buildShowCaseView(activity, R.id.toolbar_save, R.string.showcase_save_gif,
                                     FocusShape.CIRCLE, new DismissListener() {

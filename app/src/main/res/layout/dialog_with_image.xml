@@ -92,6 +92,7 @@
             android:layout_marginStart="@dimen/half_unit_dimen"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/server_category_store"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_upload"
             android:visibility="gone" />
@@ -104,6 +105,7 @@
             android:layout_marginStart="@dimen/half_unit_dimen"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/share_kakao"
             android:scaleType="fitCenter"
             android:src="@drawable/img_kakaotalk" />
 
@@ -115,6 +117,7 @@
             android:layout_marginStart="@dimen/half_unit_dimen"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/share_gogle_drive"
             android:scaleType="fitCenter"
             android:src="@drawable/img_google_drive" />
 
@@ -126,6 +129,7 @@
             android:layout_marginStart="@dimen/half_unit_dimen"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/share_facebook"
             android:scaleType="fitCenter"
             android:src="@drawable/img_facebook" />
 
@@ -137,6 +141,7 @@
             android:layout_marginStart="@dimen/half_unit_dimen"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/share_others"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_more" />
     </LinearLayout>
@@ -155,6 +160,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:clickable="true"
+            android:contentDescription="@string/share"
             android:foreground="?attr/selectableItemBackground"
             android:gravity="center"
             android:padding="@dimen/unit_dimen"
@@ -167,6 +173,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:clickable="true"
+            android:contentDescription="@string/remove"
             android:foreground="?attr/selectableItemBackground"
             android:gravity="center"
             android:padding="@dimen/unit_dimen"
