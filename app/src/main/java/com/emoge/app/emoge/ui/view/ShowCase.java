@@ -100,7 +100,7 @@ public class ShowCase {
                 @Override
                 public void run() {
                     new FancyShowCaseQueue()
-                            .add(buildShowCaseView(activity, R.id.main_frame_list, R.string.showcase_add_frame, FocusShape.ROUNDED_RECTANGLE))
+                            .add(buildShowCaseView(activity, R.id.main_frame_list, R.string.showcase_add_frame, FocusShape.CIRCLE))
                             .add(buildShowCaseView(activity, R.id.toolbar_next, R.string.showcase_show_correct,
                                     FocusShape.CIRCLE, new DismissListener() {
                                         @Override
@@ -126,7 +126,7 @@ public class ShowCase {
                 @Override
                 public void run() {
                     new FancyShowCaseQueue()
-                            .add(buildShowCaseView(activity, R.id.main_palette_tab, R.string.showcase_correcting, FocusShape.ROUNDED_RECTANGLE))
+                            .add(buildShowCaseView(activity, R.id.main_palette_tab, R.string.showcase_correcting, FocusShape.CIRCLE))
                             .add(buildShowCaseView(activity, R.id.main_bt_correction, R.string.showcase_correcting_filter, FocusShape.CIRCLE))
                             .add(buildShowCaseView(activity, R.id.main_bt_history, R.string.showcase_history, FocusShape.CIRCLE))
                             .add(buildShowCaseView(activity, R.id.toolbar_save, R.string.showcase_save_gif,

@@ -71,7 +71,7 @@
     <string name="add_from_image">이미지에서 추가</string>
     <string name="add_from_gif">움짤에서 추가</string>
     <string name="add_from_video">비디오에서 추가</string>
-    <string name="add_from_camera">사진 찍어서 추가</string>
+    <string name="add_from_camera">사진 촬영</string>
     <string name="add_from_image_detail">*  외부앱에서 이미지를 추가합니다</string>
     <string name="add_from_gif_detail">*  외부앱에서 움짤을 추가합니다</string>
     <string name="add_from_video_detail">*  비디오의 일부를 캡쳐합니다</string>

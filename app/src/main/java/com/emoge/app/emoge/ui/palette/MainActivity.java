@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
         mTabSelectedListener.onTabSelected(mMainTab);
     }
 
-    // 필터 적용 ( Message from Correcter )
+    // 히스토리 정보를 이용한 보정 처리 ( Message from HistoryImplAdapter )
     @Subscribe(threadMode = ThreadMode.MAIN)
     public synchronized void onRollbackEvent(History history) {
         mHandler.removeCallbacks(mTask);
