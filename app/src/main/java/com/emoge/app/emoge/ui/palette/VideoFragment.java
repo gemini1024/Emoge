@@ -1,4 +1,4 @@
-package com.emoge.app.emoge.ui.frame;
+package com.emoge.app.emoge.ui.palette;
 
 
 import android.content.Intent;
@@ -85,7 +85,8 @@ public class VideoFragment extends Fragment implements BetterVideoCallback {
 
     @OnClick(R.id.main_gallery_video_back)
     void onFinish() {
-        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(0, android.R.anim.fade_out).remove(this).commit();
     }
 
     @OnClick(R.id.video_button)

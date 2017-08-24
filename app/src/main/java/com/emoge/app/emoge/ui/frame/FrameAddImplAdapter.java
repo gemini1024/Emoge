@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
 import com.emoge.app.emoge.model.Frame;
+import com.emoge.app.emoge.ui.palette.VideoFragment;
 import com.emoge.app.emoge.utils.Logger;
 
 import java.io.FileNotFoundException;

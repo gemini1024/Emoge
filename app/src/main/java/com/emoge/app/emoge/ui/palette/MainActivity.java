@@ -32,7 +32,6 @@ import com.emoge.app.emoge.ui.correction.CorrectImplAdapter;
 import com.emoge.app.emoge.ui.correction.Correcter;
 import com.emoge.app.emoge.ui.frame.FrameAddTask;
 import com.emoge.app.emoge.ui.frame.FrameAdder;
-import com.emoge.app.emoge.ui.frame.VideoFragment;
 import com.emoge.app.emoge.ui.gallery.GalleryViewPagerAdapter;
 import com.emoge.app.emoge.ui.gallery.ImageFormatChecker;
 import com.emoge.app.emoge.ui.history.HistoryImplAdapter;
@@ -408,6 +407,7 @@ public class MainActivity extends AppCompatActivity {
         } else if(ImageFormatChecker.inFormat(file, ImageFormatChecker.VIDEO_FORMAT)) {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, 0);
             fragmentTransaction.add(main_gallery_window,
                     VideoFragment.newInstance(Uri.fromFile(file).toString()));
             fragmentTransaction.commit();

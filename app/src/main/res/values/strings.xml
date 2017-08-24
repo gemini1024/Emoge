@@ -68,6 +68,9 @@
     <string name="quality_low">저화질</string>
 
     <!--frame adder-->
+    <string name="add_from_image_label">이미지에서\n추가</string>
+    <string name="add_from_gif_label">움짤에서\n추가</string>
+    <string name="add_from_video_label">비디오에서\n추가</string>
     <string name="add_from_image">이미지에서 추가</string>
     <string name="add_from_gif">움짤에서 추가</string>
     <string name="add_from_video">비디오에서 추가</string>
@@ -87,7 +90,7 @@
     <string name="complete">완료</string>
 
     <!--video capture-->
-    <string name="video_capture_label">캡쳐 시작지점 설정</string>
+    <string name="video_capture_label">캡쳐 지점 설정</string>
     <string name="frame_delay">프레임 딜레이(ms)</string>
     <string name="count">캡쳐 수</string>
 

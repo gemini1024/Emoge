@@ -21,9 +21,9 @@ public class GalleryViewPagerAdapter extends FragmentPagerAdapter {
 
     public GalleryViewPagerAdapter(AppCompatActivity activity) {
         super(activity.getSupportFragmentManager());
-        strAddImage = activity.getString(R.string.add_from_image);
-        strAddGif = activity.getString(R.string.add_from_gif);
-        strAddVideo = activity.getString(R.string.add_from_video);
+        strAddImage = activity.getString(R.string.add_from_image_label);
+        strAddGif = activity.getString(R.string.add_from_gif_label);
+        strAddVideo = activity.getString(R.string.add_from_video_label);
     }
 
     @Override
