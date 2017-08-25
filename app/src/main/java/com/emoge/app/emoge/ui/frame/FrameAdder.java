@@ -187,11 +187,15 @@ public class FrameAdder implements OnBMClickListener, BitmapLoadable {
 
         int addCount = Math.min(count, maxSize);
         retriever.setDataSource(getRealPathFromUri(activity, videoUri));
+        int orientation = Integer.valueOf(retriever.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));
         for(int i = 0; i < addCount; i++){
             Bitmap videoFrame = retriever.getFrameAtTime((startSec + i*fps)*1000L, FFmpegMediaMetadataRetriever.OPTION_CLOSEST);
             if(videoFrame != null) {
-                bitmapArrayList.add(resizeVideoFrame(videoFrame,
-                        (int)(MAX_WIDTH*1.5f), (int)(MAX_HEIGHT*1.5f)));
+                if(orientation != 0) {
+                    videoFrame = rotateBitmap(resizeVideoFrame(videoFrame,
+                            (int)(MAX_WIDTH*1.5f), (int)(MAX_HEIGHT*1.5f)), orientation);
+                }
+                bitmapArrayList.add(videoFrame);
             } else {
                 Logger.e(LOG_TAG, "not found video frame : " + i);
             }

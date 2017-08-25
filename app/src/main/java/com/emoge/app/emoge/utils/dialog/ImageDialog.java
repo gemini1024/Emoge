@@ -2,6 +2,7 @@ package com.emoge.app.emoge.utils.dialog;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -13,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestOptions;
+import com.emoge.app.emoge.BuildConfig;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.utils.GifSharer;
 import com.emoge.app.emoge.utils.GlideAvRequester;
@@ -121,6 +123,8 @@ public class ImageDialog extends CustomDialog {
 
 
     public ImageDialog showShareButton() {
+        final Uri shareUri = FileProvider.getUriForFile(activity,
+                BuildConfig.APPLICATION_ID+".fileprovider", new File(fileUri.getPath()));
         final GifSharer gifSharer = new GifSharer(activity);
         Animation exitAnim = AnimationUtils.loadAnimation(activity, R.anim.popup_enter);
         shareLayout.setAnimation(exitAnim);
@@ -128,25 +132,25 @@ public class ImageDialog extends CustomDialog {
         findViewById(R.id.dialog_share_kakao).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new GifSharer(activity).shareOtherApps(fileUri, activity.getString(R.string.app_package_kakao));
+                new GifSharer(activity).shareOtherApps(shareUri, activity.getString(R.string.app_package_kakao));
             }
         });
         findViewById(R.id.dialog_share_gdrive).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gifSharer.shareOtherApps(fileUri, activity.getString(R.string.app_package_google_drive));
+                gifSharer.shareOtherApps(shareUri, activity.getString(R.string.app_package_google_drive));
             }
         });
         findViewById(R.id.dialog_share_facebook).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gifSharer.shareOtherApps(fileUri, activity.getString(R.string.app_package_facebook));
+                gifSharer.shareOtherApps(shareUri, activity.getString(R.string.app_package_facebook));
             }
         });
         findViewById(R.id.dialog_share_others).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gifSharer.shareOtherApps(fileUri);
+                gifSharer.shareOtherApps(shareUri);
             }
         });
         return this;
