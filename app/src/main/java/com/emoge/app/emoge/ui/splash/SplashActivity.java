@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
+import com.emoge.app.emoge.BuildConfig;
 import com.emoge.app.emoge.R;
 import com.emoge.app.emoge.ui.gallery.GalleryActivity;
 import com.emoge.app.emoge.utils.Logger;
@@ -30,6 +32,8 @@ public class SplashActivity extends AppCompatActivity implements PermissionListe
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_splash);
+
+        ((TextView)findViewById(R.id.license_app_version)).setText(BuildConfig.VERSION_NAME);
 
         mPermission = new TedPermission(this).setPermissionListener(this)
                 .setDeniedMessage(R.string.err_permission_denied)
