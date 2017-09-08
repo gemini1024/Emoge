@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.emoge.app.emoge.R;
+import com.emoge.app.emoge.ui.frame.FrameAdapter;
 import com.emoge.app.emoge.utils.SeekBarNumberTransformers;
 import com.halilibo.bettervideoplayer.BetterVideoCallback;
 import com.halilibo.bettervideoplayer.BetterVideoPlayer;
@@ -74,6 +75,10 @@ public class VideoFragment extends Fragment implements BetterVideoCallback {
         mVideoView.setCallback(this);
         mVideoView.setSource(videoUri);
         mVideoView.enableSwipeGestures();
+
+        mCountBar.setMin(1);
+        mCountBar.setMax(FrameAdapter.MAX_ITEM_SIZE);
+        mCountBar.setProgress(FrameAdapter.MAX_ITEM_SIZE/2);
 
         mFpsBar.setNumericTransformer(SeekBarNumberTransformers.Multiply(100));
         mFpsBar.setMin(1);

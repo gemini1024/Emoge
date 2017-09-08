@@ -191,9 +191,9 @@ public class FrameAdder implements OnBMClickListener, BitmapLoadable {
         for(int i = 0; i < addCount; i++){
             Bitmap videoFrame = retriever.getFrameAtTime((startSec + i*fps)*1000L, FFmpegMediaMetadataRetriever.OPTION_CLOSEST);
             if(videoFrame != null) {
+                videoFrame = resizeVideoFrame(videoFrame, (int)(MAX_WIDTH*1.5f), (int)(MAX_HEIGHT*1.5f));
                 if(orientation != 0) {
-                    videoFrame = rotateBitmap(resizeVideoFrame(videoFrame,
-                            (int)(MAX_WIDTH*1.5f), (int)(MAX_HEIGHT*1.5f)), orientation);
+                    videoFrame = rotateBitmap(videoFrame, orientation);
                 }
                 bitmapArrayList.add(videoFrame);
             } else {

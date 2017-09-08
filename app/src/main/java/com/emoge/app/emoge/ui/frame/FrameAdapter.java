@@ -29,7 +29,7 @@ import java.util.List;
 public class FrameAdapter extends DragSortAdapter<FrameViewHolder> implements OnFrameClickListener {
     private static final String LOG_TAG = FrameAdapter.class.getSimpleName();
 
-    private static final int MAX_ITEM_SIZE = 10;
+    public static final int MAX_ITEM_SIZE = 12;
 
     private List<Frame> frames;
     private Activity activity;
